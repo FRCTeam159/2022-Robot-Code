@@ -7,8 +7,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  public DriveTrain() {}
+	private MotorInterface frontLeft;
+	private MotorInterface frontRight;
+	private MotorInterface backLeft;
+	private MotorInterface backRight;
+  public DriveTrain() {
+    frontLeft = new SparkMotor(FRONT_LEFT);
+    frontRight = new SparkMotor(FRONT_RIGHT);
+    backLeft = new SparkMotor(BACK_LEFT);
+    backRight = new SparkMotor(BACK_RIGHT);
+  }
 
   @Override
   public void periodic() {
