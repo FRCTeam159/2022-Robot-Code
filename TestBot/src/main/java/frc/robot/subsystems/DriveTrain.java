@@ -19,6 +19,49 @@ public class DriveTrain extends SubsystemBase implements Constants {
     backRight = new SparkMotor(BACK_RIGHT);
   }
 
+  public void arcadeDrive(double moveValue, double turnValue) {
+		double leftMotorOutput;
+		double rightMotorOutput;
+		// System.out.println("M:"+moveValue+" T:"+turnValue);
+
+		if (moveValue > 0.0) {
+			if (turnValue > 0.0) {
+				leftMotorOutput = Math.max(moveValue, turnValue);
+				rightMotorOutput = moveValue - turnValue;
+			} else {
+				leftMotorOutput = moveValue + turnValue;
+				rightMotorOutput = Math.max(moveValue, -turnValue);
+			}
+		} else {
+			if (turnValue > 0.0) {
+				leftMotorOutput = moveValue + turnValue;
+				rightMotorOutput = -Math.max(-moveValue, turnValue);
+			} else {
+				leftMotorOutput = -Math.max(-moveValue, -turnValue);
+				rightMotorOutput = moveValue - turnValue;
+			}
+		}
+		// Make sure values are between -1 and 1
+		leftMotorOutput = coerce(-1, 1, leftMotorOutput);
+		rightMotorOutput = coerce(-1, 1, rightMotorOutput);
+
+		// lastMoveValue = moveValue;
+		setRaw(leftMotorOutput, rightMotorOutput);
+		// setRaw(0, rightMotorOutput);
+	}
+
+	private static double coerce(double min, double max, double value) {
+		return Math.max(min, Math.min(value, max));
+	}
+
+	public void setRaw(double left, double right) {
+		backLeft.set(left);
+		frontLeft.set(left);
+		frontRight.set(-right);
+		backRight.set(-right);
+		//log();
+	}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -29,3 +72,4 @@ public class DriveTrain extends SubsystemBase implements Constants {
     // This method will be called once per scheduler run during simulation
   }
 }
+

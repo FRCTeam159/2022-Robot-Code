@@ -4,12 +4,14 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+
 /** An example command that uses an example subsystem. */
-public class DriveWithGamepad extends CommandBase {
+public class DriveWithGamepad extends CommandBase implements Constants {
   
   private final DriveTrain m_Drive;
   private final XboxController m_Controller;
@@ -32,7 +34,17 @@ public class DriveWithGamepad extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    double zs = -m_Controller.getRawAxis(LEFT_JOYSTICK);
+    double xs = m_Controller.getRawAxis(RIGHT_JOYSTICK);
+
+    
+    m_Drive.arcadeDrive(zs, xs);
+
+  }
+
+  
 
   // Called once the command ends or is interrupted.
   @Override
