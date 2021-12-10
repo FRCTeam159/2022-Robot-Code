@@ -4,22 +4,101 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase implements Constants {
-	private MotorInterface frontLeft;
-	private MotorInterface frontRight;
-	private MotorInterface backLeft;
-	private MotorInterface backRight;
-  public DriveTrain() {
-    frontLeft = new SparkMotor(FRONT_LEFT);
-    frontRight = new SparkMotor(FRONT_RIGHT);
-    backLeft = new SparkMotor(BACK_LEFT);
-    backRight = new SparkMotor(BACK_RIGHT);
-  }
+	private MotorController frontLeft;
+	private MotorController frontRight;
+	private MotorController backLeft;
+	private MotorController backRight;
 
-  public void arcadeDrive(double moveValue, double turnValue) {
+	private final MotorControllerGroup leftGroup;
+	private final MotorControllerGroup rightGroup;
+
+	public static final double kMaxSpeed = 108; // inches per second
+	public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
+
+	private final AnalogGyro gyro = new AnalogGyro(0);
+
+	private final PIDController leftPIDController = new PIDController(1, 0, 0);
+	private final PIDController rightPIDController = new PIDController(1, 0, 0);
+
+	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
+	private final DifferentialDriveOdometry odometry;
+
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 3);
+	private final MotorInterface leftMotorInterface;
+	private final MotorInterface rightMotorInterface;
+
+	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(3);
+	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+
+	private static final double kTrackWidth = 28.25; // inches
+	private static final double kWheelRadius = 2.13; // inches
+	// public static final double WHEEL_DIAMETER = 4.26;
+
+	public DriveTrain() {
+		frontLeft = new SparkMotor(FRONT_LEFT);
+		frontRight = new SparkMotor(FRONT_RIGHT);
+		backLeft = new SparkMotor(BACK_LEFT);
+		backRight = new SparkMotor(BACK_RIGHT);
+		leftMotorInterface = (MotorInterface) frontLeft;
+		rightMotorInterface = (MotorInterface) frontRight;
+		leftMotorInterface.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		rightMotorInterface.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		gyro.reset();
+
+		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+
+		leftGroup = new MotorControllerGroup(frontLeft, backLeft);
+		rightGroup = new MotorControllerGroup(frontRight, backRight);
+		rightGroup.setInverted(true);
+
+	}
+
+	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+		final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
+		final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+
+		final double leftOutput = leftPIDController.calculate(leftMotorInterface.getRate(), speeds.leftMetersPerSecond);
+		final double rightOutput = rightPIDController.calculate(rightMotorInterface.getRate(),
+				speeds.rightMetersPerSecond);
+		leftGroup.setVoltage(leftOutput + leftFeedforward);
+		rightGroup.setVoltage(rightOutput + rightFeedforward);
+	}
+
+	public void drive(double xSpeed, double rot) {
+		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+		setSpeeds(wheelSpeeds);
+	}
+
+	/** Updates the field-relative position. */
+	public void updateOdometry() {
+		odometry.update(gyro.getRotation2d(), leftMotorInterface.getDistance(), rightMotorInterface.getDistance());
+	}
+
+	private double i2M(double inches) {
+		return inches * 0.0254;
+	}
+
+	public void odometryDrive(double moveValue, double turnValue) {
+		final var xSpeed = -m_speedLimiter.calculate(moveValue) * i2M(kMaxSpeed);
+		final var rot = -m_rotLimiter.calculate(turnValue) * kMaxAngularSpeed;
+		drive(xSpeed, rot);
+	}
+
+	public void arcadeDrive(double moveValue, double turnValue) {
 		double leftMotorOutput;
 		double rightMotorOutput;
 		// System.out.println("M:"+moveValue+" T:"+turnValue);
@@ -59,17 +138,16 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontLeft.set(left);
 		frontRight.set(-right);
 		backRight.set(-right);
-		//log();
+		// log();
 	}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+	@Override
+	public void periodic() {
+		// This method will be called once per scheduler run
+	}
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
+	@Override
+	public void simulationPeriodic() {
+		// This method will be called once per scheduler run during simulation
+	}
 }
-

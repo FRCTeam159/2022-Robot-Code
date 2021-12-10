@@ -17,6 +17,7 @@ import com.revrobotics.RelativeEncoder;
 class SparkMotor extends CANSparkMax implements MotorInterface {
     private RelativeEncoder encoder;
     private double zeroValue = 0;
+    private double distancePerRotation = 1;
 
     SparkMotor(int id) {
         super(id, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -31,5 +32,22 @@ class SparkMotor extends CANSparkMax implements MotorInterface {
 
     public void reset() {
         zeroValue = encoder.getPosition();
+    }
+
+    @Override
+    public double getRate() {
+
+        return getEncoder().getVelocity();
+    }
+
+    @Override
+    public void setDistancePerRotation(double d) {
+        distancePerRotation = d;
+
+    }
+
+    @Override
+    public double getDistance() {
+        return getRotations() * distancePerRotation;
     }
 }

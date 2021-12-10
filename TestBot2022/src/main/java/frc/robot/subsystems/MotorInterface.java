@@ -10,4 +10,8 @@ public interface MotorInterface {
     void set(double arg);
     void reset();
 
+    double getRate();
+    void setDistancePerRotation(double d);
+    double getDistance();
 }
+
