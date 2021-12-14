@@ -11,9 +11,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,6 +26,11 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private MotorController frontRight;
 	private MotorController backLeft;
 	private MotorController backRight;
+
+	NetworkTable table = NetworkTableInstance.getDefault().getTable("drivetrain");
+	NetworkTableEntry lD = table.getEntry("leftDistance");
+	NetworkTableEntry rD = table.getEntry("rightDistance");
+	NetworkTableEntry vL = table.getEntry("velocity");
 
 	private final MotorControllerGroup leftGroup;
 	private final MotorControllerGroup rightGroup;
@@ -139,6 +148,14 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontRight.set(-right);
 		backRight.set(-right);
 		// log();
+	}
+
+	public void log() {
+		SmartDashboard.putNumber("backLeft", x);
+		SmartDashboard.putNumber("frontLeft", y);
+		SmartDashboard.putNumber("frontRight", area);
+		SmartDashboard.putNumber("backRight", area);
+	  //smartdashboard getDouble value figure out pls help
 	}
 
 	@Override
