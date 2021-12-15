@@ -22,10 +22,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase implements Constants {
-	private MotorController frontLeft;
-	private MotorController frontRight;
-	private MotorController backLeft;
-	private MotorController backRight;
+	private SparkMotor frontLeft;
+	private SparkMotor frontRight;
+	private SparkMotor backLeft;
+	private SparkMotor backRight;
 
 	NetworkTable table = NetworkTableInstance.getDefault().getTable("drivetrain");
 	NetworkTableEntry lD = table.getEntry("leftDistance");
@@ -47,8 +47,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final DifferentialDriveOdometry odometry;
 
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 3);
-	private final MotorInterface leftMotorInterface;
-	private final MotorInterface rightMotorInterface;
+
 
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(3);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
@@ -62,10 +61,10 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontRight = new SparkMotor(FRONT_RIGHT);
 		backLeft = new SparkMotor(BACK_LEFT);
 		backRight = new SparkMotor(BACK_RIGHT);
-		leftMotorInterface = (MotorInterface) frontLeft;
-		rightMotorInterface = (MotorInterface) frontRight;
-		leftMotorInterface.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
-		rightMotorInterface.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		frontLeft.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		frontRight.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		backLeft.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		backRight.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
 		gyro.reset();
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
@@ -80,8 +79,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
 		final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
 
-		final double leftOutput = leftPIDController.calculate(leftMotorInterface.getRate(), speeds.leftMetersPerSecond);
-		final double rightOutput = rightPIDController.calculate(rightMotorInterface.getRate(),
+		final double leftOutput = leftPIDController.calculate(frontLeft.getRate(), speeds.leftMetersPerSecond);
+		final double rightOutput = rightPIDController.calculate(frontRight.getRate(),
 				speeds.rightMetersPerSecond);
 		leftGroup.setVoltage(leftOutput + leftFeedforward);
 		rightGroup.setVoltage(rightOutput + rightFeedforward);
@@ -94,7 +93,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 
 	/** Updates the field-relative position. */
 	public void updateOdometry() {
-		odometry.update(gyro.getRotation2d(), leftMotorInterface.getDistance(), rightMotorInterface.getDistance());
+		odometry.update(gyro.getRotation2d(), i2M(frontLeft.getDistance()), i2M(frontRight.getDistance()));
 	}
 
 	private double i2M(double inches) {
@@ -147,24 +146,26 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontLeft.set(left);
 		frontRight.set(-right);
 		backRight.set(-right);
-		// log();
+		log();
 	}
 
 	public void log() {
-		SmartDashboard.putNumber("backLeft", x);
-		SmartDashboard.putNumber("frontLeft", y);
-		SmartDashboard.putNumber("frontRight", area);
-		SmartDashboard.putNumber("backRight", area);
-	  //smartdashboard getDouble value figure out pls help
+		SmartDashboard.putNumber("leftDistance", frontLeft.getDistance());
+		SmartDashboard.putNumber("leftSpeed", frontLeft.getRate());
+		SmartDashboard.putNumber("rightDistance", frontRight.getDistance());
+		SmartDashboard.putNumber("rightSpeed", frontRight.getRate());
+	    
 	}
 
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		log();
 	}
 
 	@Override
 	public void simulationPeriodic() {
 		// This method will be called once per scheduler run during simulation
+		log();
 	}
 }
