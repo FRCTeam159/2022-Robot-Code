@@ -35,36 +35,41 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final MotorControllerGroup leftGroup;
 	private final MotorControllerGroup rightGroup;
 
-	public static final double kMaxSpeed = 108; // inches per second
-	public static final double kMaxAngularSpeed = 2 * Math.PI; // one rotation per second
+	private static final double LOW_GEARBOX_RATIO = 8.333;
+	private static final double DRIVE_SPROCKET_RATIO = 38.0 / 22.0;
+	private static final double FINAL_GEAR_RATIO = LOW_GEARBOX_RATIO * DRIVE_SPROCKET_RATIO;
+
+
+	public static final double kMaxSpeed = i2M(30); // inches per second
+	public static final double kMaxAngularSpeed = 10; // one rotation per second
 
 	private final AnalogGyro gyro = new AnalogGyro(0);
 
-	private final PIDController leftPIDController = new PIDController(1, 0, 0);
-	private final PIDController rightPIDController = new PIDController(1, 0, 0);
+	private final PIDController leftPIDController = new PIDController(0.2, 0, 0);
+	private final PIDController rightPIDController = new PIDController(0.2, 0, 0);
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 3);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 0.5);
 
+	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(0.1);
+	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.1);
 
-	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(3);
-	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
-
-	private static final double kTrackWidth = 28.25; // inches
-	private static final double kWheelRadius = 2.13; // inches
+	private static final double kTrackWidth = i2M(28.25); // inches
+	private static final double kWheelRadius = i2M(2.13); // inches
 	// public static final double WHEEL_DIAMETER = 4.26;
+	private static final double distancePerRotationGearDown = (kWheelRadius * 2 * Math.PI)/FINAL_GEAR_RATIO;
 
 	public DriveTrain() {
 		frontLeft = new SparkMotor(FRONT_LEFT);
 		frontRight = new SparkMotor(FRONT_RIGHT);
 		backLeft = new SparkMotor(BACK_LEFT);
 		backRight = new SparkMotor(BACK_RIGHT);
-		frontLeft.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
-		frontRight.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
-		backLeft.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
-		backRight.setDistancePerRotation(kWheelRadius * 2 * Math.PI);
+		frontLeft.setDistancePerRotation(distancePerRotationGearDown);
+		frontRight.setDistancePerRotation(distancePerRotationGearDown);
+		backLeft.setDistancePerRotation(distancePerRotationGearDown);
+		backRight.setDistancePerRotation(distancePerRotationGearDown);
 		gyro.reset();
 
 		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
@@ -72,18 +77,23 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		leftGroup = new MotorControllerGroup(frontLeft, backLeft);
 		rightGroup = new MotorControllerGroup(frontRight, backRight);
 		rightGroup.setInverted(true);
-
+		frontRight.setInverted();
+		backRight.setInverted();
+		
 	}
 
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
 		final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
 		final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
-
 		final double leftOutput = leftPIDController.calculate(frontLeft.getRate(), speeds.leftMetersPerSecond);
 		final double rightOutput = rightPIDController.calculate(frontRight.getRate(),
 				speeds.rightMetersPerSecond);
 		leftGroup.setVoltage(leftOutput + leftFeedforward);
 		rightGroup.setVoltage(rightOutput + rightFeedforward);
+	}
+
+	public double getHeading() {
+		return gyro.getAngle();
 	}
 
 	public void drive(double xSpeed, double rot) {
@@ -93,24 +103,29 @@ public class DriveTrain extends SubsystemBase implements Constants {
 
 	/** Updates the field-relative position. */
 	public void updateOdometry() {
-		odometry.update(gyro.getRotation2d(), i2M(frontLeft.getDistance()), i2M(frontRight.getDistance()));
+		odometry.update(gyro.getRotation2d(), (frontLeft.getDistance()), (frontRight.getDistance()));
 	}
 
-	private double i2M(double inches) {
+	private static double i2M(double inches) {
 		return inches * 0.0254;
 	}
 
 	public void odometryDrive(double moveValue, double turnValue) {
-		final var xSpeed = -m_speedLimiter.calculate(moveValue) * i2M(kMaxSpeed);
-		final var rot = -m_rotLimiter.calculate(turnValue) * kMaxAngularSpeed;
-		drive(xSpeed, rot);
+		/*
+		 * final var xSpeed = -m_speedLimiter.calculate(moveValue) * (kMaxSpeed);
+		 * final var rot = -m_rotLimiter.calculate(turnValue) * kMaxAngularSpeed;
+		 * drive(xSpeed, rot);
+		 */
+		drive(moveValue, turnValue);
+
 	}
 
 	public void arcadeDrive(double moveValue, double turnValue) {
 		double leftMotorOutput;
 		double rightMotorOutput;
 		// System.out.println("M:"+moveValue+" T:"+turnValue);
-
+		moveValue *= 0.2;
+		turnValue *= 0.2;
 		if (moveValue > 0.0) {
 			if (turnValue > 0.0) {
 				leftMotorOutput = Math.max(moveValue, turnValue);
@@ -154,12 +169,14 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("leftSpeed", frontLeft.getRate());
 		SmartDashboard.putNumber("rightDistance", frontRight.getDistance());
 		SmartDashboard.putNumber("rightSpeed", frontRight.getRate());
-	    
+		SmartDashboard.putNumber("Heading", getHeading());
+		
+SmartDashboard.putNumber("Rotations", frontRight.getRotations());
 	}
-
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
+		updateOdometry();
 		log();
 	}
 

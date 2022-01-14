@@ -18,7 +18,7 @@ class SparkMotor extends CANSparkMax implements MotorInterface {
     private RelativeEncoder encoder;
     private double zeroValue = 0;
     private double distancePerRotation = 1;
-
+    private int inverted = 1;
     SparkMotor(int id) {
         super(id, CANSparkMaxLowLevel.MotorType.kBrushless);
         encoder = getEncoder();
@@ -37,7 +37,7 @@ class SparkMotor extends CANSparkMax implements MotorInterface {
     @Override
     public double getRate() {
 
-        return getEncoder().getVelocity();
+        return distancePerRotation * inverted * getEncoder().getVelocity()/60;
     }
 
     @Override
@@ -48,6 +48,12 @@ class SparkMotor extends CANSparkMax implements MotorInterface {
 
     @Override
     public double getDistance() {
-        return getRotations() * distancePerRotation;
+        return getRotations() * distancePerRotation * inverted;
+        
+    }
+    public void setInverted() {
+        inverted = -1;
+        
+        
     }
 }

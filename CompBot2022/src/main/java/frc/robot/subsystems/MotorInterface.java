@@ -6,7 +6,7 @@ package frc.robot.subsystems;
 
 /** Add your docs here. */
 public interface MotorInterface {
-    double getRotations();
+
     void set(double arg);
     void reset();
 

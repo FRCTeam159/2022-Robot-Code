@@ -44,8 +44,9 @@ public class DriveWithGamepad extends CommandBase implements Constants {
     if (Math.abs(xs) < 0.2) {
       xs = 0;
     }
-    // m_Drive.arcadeDrive(zs, xs);
-    m_Drive.odometryDrive(zs, xs);
+
+    m_Drive.arcadeDrive(zs, xs);
+    // m_Drive.odometryDrive(zs, xs);
 
   }
 
