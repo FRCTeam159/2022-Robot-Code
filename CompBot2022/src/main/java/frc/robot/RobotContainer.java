@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.DriveToPath;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -21,7 +22,8 @@ public class RobotContainer {
   private final XboxController m_Controller = new XboxController(0);
   private final DriveTrain m_Drive = new DriveTrain();
 
-  private final DriveWithGamepad m_autoCommand = new DriveWithGamepad(m_Drive, m_Controller);
+  private final DriveWithGamepad m_teleOP = new DriveWithGamepad(m_Drive, m_Controller);
+  private final DriveToPath m_driveToPath = new DriveToPath();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -45,6 +47,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_driveToPath;
   }
 }

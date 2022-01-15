@@ -40,21 +40,22 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private static final double FINAL_GEAR_RATIO = LOW_GEARBOX_RATIO * DRIVE_SPROCKET_RATIO;
 
 
-	public static final double kMaxSpeed = i2M(30); // inches per second
-	public static final double kMaxAngularSpeed = 10; // one rotation per second
+	public static final double kMaxSpeed = i2M(50); // inches per second
+	public static final double kMaxAngularSpeed = 180; // one rotation per second
 
 	private final AnalogGyro gyro = new AnalogGyro(0);
 
-	private final PIDController leftPIDController = new PIDController(0.2, 0, 0);
-	private final PIDController rightPIDController = new PIDController(0.2, 0, 0);
+	private final PIDController leftPIDController = new PIDController(0.5, 0, 0);
+	private final PIDController rightPIDController = new PIDController(0.5, 0, 0);
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(1, 0.5);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(2, 3);
 
-	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(0.1);
-	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(0.1);
+	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
+	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
+	public boolean m_driveArcade = false; 
 
 	private static final double kTrackWidth = i2M(28.25); // inches
 	private static final double kWheelRadius = i2M(2.13); // inches
@@ -79,6 +80,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		rightGroup.setInverted(true);
 		frontRight.setInverted();
 		backRight.setInverted();
+		SmartDashboard.putBoolean("DriveMode", m_driveArcade);
 		
 	}
 
@@ -112,10 +114,11 @@ public class DriveTrain extends SubsystemBase implements Constants {
 
 	public void odometryDrive(double moveValue, double turnValue) {
 		/*
-		 * final var xSpeed = -m_speedLimiter.calculate(moveValue) * (kMaxSpeed);
-		 * final var rot = -m_rotLimiter.calculate(turnValue) * kMaxAngularSpeed;
-		 * drive(xSpeed, rot);
-		 */
+		final var xSpeed = -m_speedLimiter.calculate(moveValue); 
+		final var rot = -m_rotLimiter.calculate(turnValue);
+		drive(xSpeed, rot);
+		*/
+		 
 		drive(moveValue, turnValue);
 
 	}
@@ -124,8 +127,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		double leftMotorOutput;
 		double rightMotorOutput;
 		// System.out.println("M:"+moveValue+" T:"+turnValue);
-		moveValue *= 0.2;
-		turnValue *= 0.2;
+		moveValue *= 0.5;
+		turnValue *= 0.5;
 		if (moveValue > 0.0) {
 			if (turnValue > 0.0) {
 				leftMotorOutput = Math.max(moveValue, turnValue);
@@ -170,6 +173,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("rightDistance", frontRight.getDistance());
 		SmartDashboard.putNumber("rightSpeed", frontRight.getRate());
 		SmartDashboard.putNumber("Heading", getHeading());
+		m_driveArcade = SmartDashboard.getBoolean("DriveMode", m_driveArcade);
 		
 SmartDashboard.putNumber("Rotations", frontRight.getRotations());
 	}
