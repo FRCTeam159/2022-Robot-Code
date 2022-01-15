@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase implements Constants {
+	
 	private SparkMotor frontLeft;
 	private SparkMotor frontRight;
 	private SparkMotor backLeft;
@@ -42,6 +44,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 
 	public static final double kMaxSpeed = i2M(50); // inches per second
 	public static final double kMaxAngularSpeed = 180; // one rotation per second
+    public static double kMaxAcceleration = 1; //mps
 
 	private final AnalogGyro gyro = new AnalogGyro(0);
 
@@ -106,6 +109,19 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	/** Updates the field-relative position. */
 	public void updateOdometry() {
 		odometry.update(gyro.getRotation2d(), (frontLeft.getDistance()), (frontRight.getDistance()));
+	}
+
+	public void resetOdometry(Pose2d pose) {
+		gyro.reset();
+		backLeft.reset();
+		frontLeft.reset();
+		backRight.reset();
+		frontRight.reset();
+		odometry.resetPosition(pose, gyro.getRotation2d());
+	}
+
+	public Pose2d getPose() {
+		return odometry.getPoseMeters();
 	}
 
 	private static double i2M(double inches) {

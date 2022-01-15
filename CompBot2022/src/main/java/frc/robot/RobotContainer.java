@@ -23,7 +23,7 @@ public class RobotContainer {
   private final DriveTrain m_Drive = new DriveTrain();
 
   private final DriveWithGamepad m_teleOP = new DriveWithGamepad(m_Drive, m_Controller);
-  private final DriveToPath m_driveToPath = new DriveToPath();
+  private final DriveToPath m_driveToPath = new DriveToPath(m_Drive);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
