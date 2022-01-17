@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -59,8 +60,9 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 	public boolean m_driveArcade = false; 
+	public boolean useGyro = false;
 
-	private static final double kTrackWidth = i2M(28.25); // inches
+	public static final double kTrackWidth = i2M(28.25); // inches
 	private static final double kWheelRadius = i2M(2.13); // inches
 	// public static final double WHEEL_DIAMETER = 4.26;
 	private static final double distancePerRotationGearDown = (kWheelRadius * 2 * Math.PI)/FINAL_GEAR_RATIO;
@@ -76,14 +78,14 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		backRight.setDistancePerRotation(distancePerRotationGearDown);
 		gyro.reset();
 
-		odometry = new DifferentialDriveOdometry(gyro.getRotation2d());
+		odometry = new DifferentialDriveOdometry(getRotation2d());
 
 		leftGroup = new MotorControllerGroup(frontLeft, backLeft);
 		rightGroup = new MotorControllerGroup(frontRight, backRight);
 		rightGroup.setInverted(true);
 		frontRight.setInverted();
 		backRight.setInverted();
-		SmartDashboard.putBoolean("DriveMode", m_driveArcade);
+		SmartDashboard.putBoolean("ArcadeMode", m_driveArcade);
 		
 	}
 
@@ -98,8 +100,16 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	}
 
 	public double getHeading() {
-		return gyro.getAngle();
+			return getRotation2d().getDegrees();
 	}
+
+	public Rotation2d getRotation2d() {
+		double delta = getLeftDistance() - getRightDistance();
+		Rotation2d r = new Rotation2d(-delta/kTrackWidth); //remove neg if add neg at omega radianspersecond
+		return r;
+	}
+
+
 
 	public void drive(double xSpeed, double rot) {
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
@@ -108,7 +118,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 
 	/** Updates the field-relative position. */
 	public void updateOdometry() {
-		odometry.update(gyro.getRotation2d(), (frontLeft.getDistance()), (frontRight.getDistance()));
+		odometry.update(getRotation2d(), (frontLeft.getDistance()), (frontRight.getDistance()));
 	}
 
 	public void resetOdometry(Pose2d pose) {
@@ -117,10 +127,16 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontLeft.reset();
 		backRight.reset();
 		frontRight.reset();
-		odometry.resetPosition(pose, gyro.getRotation2d());
+		getRotation2d();
+		odometry.resetPosition(pose, getRotation2d());
+	}
+
+	public void reset() {
+		resetOdometry(new Pose2d());
 	}
 
 	public Pose2d getPose() {
+		updateOdometry();
 		return odometry.getPoseMeters();
 	}
 
@@ -136,7 +152,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		*/
 		 
 		drive(moveValue, turnValue);
-
+		//System.out.println(moveValue + ": " + turnValue + " " + getHeading());
 	}
 
 	public void arcadeDrive(double moveValue, double turnValue) {
@@ -189,7 +205,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("rightDistance", frontRight.getDistance());
 		SmartDashboard.putNumber("rightSpeed", frontRight.getRate());
 		SmartDashboard.putNumber("Heading", getHeading());
-		m_driveArcade = SmartDashboard.getBoolean("DriveMode", m_driveArcade);
+		m_driveArcade = SmartDashboard.getBoolean("ArcadeMode", m_driveArcade);
 		
 SmartDashboard.putNumber("Rotations", frontRight.getRotations());
 	}
@@ -205,4 +221,12 @@ SmartDashboard.putNumber("Rotations", frontRight.getRotations());
 		// This method will be called once per scheduler run during simulation
 		log();
 	}
+
+    public double getLeftDistance() {
+        return frontLeft.getDistance();
+    }
+
+    public double getRightDistance() {
+        return frontRight.getDistance();
+    }
 }
