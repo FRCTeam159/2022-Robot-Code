@@ -14,7 +14,10 @@ package frc.robot;
  * It is advised to statically import this class (or one of its inner classes)
  * wherever the constants are needed, to reduce verbosity.
  */
+
+
 public interface Constants {
+    public static boolean flagPancake = true;
     public static final int FRONT_LEFT = 3;
     public static final int BACK_LEFT = 4;
 
@@ -23,6 +26,6 @@ public interface Constants {
 
     public static final int LEFT_JOYSTICK = 1;
     public static final int RIGHT_JOYSTICK = 4;
-    public static final double WHEEL_DIAMETER = 4.26;
+    
 
 }

@@ -52,22 +52,31 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final PIDController leftPIDController = new PIDController(0.5, 0, 0);
 	private final PIDController rightPIDController = new PIDController(0.5, 0, 0);
 
-	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth);
+	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(kTrackWidth*2);
 	private final DifferentialDriveOdometry odometry;
 
-	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(2, 3);
+	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(2, 2);
 
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
-	public boolean m_driveArcade = false; 
+	public boolean m_driveArcade = true; 
 	public boolean useGyro = false;
+	
+	public static double kTrackWidth = i2M(flagPancake?28.25:24); // inches
+	public static double kWheelRadius = i2M(flagPancake?2.13:4.0); // inches
 
-	public static final double kTrackWidth = i2M(28.25); // inches
-	private static final double kWheelRadius = i2M(2.13); // inches
 	// public static final double WHEEL_DIAMETER = 4.26;
+	//if (flagPancake == true) {
+	//	kTrackWidth = kTrackWidthPancake;
+	//	kWheelRadius = kWheelRadiusPancake;
+	//} else {
+	//	kTrackWidth = kTrackWidthComp;
+	//	kWheelRadius = kWheelRadiusComp;
+	//}
 	private static final double distancePerRotationGearDown = (kWheelRadius * 2 * Math.PI)/FINAL_GEAR_RATIO;
 
 	public DriveTrain() {
+
 		frontLeft = new SparkMotor(FRONT_LEFT);
 		frontRight = new SparkMotor(FRONT_RIGHT);
 		backLeft = new SparkMotor(BACK_LEFT);
@@ -86,6 +95,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontRight.setInverted();
 		backRight.setInverted();
 		SmartDashboard.putBoolean("ArcadeMode", m_driveArcade);
+	
 		
 	}
 
@@ -206,8 +216,9 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		SmartDashboard.putNumber("rightSpeed", frontRight.getRate());
 		SmartDashboard.putNumber("Heading", getHeading());
 		m_driveArcade = SmartDashboard.getBoolean("ArcadeMode", m_driveArcade);
+	
 		
-SmartDashboard.putNumber("Rotations", frontRight.getRotations());
+		SmartDashboard.putNumber("Rotations", frontRight.getRotations());
 	}
 	@Override
 	public void periodic() {

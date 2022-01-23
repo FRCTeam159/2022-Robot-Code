@@ -45,11 +45,16 @@ public class DriveWithGamepad extends CommandBase implements Constants {
       xs = 0;
     }
 
+    //Non-linear activation (needs to be after dead-zone)
+    xs = Math.pow(xs, 2) * (xs > 0 ? 1 : -1);
+    zs = Math.pow(zs, 2) * (zs > 0 ? 1 : -1);
+
     if (m_Drive.m_driveArcade) {
-      m_Drive.arcadeDrive(zs, xs);
+      m_Drive.arcadeDrive(zs, xs*0.9);
       //System.out.println("Arcade");
     }
     else {
+      xs = zs < 0? xs : -xs;
       m_Drive.odometryDrive(zs, xs);
       //System.out.println("Odometry");
     }
