@@ -43,7 +43,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private static final double FINAL_GEAR_RATIO = LOW_GEARBOX_RATIO * DRIVE_SPROCKET_RATIO;
 
 
-	public static final double kMaxSpeed = i2M(50); // inches per second
+	public static final double kMaxSpeed = i2M(100); // inches per second
 	public static final double kMaxAngularSpeed = 180; // one rotation per second
     public static double kMaxAcceleration = 1; //mps
 
