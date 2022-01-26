@@ -12,6 +12,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
+import frc.robot.commands.DriveToCargo;
+import frc.robot.commands.DriveToTarget;
+import frc.robot.commands.GrabCargo;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.TurnToAngle;
 import utils.PlotUtils;
 
@@ -23,10 +27,9 @@ public class Autonomous extends SubsystemBase {
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
-  public static final int AUTOTEST = 2;
-  public static final int PATHWEAVER = 3;
-
-  boolean reversed=false;
+  public static final int AUTOTEST1 = 2;
+  public static final int AUTOTEST2 = 3;
+ 
  
   public int selected_path=PROGRAM;
 
@@ -41,11 +44,12 @@ public class Autonomous extends SubsystemBase {
     m_auto_plot_option.addOption("Plot Position", PlotUtils.PLOT_POSITION);
 
     m_path_chooser.setDefaultOption("Program", PROGRAM);
-	  m_path_chooser.addOption("AutoTest", AUTOTEST);
-    m_path_chooser.addOption("PathWeaver", PATHWEAVER);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-    SmartDashboard.putBoolean("reversed", reversed);
+	  m_path_chooser.addOption("AutoTest 1", AUTOTEST1);
+    m_path_chooser.addOption("AutoTest 2", AUTOTEST2);
+
+    SmartDashboard.putBoolean("reversed", false);
     SmartDashboard.putNumber("xPath", 4);
     SmartDashboard.putNumber("yPath", 0);
     SmartDashboard.putNumber("rPath", 0);
@@ -53,24 +57,48 @@ public class Autonomous extends SubsystemBase {
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);
   }
+
   public CommandGroupBase getCommand(){
     PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
-    reversed = SmartDashboard.getBoolean("reversed", reversed);
     
     CommandGroupBase.clearGroupedCommands();
       
     switch (selected_path){
     case CALIBRATE:
       return new SequentialCommandGroup(new Calibrate(m_drive));
-    case PATHWEAVER:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PATHWEAVER,reversed));
     case PROGRAM:
-      return new SequentialCommandGroup(new DrivePath(m_drive,PROGRAM,reversed));
-    case AUTOTEST:
-      return new SequentialCommandGroup(
-        new TurnToAngle(m_drive,90.0), new DrivePath(m_drive,PROGRAM,reversed));
+      return programPath();
+    case AUTOTEST1:
+      return autoTest1();
+    case AUTOTEST2:
+      return autoTest2();
     }
     return null;
+  }
+  CommandGroupBase programPath(){
+    double x = SmartDashboard.getNumber("xPath", 4);
+    double y = SmartDashboard.getNumber("yPath", 0);
+    double r = SmartDashboard.getNumber("rPath", 0);
+    boolean rev=SmartDashboard.getBoolean("reversed", false);
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+    commands.addCommands(new DrivePath(m_drive,x,y,r,rev));
+    return commands;
+  }
+  CommandGroupBase autoTest1(){
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+    commands.addCommands(new TurnToAngle(m_drive,90.0));
+    commands.addCommands(new DrivePath(m_drive,4.0,0.0,0.0,false));
+    return commands;
+  }
+  CommandGroupBase autoTest2(){
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+    commands.addCommands(new DrivePath(m_drive,0.75,0.0,0,true)); // backup 1 meter
+    commands.addCommands(new DriveToTarget()); // acquire target using limelight
+    commands.addCommands(new Shoot());    // shoot
+    commands.addCommands(new DriveToCargo());  // drive to pall using Axon
+    commands.addCommands(new DriveToTarget()); // acquire target using limelight
+    commands.addCommands(new Shoot());    // shoot
+    return commands;
   }
 }

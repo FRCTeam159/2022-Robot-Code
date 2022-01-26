@@ -69,13 +69,7 @@ public class SparkMotor implements MotorInterface {
         else
             return sim_motor.getDistance();
     }
-    @Override
-    public double getTotalDistance() {
-        if (Robot.isReal())
-            return getRotations() * distancePerRotation * inverted;
-        else
-            return sim_motor.getTotalDistance();
-    }
+    
     @Override
     public void setInverted() {
         inverted = -1;

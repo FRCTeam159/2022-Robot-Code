@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -16,14 +15,13 @@ import gazebo.SimClock;
 import gazebo.SimControl;
 
 public class Simulation extends SubsystemBase {
-  static int cnt=0;
+
   /** Creates a new SimulationControl. */
   private SimControl m_simcontrol = new SimControl();
   private Drivetrain m_drive;
   private boolean resetting = false;
   private final Field2d m_fieldSim = new Field2d();
-  Pose2d field_offset= new Pose2d(7,2,Rotation2d.fromDegrees(90));
-
+  
   private final Timer m_timer = new Timer();
 
   double simtime = 0;
@@ -61,6 +59,7 @@ public class Simulation extends SubsystemBase {
     System.out.println("Simulation.clear");
     m_simclock.clear();
     m_timer.reset();
+    m_drive.resetPose();
     SmartDashboard.putNumber("SimTime", 0);
     running = false;
   }
@@ -85,15 +84,27 @@ public class Simulation extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  // set the robot pose in the glass field window
+  // - field_offset is the initila position of the robot on the field
+  // - for 2022 RapidReact needed to scale down effective travel distance
+  //   by 10% in order to match robot position in Gazebo simulator
+  private void setFieldPose() {
+    Pose2d field_offset= new Pose2d(7.3,2,Rotation2d.fromDegrees(90));
+
+    Pose2d field_pose = m_drive.getFieldPose();
+    Pose2d p1 = Drivetrain.add(field_offset, field_pose);
+
+    Pose2d robot_pose = m_drive.getPose();
+    Translation2d t1 = robot_pose.getTranslation();
+    t1 = t1.times(0.9);
+    robot_pose = new Pose2d(t1, robot_pose.getRotation());
+    Pose2d sim_pose = Drivetrain.add(p1, robot_pose);
+
+    m_fieldSim.setRobotPose(sim_pose);
+  }
+
   public void simulationPeriodic() {
-    
-    Pose2d robot_pose=m_drive.getAbsPose();
-    Transform2d transform=new Transform2d(robot_pose.getTranslation(), robot_pose.getRotation());
-    Pose2d field_pose=field_offset.plus(transform);
-    if((cnt%20)==0)
-      System.out.println(field_pose);
-    cnt++;
-    m_fieldSim.setRobotPose(field_pose);
+    setFieldPose(); 
     simtime = getClockTime();
     if (running)
       SmartDashboard.putNumber("SimClock", getClockTime());
@@ -104,16 +115,12 @@ public class Simulation extends SubsystemBase {
     if (b) {
       if (!resetting) {
         resetting = true;
-        m_drive.reset();
-        if (m){
-          clear();
-          m_drive.resetOdometry(new Pose2d(0,0,new Rotation2d(0)));
-        }
-       
+        if (m)
+          clear();       
+        m_drive.reset();    
         m_timer.reset();
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {
-         // m_drive.reset();
           m_drive.disable();
           disabling = true;
         } else if (m_timer.get() > 0.5) {

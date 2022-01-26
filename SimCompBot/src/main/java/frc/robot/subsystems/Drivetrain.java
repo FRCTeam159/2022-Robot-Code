@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -52,8 +53,9 @@ public class Drivetrain extends SubsystemBase {
 	
 	public boolean enable_gyro = true;
 	private double last_heading=0;
-	private double last_abs_heading=0;
 	public boolean arcade_mode=false;
+
+	private Pose2d field_pose;
 
 	public Drivetrain() {
 		simulation = new Simulation(this);
@@ -66,7 +68,6 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.setInverted();
 	
 		odometry = new DifferentialDriveOdometry(getRotation2d());
-		
 		
 		SmartDashboard.putBoolean("Enable gyro", enable_gyro);
 		SmartDashboard.putBoolean("Arcade mode", arcade_mode);
@@ -89,8 +90,8 @@ public class Drivetrain extends SubsystemBase {
 		enable();
 	}
 	public void init(){
-		System.out.println(odometry);
 		System.out.println("Drivetrain.init");
+		field_pose=getPose();
 		simulation.init();
 		enable();
 	}
@@ -108,18 +109,30 @@ public class Drivetrain extends SubsystemBase {
 		rightMotor.enable();
 		gyro.enable();
 	}
-	
+	// get transform from pose
+	public static Transform2d getTransform(Pose2d pose){
+		return new Transform2d(pose.getTranslation(), pose.getRotation());
+	}
+	// add two poses
+	public static Pose2d add(Pose2d p1,Pose2d p2){
+		Transform2d td=getTransform(p2);
+		return p1.plus(td);
+	}
 	public void reset(){
+		field_pose=add(field_pose,getPose());
 		System.out.println("Drivetrain.reset");
 		leftMotor.reset();
 		rightMotor.reset();
 		gyro.reset();
 		last_heading =0;
 	}
+	public void resetPose() {
+		resetOdometry(new Pose2d(0,0,new Rotation2d(0)));
+		field_pose=getPose();
+    }
 	public double getHeading(){
 		return getRotation2d().getDegrees();
 	}
-	
 	public double gyroHeading(){
 		return gyro.getHeading();
 	}
@@ -127,7 +140,6 @@ public class Drivetrain extends SubsystemBase {
 		double angle=r2D((getRightDistance()-getLeftDistance())/kTrackWidth);	
 		return angle;
 	}
-	
 	public Rotation2d getRotation2d(){
 		double angle;
 		if(enable_gyro)
@@ -211,16 +223,11 @@ public class Drivetrain extends SubsystemBase {
 		gyro.reset();
 		odometry.resetPosition(pose, getRotation2d());
 	}
-
-    public Pose2d getPose() {
+	public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
-	public Pose2d getAbsPose() {
-		double angle=gyro.getHeading();
-		angle=unwrap(last_abs_heading,angle);
-		Pose2d pose=new Pose2d(leftMotor.getTotalDistance(),rightMotor.getTotalDistance(),Rotation2d.fromDegrees(angle));
-		last_abs_heading=angle;
-        return pose;
+	public Pose2d getFieldPose() {
+        return field_pose;
     }
 	public void set(double value) {
 		leftMotor.set(value);

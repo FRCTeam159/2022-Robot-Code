@@ -61,12 +61,7 @@ public class Gyroscope implements GyroInterface{
         else
             return sim_gyro.getHeading();
     }
-    public double getAbsHeading() {
-        if(Robot.isReal())
-            return real_gyro.getAngle();
-        else
-            return sim_gyro.getAbsHeading();
-    }
+    
     @Override
     public boolean isEnabled() {
         return enabled;

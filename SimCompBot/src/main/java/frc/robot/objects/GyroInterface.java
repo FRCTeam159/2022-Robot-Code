@@ -10,7 +10,6 @@ public interface GyroInterface {
     void disable();
     void reset();
     double getHeading();
-    double getAbsHeading();
     double getRate();
     boolean isEnabled();
 
