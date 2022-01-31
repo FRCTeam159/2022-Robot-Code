@@ -5,11 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Targeting;
 
 public class DriveToCargo extends CommandBase {
   boolean test=true;
-  public DriveToCargo() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private final Drivetrain m_drive;
+  private final Targeting m_targeting;
+  public DriveToCargo(Drivetrain drive,Targeting targeting) {
+    m_drive=drive;
+    m_targeting=targeting;
+    addRequirements(drive,targeting);
   }
 
   // Called when the command is initially scheduled.

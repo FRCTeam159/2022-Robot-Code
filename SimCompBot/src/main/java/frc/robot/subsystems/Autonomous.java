@@ -24,6 +24,7 @@ public class Autonomous extends SubsystemBase {
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   Drivetrain m_drive;
+  Targeting m_targeting;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
@@ -35,8 +36,9 @@ public class Autonomous extends SubsystemBase {
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
-  public Autonomous(Drivetrain drive) {
+  public Autonomous(Drivetrain drive,Targeting targeting) {
     m_drive=drive;
+    m_targeting=targeting;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
@@ -94,10 +96,10 @@ public class Autonomous extends SubsystemBase {
   CommandGroupBase autoTest2(){
     SequentialCommandGroup commands = new SequentialCommandGroup();
     commands.addCommands(new DrivePath(m_drive,0.75,0.0,0,true)); // backup 1 meter
-    commands.addCommands(new DriveToTarget()); // acquire target using limelight
+    commands.addCommands(new DriveToTarget(m_drive,m_targeting)); // acquire target using limelight
     commands.addCommands(new Shoot());    // shoot
-    commands.addCommands(new DriveToCargo());  // drive to pall using Axon
-    commands.addCommands(new DriveToTarget()); // acquire target using limelight
+    commands.addCommands(new DriveToCargo(m_drive,m_targeting));  // drive to ball using Axon
+    commands.addCommands(new DriveToTarget(m_drive,m_targeting)); // acquire target using limelight
     commands.addCommands(new Shoot());    // shoot
     return commands;
   }
