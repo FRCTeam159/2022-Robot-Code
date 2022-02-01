@@ -24,8 +24,12 @@ public interface Constants {
     public static final int FRONT_RIGHT = 2;
     public static final int BACK_RIGHT = 1;
 
+    public static final int INTAKE = 7;
+    public static final int SHOOTER = 8;
+
     public static final int LEFT_JOYSTICK = 1;
     public static final int RIGHT_JOYSTICK = 4;
+
     
 
 }

@@ -54,7 +54,7 @@ public class Autonomous extends SubsystemBase {
     SmartDashboard.putData(m_auto_plot_option);
   }
   public CommandGroupBase getCommand(){
-    PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
+    //PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
     reversed = SmartDashboard.getBoolean("reversed", reversed);
     

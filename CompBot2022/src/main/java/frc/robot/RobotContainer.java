@@ -7,8 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.ShootingCommand;
+import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveToPath;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Shooting;
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -18,12 +23,20 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  //subsystem
+
   private final XboxController m_Controller = new XboxController(0);
   private final DriveTrain m_Drive = new DriveTrain();
+  private final Limelight m_limelight = new Limelight();
+  private final Shooting m_shoot = new Shooting();
+ 
 
+  //command
+  private final TurnToAngle m_turnToAngle = new TurnToAngle(m_Drive, 90);
+  private final AutoAim m_aim = new AutoAim(m_limelight);
   private final DriveWithGamepad m_teleOP = new DriveWithGamepad(m_Drive, m_Controller);
   private final DriveToPath m_driveToPath = new DriveToPath(m_Drive);
+  private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
