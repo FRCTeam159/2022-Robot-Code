@@ -5,12 +5,12 @@
 package frc.robot.objects;
 
 /** Add your docs here. */
-public interface GyroInterface {
+public interface DetectorInterface {
+    public static final int FRONT=0;
+    public static final int BACK=1;
+    public static final int TARGET=2;
     void enable();
     void disable();
-    void reset();
-    double getHeading();
-    double getRate();
     boolean isEnabled();
 
 }

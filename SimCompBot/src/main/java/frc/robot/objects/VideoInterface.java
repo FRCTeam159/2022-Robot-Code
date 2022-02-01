@@ -4,13 +4,10 @@
 
 package frc.robot.objects;
 
-/** Add your docs here. */
-public interface GyroInterface {
-    void enable();
-    void disable();
-    void reset();
-    double getHeading();
-    double getRate();
-    boolean isEnabled();
+import org.opencv.core.Mat;
 
+/** Add your docs here. */
+public interface VideoInterface {
+    Mat getMat();
+    boolean isConnected();
 }

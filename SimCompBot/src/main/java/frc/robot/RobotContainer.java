@@ -11,6 +11,7 @@ import frc.robot.commands.DriveWithGamepad;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Targeting;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,7 +23,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Cameras m_cameras = new Cameras();
-  private final Autonomous m_autonomous = new Autonomous(m_drivetrain);
+  private final Targeting m_targeting = new Targeting();
+  private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting);
   private final XboxController m_controller = new XboxController(0);
 
   private DriveWithGamepad m_driveCommand = null; // TODO
@@ -58,5 +60,6 @@ public class RobotContainer {
   }
   public void robotInit(){
     m_drivetrain.init();
+    m_targeting.start();
   }
 }

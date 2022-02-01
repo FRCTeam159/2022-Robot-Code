@@ -13,7 +13,6 @@ public interface MotorInterface {
     double getRate();
     void setDistancePerRotation(double d);
     double getDistance();
-    double getTotalDistance();
     void enable();
     void disable();
     void setInverted();

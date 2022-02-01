@@ -20,9 +20,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Drivetrain;
 import utils.PathData;
 import utils.PlotUtils;
@@ -50,11 +48,12 @@ public class DrivePath extends CommandBase {
   boolean reversed = false;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
-  int trajectory_option = Autonomous.PROGRAM;
 
-  public DrivePath(Drivetrain drive, int opt,boolean rev) {
+  public DrivePath(Drivetrain drive, double x, double y, double r, boolean rev) {
     reversed=rev;
-    trajectory_option=opt;
+    xPath=x;
+    yPath=y;
+    rPath=r;
     m_drive = drive;
     addRequirements(drive);
   }
@@ -65,15 +64,15 @@ public class DrivePath extends CommandBase {
   @Override
   public void initialize() {
     plot_type = PlotUtils.auto_plot_option;
-    System.out.println("DRIVEPATH_INIT");
+    System.out.println("DrivePath.start");
 
-    xPath = SmartDashboard.getNumber("xPath", xPath);
-    yPath = SmartDashboard.getNumber("yPath", yPath);
-    rPath = SmartDashboard.getNumber("rPath", rPath);
+    //xPath = SmartDashboard.getNumber("xPath", xPath);
+    //yPath = SmartDashboard.getNumber("yPath", yPath);
+    //rPath = SmartDashboard.getNumber("rPath", rPath);
 
     PlotUtils.initPlot();
 
-    m_trajectory=getTrajectory();
+    m_trajectory=programPath();
     if(m_trajectory==null)
       return;
 
@@ -126,11 +125,10 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void end(boolean interrupted) {
-    System.out.println("DRIVEPATH_END");
+    System.out.println("DrivePath.end");
     if (m_trajectory == null)
       return;
     m_drive.reset();
-    // m_drive.enable();
 
     if (plot_type != utils.PlotUtils.PLOT_NONE)
       utils.PlotUtils.publish(pathdata, 6, plot_type);
@@ -144,36 +142,18 @@ public class DrivePath extends CommandBase {
     return elapsed >= 1.001 * runtime || m_trajectory == null;
   }
 
-  // *********************** trajectory functions *******************/
-
   // =================================================
-  // getTrajectory: return a selected trajectory
-  // =================================================
-  Trajectory getTrajectory() {
-    switch (trajectory_option) {
-      case Autonomous.PROGRAM:
-        return programPath();
-      case Autonomous.PATHWEAVER:
-        return pathWeaverTest();
-    }
-    return null;
-  }
-
-  // =================================================
-  // programPath: build a multi-point trajectory from variables
+  // programPath: build a two-point trajectory from variables
   // =================================================
   Trajectory programPath() {
     Pose2d pos1 = new Pose2d(0, 0, new Rotation2d(0));
     Pose2d pos2 = new Pose2d(xPath, yPath, Rotation2d.fromDegrees(rPath));
-    // Pose2d pos3=new Pose2d(2*xVal, 2*yVal, Rotation2d.fromDegrees(rVal));
-    // Pose2d pos4=new Pose2d(3*xVal, 3*yVal, Rotation2d.fromDegrees(rVal));
 
     List<Pose2d> points = new ArrayList<Pose2d>();
 
     points.add(pos1);
     points.add(pos2);
-    // points.add(pos3);
-    // points.add(pos4);
+   
     return makeTrajectory(points, reversed);
   }
 

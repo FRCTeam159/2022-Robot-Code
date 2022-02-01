@@ -5,12 +5,13 @@
 package frc.robot.objects;
 
 /** Add your docs here. */
-public interface GyroInterface {
-    void enable();
-    void disable();
-    void reset();
-    double getHeading();
-    double getRate();
-    boolean isEnabled();
-
+public class TargetData {
+    public double ta;
+    public double tx;
+    public double ty;
+    public boolean tv;
+    TargetData(){
+        tx=ty=ta=0;
+        tv=false;
+    }
 }

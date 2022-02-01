@@ -11,11 +11,8 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnToAngle extends CommandBase {
   Drivetrain m_drive;
   double m_angle;
+  final PIDController m_controller=new PIDController(0.3,0,0.1);
 
-  private final PIDController m_controller=
-    new PIDController(0.3,0,0.1);
-
- 
   public TurnToAngle(Drivetrain drive, double angle) { 
     m_drive=drive;
     m_angle=angle;
@@ -46,7 +43,6 @@ public class TurnToAngle extends CommandBase {
     // End when the controller is at the reference.
     //return m_controller.atGoal();
     return m_controller.atSetpoint();
-
   }
   // =================================================
   // end: Called once the command ends or is interrupted.

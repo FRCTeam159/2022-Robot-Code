@@ -4,13 +4,11 @@
 
 package frc.robot.objects;
 
-/** Add your docs here. */
-public interface GyroInterface {
-    void enable();
-    void disable();
-    void reset();
-    double getHeading();
-    double getRate();
-    boolean isEnabled();
+import edu.wpi.first.networktables.NetworkTable;
+
+public class AxonDetector extends TargetDetector{
+    public AxonDetector(int type){
+        super(type);
+    }
 
 }
