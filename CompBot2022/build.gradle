@@ -67,8 +67,6 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation files("file://$System.env.GAZEBO_SIM/bin/gzsim.jar")
-
     testImplementation 'junit:junit:4.12'
 }
 
