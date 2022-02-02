@@ -7,8 +7,7 @@ package frc.robot.objects;
 import edu.wpi.first.networktables.NetworkTable;
 
 public class AxonDetector extends TargetDetector{
-    public AxonDetector(int type){
-        super(type);
+    public AxonDetector(){
     }
 
 }

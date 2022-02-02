@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class ToggleButton extends SubsystemBase {
   private JoystickButton button;
 private boolean resetReady = true;
+  private boolean last_state=false;
   /** Creates a new ToggleButton. */
   public ToggleButton(JoystickButton givenbutton){
       button = givenbutton; 
@@ -19,13 +20,17 @@ private boolean resetReady = true;
       boolean state = button.get();
       if(state && resetReady){
           resetReady = false;
+          last_state=state;
           return true;
       } else if(!state && !resetReady){
           resetReady = true;
           return false;
       } else{
-          return false;
+        return false;
       }
+  }
+  public boolean getState(){
+    return last_state;
   }
 
   @Override

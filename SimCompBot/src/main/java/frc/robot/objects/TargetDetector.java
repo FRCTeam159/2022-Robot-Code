@@ -4,58 +4,46 @@
 
 package frc.robot.objects;
 
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 
 /** Add your docs here. */
-public class TargetDetector extends Thread implements DetectorInterface{
-    static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-	}
+public class TargetDetector implements VideoInterface{
+  
  
     protected final Timer m_timer = new Timer();
     protected NetworkTable m_target_table;
     protected final NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    protected final CvSource outputStream;
+   
     protected Mat mat;
    
-    boolean m_enabled=false;
-    boolean m_annotate=false;
-    protected int m_type;
+    protected boolean m_annotate=false;
+    protected boolean m_connected=false;
+    public static boolean show_hsv_threshold=false;
+    
     public int image_width=640;
     public int image_height=480;
     
-    TargetDetector(int type){
-        super();
+    TargetDetector(){
         m_target_table = inst.getTable("TargetData");
-        m_type=type;
-   
-        if(type==FRONT)
-            outputStream= CameraServer.putVideo("FrontCamera", image_width, image_height);
-        else
-            outputStream= CameraServer.putVideo("BackCamera", image_width, image_height);
     }
-    public void enable(){ m_enabled=true;}
-    public void disable(){ m_enabled=false;}
-    public boolean isEnabled() { return m_enabled;}
+    
     public void outputTargetInImage(){
         m_annotate=true;
     }
     public void outputRawImage(){
         m_annotate=false;
     }
-    public TargetData getTarget(){
+    
+    @Override
+    public Mat getFrame(){
         return null;
     }
-    public void outputFrame(Mat mat){
-        // TODO add target box to image if annotate flag is set
-        outputStream.putFrame(mat);
+    @Override
+    public boolean isConnected() {
+        return m_connected;
     }
-    
 }

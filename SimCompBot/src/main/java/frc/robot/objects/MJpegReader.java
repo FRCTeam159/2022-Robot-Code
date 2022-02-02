@@ -21,7 +21,7 @@ import org.opencv.videoio.VideoCapture;
 import utils.MJpegClient;
 
 /** Add your docs here. */
-public class MJpegReader extends VideoSource {
+public class MJpegReader implements VideoInterface {
     public String input_url;
     boolean connected = false;
     VideoCapture vcap;
@@ -49,7 +49,7 @@ public class MJpegReader extends VideoSource {
     }
 
     @Override
-    public Mat getMat() {
+    public Mat getFrame() {
         Mat mat = new Mat();
         if (use_vcap) {
             if (!vcap.read(mat))

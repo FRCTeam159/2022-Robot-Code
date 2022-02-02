@@ -10,8 +10,7 @@ import edu.wpi.first.networktables.NetworkTable;
 public class LimelightDetector extends TargetDetector
 { 
     String url="http://limelight.local:5802/?action=stream";
-    public LimelightDetector(int type){
-        super(type);
+    public LimelightDetector(){
     }
    
 }

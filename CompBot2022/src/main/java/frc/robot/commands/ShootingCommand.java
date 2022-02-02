@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -12,7 +11,7 @@ import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.ToggleButton;
 
 public class ShootingCommand extends CommandBase {
-  public boolean test = false;
+  public boolean test = true;
    Shooting m_shoot;
    XboxController m_controller;
    public JoystickButton testjoybutton;
@@ -28,12 +27,18 @@ public class ShootingCommand extends CommandBase {
   }
 
   void testIntake() {
-    boolean test = testbutton.newState();
-    m_shoot.setIntake(test);
-    if (lastState != test) {
-      System.out.println("intake state = " + test);
+    boolean newstate = testbutton.newState();
+   
+    if (newstate) {
+      if(m_shoot.isIntakeOn()){
+        m_shoot.setIntakeOff();
+        System.out.println("intake is on");
+      }
+      else{
+        m_shoot.setIntakeOn();
+        System.out.println("intake is off");
+      }  
     }
-    lastState = test;
   }
 
   // Called when the command is initially scheduled.
@@ -44,7 +49,7 @@ public class ShootingCommand extends CommandBase {
   @Override
   public void execute() {
     if (test == true) {
-      //testIntake();
+      testIntake();
     } else {
 
     }

@@ -41,6 +41,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_Drive.setDefaultCommand(new DriveWithGamepad(m_Drive, m_Controller));
+    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller));
     // Configure the button bindings
     configureButtonBindings();
   }

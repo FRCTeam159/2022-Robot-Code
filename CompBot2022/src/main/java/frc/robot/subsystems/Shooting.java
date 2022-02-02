@@ -11,20 +11,24 @@ public class Shooting extends SubsystemBase implements Constants {
   /** Creates a new Intake. */
   private SparkMotor intake;
   private SparkMotor shoot;
+  private boolean intake_is_on=false;
 
   public Shooting() {
     intake = new SparkMotor(INTAKE);
     shoot = new SparkMotor(SHOOTER);
   }
 
-  public void setIntake(boolean On) {
-    if (On) {
+  public void setIntakeOn() {
       intake.set(1.0);
-    } else {
-      intake.set(0.0);
-    }
+      intake_is_on=true;
   }
-
+  public void setIntakeOff() {
+    intake.set(0);
+    intake_is_on=false;
+ } 
+ public boolean isIntakeOn(){
+   return intake_is_on;
+ }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

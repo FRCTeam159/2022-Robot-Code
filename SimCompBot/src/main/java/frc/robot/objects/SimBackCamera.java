@@ -6,47 +6,22 @@ package frc.robot.objects;
 
 import org.opencv.core.Mat;
 
-import edu.wpi.first.networktables.NetworkTable;
-import utils.GripPipeline;
-
 public class SimBackCamera extends TargetDetector{
-    boolean connected=false;
     MJpegReader video_source;
     GripBallTarget grip = new GripBallTarget();
-    public boolean show_hsv_threshold=true;
 
-    public SimBackCamera(int type){
-        super(type);
-        System.out.println("new SimBackCamera "+type);
+    public SimBackCamera(){
+        System.out.println("new SimBackCamera");
+        video_source=new MJpegReader("http://localhost:9001/?action=stream");     
+        m_connected=video_source.isConnected();
     }
-    public void run(){
-        m_timer.start();
-        
-        video_source=new MJpegReader("http://localhost:9001/?action=stream");
-        
-        connected=video_source.isConnected();
-        
-        if (!connected)
-            disable();     
-        else
-            enable();
-        
-        Mat mat=new Mat();
-        while (true && isEnabled()) {
-            try {
-              Thread.sleep(20);
-            } catch (InterruptedException ex) {
-              System.out.println("exception)");
-            }
-            mat=video_source.getMat();
-            if(mat==null)
-                continue;
-            if(show_hsv_threshold){
-                grip.process(mat);
-                outputFrame(grip.hsvThresholdOutput);
-            }
-            else
-                outputFrame(mat);
+   
+    public Mat getFrame(){
+        mat=video_source.getFrame();
+        if(mat !=null && show_hsv_threshold){
+            grip.process(mat);
+            mat=grip.hsvThresholdOutput();
         }
+        return mat;
     }
 }
