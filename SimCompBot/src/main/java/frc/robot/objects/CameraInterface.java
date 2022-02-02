@@ -4,10 +4,14 @@
 
 package frc.robot.objects;
 
+import org.opencv.core.Mat;
+
 /** Add your docs here. */
 public interface CameraInterface {
     void record();
     void stop();
     boolean isRecording();
     int getChannel();
+    Mat getFrame();
+    boolean isConnected();
 }

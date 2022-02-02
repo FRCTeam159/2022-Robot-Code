@@ -19,37 +19,25 @@ public class CameraStreams extends Thread {
   boolean front_camera = true;
   NetworkTable table;
 
-  protected static CvSource frontStream;
-  protected static CvSource backStream;
   protected static CvSource dualStream;
   public int image_width = 640;
   public int image_height = 480;
 
   protected final Timer m_timer = new Timer();
-  public static boolean switched_camera=true; 
 
   public CameraStreams() {
     System.out.println("new Targeting " + Robot.isReal());
     SmartDashboard.putBoolean("Front Camera", true);
     SmartDashboard.putBoolean("Show HVS threshold", false);
 
-    createOutputStreams();
+    dualStream = CameraServer.putVideo("SwitchedCamera", image_width, image_height);
 
     if (Robot.isReal()) {
       m_front_detector = new LimelightDetector();
       m_back_detector = new AxonDetector();
     } else {
-      m_back_detector = new SimBackCamera();
-      m_front_detector = new SimFrontCamera();
-    }
-  }
-
-  void createOutputStreams() {
-    if (switched_camera) {
-      dualStream = CameraServer.putVideo("SwitchedCamera", image_width, image_height);
-    } else {
-      frontStream = CameraServer.putVideo("FrontCamera", image_width, image_height);
-      backStream = CameraServer.putVideo("FrontCamera", image_width, image_height);
+      m_back_detector = new GripBackCamera();
+      m_front_detector = new GripFrontCamera();
     }
   }
 
@@ -68,25 +56,21 @@ public class CameraStreams extends Thread {
         System.out.println("exception)");
       }
       TargetDetector.show_hsv_threshold = SmartDashboard.getBoolean("Show HVS threshold", true);
-
-      if (switched_camera) {
-        boolean is_front = SmartDashboard.getBoolean("Front Camera", true);      
-        if (is_front != front_camera) {
-          if (is_front)
-            System.out.println("setting front camera");
-          else
-            System.out.println("setting back camera");
-        }
-        if (is_front) {
-          putFrame(dualStream, m_front_detector.getFrame());
-        } else {
-          putFrame(dualStream, m_back_detector.getFrame());
-        }
-        front_camera = is_front;
-      } else {
-        putFrame(frontStream, m_front_detector.getFrame());
-        putFrame(backStream, m_back_detector.getFrame());
+      boolean is_front = SmartDashboard.getBoolean("Front Camera", true);
+      if (is_front != front_camera) {
+        if (is_front)
+          System.out.println("setting front camera");
+        else
+          System.out.println("setting back camera");
       }
+      if (is_front) {
+        putFrame(dualStream, m_front_detector.getFrame());
+        m_front_detector.publish();
+      } else {
+        putFrame(dualStream, m_back_detector.getFrame());
+        m_back_detector.publish();
+      }
+      front_camera = is_front;
     }
   }
 }

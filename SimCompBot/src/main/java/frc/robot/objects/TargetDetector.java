@@ -7,28 +7,33 @@ package frc.robot.objects;
 import org.opencv.core.Mat;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 
 /** Add your docs here. */
 public class TargetDetector implements VideoInterface{
-  
- 
-    protected final Timer m_timer = new Timer();
-    protected NetworkTable m_target_table;
-    protected final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    
+    protected static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    protected static final NetworkTable m_target_table=inst.getTable("TargetData");
    
     protected Mat mat;
+    protected static TargetData target=new TargetData();
    
     protected boolean m_annotate=false;
     protected boolean m_connected=false;
     public static boolean show_hsv_threshold=false;
-    
+
+    private NetworkTableEntry ta;
+    private NetworkTableEntry tx;
+    private NetworkTableEntry ty;
+    private NetworkTableEntry tv;
+    private NetworkTableEntry tr;
+      
     public int image_width=640;
     public int image_height=480;
     
     TargetDetector(){
-        m_target_table = inst.getTable("TargetData");
+        publish();
     }
     
     public void outputTargetInImage(){
@@ -38,6 +43,23 @@ public class TargetDetector implements VideoInterface{
         m_annotate=false;
     }
     
+    public void publish(){
+        ta= m_target_table.getEntry("ta");
+        if(ta==null){
+            System.out.println("publish error");
+            return;
+        }
+        ta.setDouble(target.ta);
+        tx= m_target_table.getEntry("tx");
+        tx.setDouble(target.tx);
+        ty= m_target_table.getEntry("ty");
+        ty.setDouble(target.ty);
+        tv= m_target_table.getEntry("tv");
+        tv.setBoolean(target.tv); 
+        tr= m_target_table.getEntry("tr");
+        tr.setDouble(target.tr);     
+    }
+
     @Override
     public Mat getFrame(){
         return null;

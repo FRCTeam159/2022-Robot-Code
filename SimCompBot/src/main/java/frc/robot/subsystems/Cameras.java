@@ -6,18 +6,15 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
-import frc.robot.objects.Camera;
 import frc.robot.objects.CameraInterface;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Cameras extends SubsystemBase {
 
-  public static final int FRONT_CAMERA = 1;
-	public static final int BACK_CAMERA = 2;
+  public static final int FRONT_CAMERA = 0;
+	public static final int BACK_CAMERA = 1;
 
-  private Camera front_camera;
-	private Camera back_camera;
 	private CameraInterface recording_camera;
 
   /** Creates a new Cameras. */
@@ -25,13 +22,6 @@ public class Cameras extends SubsystemBase {
  
   public Cameras(){
     SmartDashboard.putBoolean("record", false);
-		SmartDashboard.putBoolean("front", true);
-
-    front_camera=new Camera(FRONT_CAMERA);
-		addCamera(front_camera);
-
-		back_camera=new Camera(BACK_CAMERA);
-		addCamera(back_camera);
   }
 
   public static void addCamera(CameraInterface cam){
@@ -48,7 +38,7 @@ public class Cameras extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    int which_camera=SmartDashboard.getBoolean("front", true)?FRONT_CAMERA:BACK_CAMERA;
+    int which_camera=SmartDashboard.getBoolean("Front Camera", true)?FRONT_CAMERA:BACK_CAMERA;
 		if(SmartDashboard.getBoolean("record", false)){
 			recording_camera=Cameras.getCamera(which_camera);
 			if(recording_camera!=null)
@@ -56,6 +46,5 @@ public class Cameras extends SubsystemBase {
 		}
 		else if(recording_camera!=null)
 			recording_camera.stop();
-    // This method will be called once per scheduler run
   }
 }

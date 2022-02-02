@@ -6,12 +6,9 @@ package frc.robot.objects;
 
 /** Add your docs here. */
 public class TargetData {
-    public double ta;
-    public double tx;
-    public double ty;
-    public boolean tv;
-    TargetData(){
-        tx=ty=ta=0;
-        tv=false;
-    }
+    public double ta=0;
+    public double tx=0;
+    public double ty=0;
+    public double tr=0;
+    public boolean tv=false;  
 }

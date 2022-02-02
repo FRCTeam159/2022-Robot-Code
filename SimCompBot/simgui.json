@@ -37,11 +37,23 @@
     }
   },
   "NetworkTables": {
+    "CameraPublisher": {
+      "SwitchedCamera": {
+        "open": true
+      }
+    },
+    "TargetData": {
+      "open": true
+    },
     "gazebo": {
       "camera": {
+        "0": {
+          "open": true
+        },
         "1": {
           "open": true
-        }
+        },
+        "open": true
       },
       "clock": {
         "open": true
@@ -66,8 +78,5 @@
     "plotdata": {
       "open": true
     }
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

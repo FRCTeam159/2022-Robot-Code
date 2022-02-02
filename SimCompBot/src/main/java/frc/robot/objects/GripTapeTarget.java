@@ -51,7 +51,7 @@ public class GripTapeTarget {
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 30.0;
 		double filterContoursMinVertices = 4.0;
-		double filterContoursMinRatio = 0.0;
+		double filterContoursMinRatio = 2.0;
 		double filterContoursMaxRatio = 4.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
