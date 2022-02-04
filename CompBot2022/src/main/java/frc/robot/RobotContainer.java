@@ -36,12 +36,12 @@ public class RobotContainer {
   private final AutoAim m_aim = new AutoAim(m_limelight);
   private final DriveWithGamepad m_teleOP = new DriveWithGamepad(m_Drive, m_Controller);
   private final DriveToPath m_driveToPath = new DriveToPath(m_Drive);
-  private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller);
+  private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller, m_aim);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_Drive.setDefaultCommand(new DriveWithGamepad(m_Drive, m_Controller));
-    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller));
+    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller, m_aim));
     // Configure the button bindings
     configureButtonBindings();
   }
