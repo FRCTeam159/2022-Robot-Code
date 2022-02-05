@@ -48,7 +48,7 @@ public class Shooting extends SubsystemBase implements Constants {
   }
 
   public boolean haveBall() {
-    return false; //change this stuff whatnot
+    return true; //change this stuff whatnot
   }
 
   public boolean dummyAimDone() {

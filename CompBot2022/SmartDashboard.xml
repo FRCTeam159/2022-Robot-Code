@@ -1,5 +1,11 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="LimelightArea" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="91"/>
+	</widget>
+	<widget field="LimelightX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="71"/>
+	</widget>
 	<widget field="rotPath" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="234" y="51"/>
 	</widget>
@@ -40,5 +46,42 @@
 	</static-widget>
 </dashboard>
 <live-window>
+	<widget field="Limelight" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="263" y="42"/>
+	</widget>
+	<widget field="ToggleButton" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="263" y="20"/>
+	</widget>
+	<widget field="Shooting" type="Subsystem" class="edu.wpi.first.smartdashboard.gui.elements.Subsystem">
+		<location x="263" y="0"/>
+	</widget>
+	<widget field="DriveTrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="22"/>
+	</widget>
+	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="AnalogGyro[0]" type="Gyro" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
+			<location x="6" y="15"/>
+			<height>150</height>
+			<width>250</width>
+		</widget>
+		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="165"/>
+			<height>149</height>
+			<width>250</width>
+		</widget>
+		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="314"/>
+			<height>149</height>
+			<width>250</width>
+		</widget>
+		<widget field="PIDController[3]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="463"/>
+			<height>149</height>
+			<width>250</width>
+		</widget>
+		<location x="0" y="0"/>
+		<width>262</width>
+		<height>618</height>
+	</widget>
 </live-window>
 </xml>
