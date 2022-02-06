@@ -15,7 +15,7 @@ import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.ToggleButton;
 
 public class ShootingCommand extends CommandBase {
-  public boolean test = false;
+  public boolean test = true;
   Shooting m_shoot;
   XboxController m_controller;
   Aiming m_aim;
