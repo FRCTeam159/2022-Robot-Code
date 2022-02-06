@@ -19,9 +19,17 @@ public class Limelight extends SubsystemBase {
 
   public double limeX;
   public double limeA;
+  public double limeY;
 
   public Limelight() {
 
+  }
+  
+  public void limelightOff() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(1);
+  }
+  public void limelightOn() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(3);
   }
 
   @Override
@@ -30,12 +38,12 @@ public class Limelight extends SubsystemBase {
 
     // read values periodically
     limeX = tx.getDouble(0.0);
-    //double y = ty.getDouble(0.0);
+    limeY = ty.getDouble(0.0);
     limeA = ta.getDouble(0.0);
 
     // post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", limeX);
-    //SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightY", limeY);
     SmartDashboard.putNumber("LimelightArea", limeA);
   }
 

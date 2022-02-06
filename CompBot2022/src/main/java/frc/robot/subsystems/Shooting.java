@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -13,10 +14,13 @@ public class Shooting extends SubsystemBase implements Constants {
   private SparkMotor shoot;
   private boolean intake_is_on = false;
   private boolean shooter_is_on = false;
-
+  private DigitalInput m_dio = new DigitalInput(0);
   public Shooting() {
     intake = new SparkMotor(INTAKE);
     shoot = new SparkMotor(SHOOTER);
+  }
+  public boolean ballCapture() {
+    return m_dio.get();
   }
 
   public void setIntakeOn() {
@@ -30,7 +34,7 @@ public class Shooting extends SubsystemBase implements Constants {
   }
 
   public void setShooterOn() {
-    shoot.set(-0.5);
+    shoot.set(-3);
     shooter_is_on = true;
   }
 
@@ -48,7 +52,7 @@ public class Shooting extends SubsystemBase implements Constants {
   }
 
   public boolean haveBall() {
-    return false; //change this stuff whatnot
+    return true; //change this stuff whatnot
   }
 
   public boolean dummyAimDone() {
@@ -58,5 +62,6 @@ public class Shooting extends SubsystemBase implements Constants {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println("ballCapture = " + ballCapture());
   }
 }

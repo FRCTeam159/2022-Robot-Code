@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.AutoAim;
 import frc.robot.commands.DriveToPath;
+import frc.robot.subsystems.Aiming;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Limelight;
@@ -24,24 +24,23 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   //subsystem
-
   private final XboxController m_Controller = new XboxController(0);
   private final DriveTrain m_Drive = new DriveTrain();
   private final Limelight m_limelight = new Limelight();
   private final Shooting m_shoot = new Shooting();
+  private final Aiming m_aim = new Aiming(m_Drive, m_limelight);
  
 
   //command
   private final TurnToAngle m_turnToAngle = new TurnToAngle(m_Drive, 90);
-  private final AutoAim m_aim = new AutoAim(m_limelight);
   private final DriveWithGamepad m_teleOP = new DriveWithGamepad(m_Drive, m_Controller);
   private final DriveToPath m_driveToPath = new DriveToPath(m_Drive);
-  private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller, m_aim);
+  private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller, m_aim, m_Drive);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_Drive.setDefaultCommand(new DriveWithGamepad(m_Drive, m_Controller));
-    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller, m_aim));
+    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller, m_aim, m_Drive));
     // Configure the button bindings
     configureButtonBindings();
   }
