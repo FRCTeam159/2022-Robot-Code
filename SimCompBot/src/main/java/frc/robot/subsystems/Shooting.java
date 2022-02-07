@@ -22,6 +22,7 @@ public class Shooting extends SubsystemBase implements Constants {
     shoot.enable();
     setIntakeOff();
     setShooterOff();
+    intake.setScale(3.5);
 
   }
 
@@ -31,7 +32,7 @@ public class Shooting extends SubsystemBase implements Constants {
   }
 
   public void setShooterOff() {
-    shoot.set(0.4);
+    shoot.set(0.1);
     shooter_is_on = false;
   }
 
