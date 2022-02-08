@@ -15,7 +15,7 @@ import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.ToggleButton;
 
 public class ShootingCommand extends CommandBase {
-  public boolean test = true;
+  public boolean test = false;
   Shooting m_shoot;
   XboxController m_controller;
   Aiming m_aim;
@@ -114,7 +114,7 @@ public class ShootingCommand extends CommandBase {
     } else {
       switch (state) {
         case state_OFF:
-          System.out.println("off");
+          //System.out.println("off");
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
           m_timer.reset();

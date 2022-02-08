@@ -35,7 +35,7 @@ public class Aiming extends SubsystemBase {
     double correctionX = m_turnController.calculate(m_limelight.limeX, idealX);
     double correctionY = m_moveController.calculate(m_limelight.limeY, idealY);
     m_drive.arcadeDrive(correctionY, -correctionX);
-    System.out.println(correctionX + ": " + correctionY);
+    //System.out.println(correctionX + ": " + correctionY);
   }
 
 

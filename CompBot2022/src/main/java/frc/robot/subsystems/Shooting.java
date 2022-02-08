@@ -33,6 +33,11 @@ public class Shooting extends SubsystemBase implements Constants {
     intake_is_on = false;
   }
 
+  public void setIntakeReverse() {
+    intake.set(-0.5);
+    intake_is_on = true;
+  }
+
   public void setShooterOn() {
     shoot.set(-3);
     shooter_is_on = true;
@@ -42,6 +47,7 @@ public class Shooting extends SubsystemBase implements Constants {
     shoot.set(0);
     shooter_is_on = false;
   }
+
 
   public boolean isIntakeOn() {
     return intake_is_on;
@@ -62,6 +68,6 @@ public class Shooting extends SubsystemBase implements Constants {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println("ballCapture = " + ballCapture());
+    // System.out.println("ballCapture = " + ballCapture());
   }
 }
