@@ -24,7 +24,7 @@ public class SparkMotor implements MotorInterface {
     private CANSparkMax real_motor;
 
     // tweak to set simulation and real motor input to get similar behaviors
-    private double sim_scale = 3.5; // velocity multiplier for simulation
+    private double sim_scale = 1; // velocity multiplier for simulation
 
     public SparkMotor(int id) {
         if (Robot.isReal()) {
@@ -57,7 +57,7 @@ public class SparkMotor implements MotorInterface {
         if (Robot.isReal())
             return distancePerRotation * inverted * real_motor.getEncoder().getVelocity() / 60;
         else
-            return sim_motor.getRate();
+            return distancePerRotation * sim_motor.getRate();
     }
 
     @Override
@@ -87,10 +87,11 @@ public class SparkMotor implements MotorInterface {
 
     @Override
     public void set(double v) {
+        double r=v/distancePerRotation;
         if (Robot.isReal())
-            real_motor.set(v);
+            real_motor.set(r);
         else
-            sim_motor.set(v);
+            sim_motor.set(r);
     }
 
     @Override

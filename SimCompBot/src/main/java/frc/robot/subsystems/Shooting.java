@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.objects.SparkMotor;
@@ -22,26 +23,29 @@ public class Shooting extends SubsystemBase implements Constants {
     shoot.enable();
     setIntakeOff();
     setShooterOff();
-    intake.setScale(3.5);
+    intake.setScale(1);
+    shoot.setScale(1);
+    SmartDashboard.putNumber("Intake speed", 0);
+		SmartDashboard.putNumber("Shooter speed", 0);
 
   }
 
   public void setShooterOn() {
-    shoot.set(-2);
+    shoot.set(-20); // rps
     shooter_is_on = true;
   }
 
   public void setShooterOff() {
-    shoot.set(0.1);
+    shoot.set(3);
     shooter_is_on = false;
   }
 
   public void setIntakeOn() {
-      intake.set(1);
+      intake.set(10);
       intake_is_on=true;
   }
   public void setIntakeOff() {
-    intake.set(-0.5);
+    intake.set(-3);
     intake_is_on=false;
  } 
  public boolean isIntakeOn(){
@@ -52,6 +56,7 @@ public class Shooting extends SubsystemBase implements Constants {
 }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Intake speed", intake.getRate());
+		SmartDashboard.putNumber("Shooter speed", shoot.getRate());
   }
 }
