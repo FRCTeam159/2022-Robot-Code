@@ -36,7 +36,7 @@ public class AutoTarget extends CommandBase {
     runtime = 0;
     m_aim.aimOn();
     m_timer.start();
-    m_shoot.setIntakeReverse();
+    m_shoot.setIntakeOn(Shooting.kIntakeBackward);
     haveTarget = false;
     System.out.println("Shoot started");
 
@@ -71,7 +71,7 @@ public class AutoTarget extends CommandBase {
       runtime = m_timer.get();
       System.out.println("Shoot, target acquired - 1 " + m_timer.get());
       m_timer.reset();
-      m_shoot.setIntakeOn();
+      m_shoot.setIntakeOn(Shooting.kIntakeForward);
       haveTarget = true;
     
     }

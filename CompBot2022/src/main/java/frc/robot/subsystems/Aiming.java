@@ -17,8 +17,11 @@ public class Aiming extends SubsystemBase {
   public final double idealDistance = 57; // Ideal Distance limelight to target, inches
   // public final double limelightArea =
   // 4*idealDistance*idealDistance*Math.tan(29.8)*Math.tan(29.2); //inches^2
+  public final double iA = 102.15;
+  public final double iB = 0.95;
+  public final double iC = 3.22;
   public final double idealX = 0; // future robotics problem
-  public final double idealY = 102.15 * Math.pow(0.95, idealDistance) + 3.22; // finish later
+  public final double idealY = iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
   public boolean isTurn;
 
   public Aiming(DriveTrain D, Limelight limelight) {
