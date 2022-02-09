@@ -24,7 +24,7 @@ public class SparkMotor implements MotorInterface {
     private CANSparkMax real_motor;
 
     // tweak to set simulation and real motor input to get similar behaviors
-    private double sim_scale = 2.5; // velocity multiplier for simulation
+    private double sim_scale = 3.5; // velocity multiplier for simulation
 
     public SparkMotor(int id) {
         if (Robot.isReal()) {
@@ -37,6 +37,10 @@ public class SparkMotor implements MotorInterface {
         // System.out.println("IsReal "+Robot.isReal());
     }
 
+    public void setScale(double f){
+        if(!Robot.isReal())
+            sim_motor.setScale(f);
+    }
     private double getRotations() {
         return real_motor.getEncoder().getPosition();
     }

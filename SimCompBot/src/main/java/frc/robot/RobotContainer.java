@@ -8,10 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
+import frc.robot.commands.ShootingCommand;
 import frc.robot.objects.CameraStreams;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Targeting;
 
 /**
@@ -26,6 +28,8 @@ public class RobotContainer {
   private final Cameras m_cameras = new Cameras();
   private final CameraStreams m_streams = new CameraStreams();
   private final Targeting m_targeting = new Targeting();
+  private final Shooting m_shoot = new Shooting();
+ 
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting);
   private final XboxController m_controller = new XboxController(0);
 
@@ -35,6 +39,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
+    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller));
     configureButtonBindings();
   }
 
