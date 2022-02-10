@@ -36,9 +36,6 @@
         "open": true
       }
     },
-    "TargetData": {
-      "open": true
-    },
     "gazebo": {
       "camera": {
         "0": {
@@ -46,20 +43,15 @@
         },
         "1": {
           "open": true
-        },
-        "open": true
+        }
       },
-      "clock": {
+      "contact": {
         "open": true
       },
       "encoder": {
         "1": {
           "open": true
-        },
-        "open": true
-      },
-      "gyro": {
-        "open": true
+        }
       },
       "motor": {
         "1": {
@@ -67,13 +59,15 @@
         },
         "7": {
           "open": true
-        },
-        "open": true
+        }
       },
       "open": true
     },
     "plotdata": {
       "open": true
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
