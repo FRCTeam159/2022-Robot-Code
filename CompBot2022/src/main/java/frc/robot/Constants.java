@@ -17,7 +17,7 @@ package frc.robot;
 
 
 public interface Constants {
-    public static boolean flagPancake = true;
+    public static boolean flagPancake = false;
     public static final int FRONT_LEFT = 3;
     public static final int BACK_LEFT = 4;
 

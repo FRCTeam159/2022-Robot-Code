@@ -48,6 +48,7 @@ public class DriveWithGamepad extends CommandBase implements Constants {
     //Non-linear activation (needs to be after dead-zone)
     xs = Math.pow(xs, 2) * (xs > 0 ? 1 : -1);
     zs = Math.pow(zs, 2) * (zs > 0 ? 1 : -1);
+    //System.out.println(xs + " : " + zs);
 
     if (m_Drive.m_driveArcade) {
       m_Drive.arcadeDrive(zs, xs*0.9);

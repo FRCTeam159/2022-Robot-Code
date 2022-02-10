@@ -63,6 +63,7 @@ public class DriveToPath extends CommandBase implements Constants {
     //PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
     System.out.println("Works?");
   }
+
   
   public static Trajectory getStraightPath(double distance) {
     Trajectory Traj = TrajectoryGenerator.generateTrajectory(
@@ -94,6 +95,8 @@ public class DriveToPath extends CommandBase implements Constants {
     );
     return Traj;
   }
+
+
   
 /*
   private void plotPosition(Trajectory.State state) {
