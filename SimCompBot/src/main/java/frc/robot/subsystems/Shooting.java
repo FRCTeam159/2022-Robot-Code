@@ -69,10 +69,14 @@ public class Shooting extends SubsystemBase implements Constants {
  public boolean isBallCaptured() {
   return limit_switch.inContact();
  }
+ public void reset(){
+  setIntakeOff();
+  setIntakeOff();
+ }
   @Override
   public void periodic() {
     //SmartDashboard.putNumber("Intake speed", intake.getRate());
-		SmartDashboard.putNumber("Shooter speed", shoot.getRate());
+		SmartDashboard.putNumber("Shooter speed", -shoot.getRate());
     shooter_speed=SmartDashboard.getNumber("Target speed", shooter_speed);
     SmartDashboard.putBoolean("Ball captured", isBallCaptured());
     SmartDashboard.putBoolean("Intake on", intake_is_on);

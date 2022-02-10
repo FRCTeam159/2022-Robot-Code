@@ -34,6 +34,7 @@ public class SparkMotor implements MotorInterface {
             sim_motor = new SimEncMotor(id);
             sim_motor.setScale(sim_scale);
         }
+        enable();
         // System.out.println("IsReal "+Robot.isReal());
     }
 

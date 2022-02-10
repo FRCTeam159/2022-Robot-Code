@@ -92,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
 	public void init(){
 		System.out.println("Drivetrain.init");
 		field_pose=getPose();
-		simulation.init();
+		//simulation.init();
 		enable();
 	}
 	public void disable(){
@@ -100,7 +100,7 @@ public class Drivetrain extends SubsystemBase {
 		leftMotor.disable();
 		rightMotor.disable();
 		gyro.disable();
-		simulation.end();
+		//simulation.end();
 	}
 	public void enable(){
 		simulation.run();

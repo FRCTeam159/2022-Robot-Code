@@ -122,6 +122,7 @@ public class Simulation extends SubsystemBase {
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {
           m_drive.disable();
+          end();
           disabling = true;
         } else if (m_timer.get() > 0.5) {
           SmartDashboard.putBoolean("Reset", false);
@@ -138,6 +139,11 @@ public class Simulation extends SubsystemBase {
   public void init() {
     m_simcontrol.init();
     m_simclock.disable();
+    run();
+  }
+
+  public void disable() {
+    end();
   }
 
   public void run() {

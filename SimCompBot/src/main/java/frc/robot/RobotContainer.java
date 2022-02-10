@@ -14,6 +14,7 @@ import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooting;
+import frc.robot.subsystems.Simulation;
 import frc.robot.subsystems.Targeting;
 
 /**
@@ -29,6 +30,7 @@ public class RobotContainer {
   private final CameraStreams m_streams = new CameraStreams();
   private final Targeting m_targeting = new Targeting();
   private final Shooting m_shoot = new Shooting();
+  private Simulation m_simulation;
  
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting);
   private final XboxController m_controller = new XboxController(0);
@@ -39,6 +41,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
+    m_simulation=new Simulation(m_drivetrain);
     m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller));
     configureButtonBindings();
   }
@@ -64,9 +67,12 @@ public class RobotContainer {
   }
   public void disabledInit(){
     m_drivetrain.disable();
+    m_simulation.disable();
+  }
   }
   public void robotInit(){
     m_drivetrain.init();
+    m_simulation.init();
     m_streams.start();
   }
 }
