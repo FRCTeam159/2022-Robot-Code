@@ -31,32 +31,29 @@
         <pose>0 -0.12065 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <scale>1 1 1</scale>
+            <scale>0.9 0.9 0.9</scale>
             <uri>model://RedCargo/meshes/Ball_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
-         <contact>
+        <bounce>
+          <restitution_coeeficient>0.5</restitution_coeeficient>
+        </bounce>
+        <friction>
           <ode>
-            <max_vel>30</max_vel>
-            <min_depth>0.0</min_depth>
-            <kp>5000</kp>
-            <kd>1</kd>
-              <!--
-              <mu>1</mu>
-              <mu2>1</mu2>
-              -->
+            <mu>1</mu>
+            <mu2>1</mu2>
           </ode>
-          </contact>
-          <!--
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-            </ode>
-          </friction>
-          -->
-        </surface>
+        </friction>
+        <contact>
+          <ode>
+            <max_vel>10</max_vel>
+            <kd>1</kd>
+            <kp>1e7</kp>
+            <min_depth>0.0001</min_depth>
+          </ode>
+        </contact>
+		  </surface>   
       </collision>
       <visual name="Ball_visual">
         <pose>0 -0.12065 -4.56002916448565E-16 0 0 0</pose>
@@ -66,7 +63,7 @@
         </material>
         <geometry>
           <mesh>
-            <scale>1 1 1</scale>
+            <scale>0.9 0.9 0.9</scale>
             <uri>model://RedCargo/meshes/Ball.STL</uri>
           </mesh>
         </geometry>

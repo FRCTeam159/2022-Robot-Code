@@ -42,7 +42,7 @@ public class GripTapeTarget {
 
 		// Step Filter_Contours0:
 		ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
-		double filterContoursMinArea = 100.0;
+		double filterContoursMinArea = 50.0;
 		double filterContoursMinPerimeter = 0.0;
 		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 1000.0;
@@ -51,8 +51,8 @@ public class GripTapeTarget {
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 30.0;
 		double filterContoursMinVertices = 4.0;
-		double filterContoursMinRatio = 2.0;
-		double filterContoursMaxRatio = 4.0;
+		double filterContoursMinRatio = 2.3;
+		double filterContoursMaxRatio = 3.1;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
 		// Step Convex_Hulls0:

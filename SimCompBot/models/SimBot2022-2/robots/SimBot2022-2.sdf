@@ -12,7 +12,7 @@
         <angular>0.001</angular>
       </velocity_decay>
       <inertial>
-        <mass>120</mass>
+        <mass>130</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.0</ixx>
@@ -125,7 +125,7 @@
         <always_on>1</always_on>
         <pose>0.0 0.25 0.1 0 1.0 1.57</pose>
         <camera name="frontcamera">
-          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <horizontal_fov>1.04</horizontal_fov>
            <image>
             <width>640</width>
             <height>480</height>
@@ -151,7 +151,7 @@
         <always_on>1</always_on>
         <pose>0.00 0.114878062181823 0.135 0 4.71238898038469 4.71238898038469</pose>
         <camera name="intakecamera">
-          <horizontal_fov>1.5707963267949</horizontal_fov>
+          <horizontal_fov>1.04</horizontal_fov>
           <image>
             <width>640</width>
             <height>480</height>
@@ -947,8 +947,8 @@
       <joint>shooter-ShooterWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/8</topic>
       <multiplier>1</multiplier>
-      <P>5</P>
-      <I>1</I>
+      <P>6</P>
+      <I>4</I>
       <D>0.0</D>
     </plugin>
     <plugin name="shooter-ShooterWheels_encoder" filename="sim_encoder.dll">
@@ -968,17 +968,17 @@
     <plugin name="Frame-LFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LFWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-LCWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LCWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-LBWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LBWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-LCWheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-LCWheel</joint>
@@ -988,17 +988,17 @@
     <plugin name="Frame-RFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RFWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-RCWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RCWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-RBWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RBWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>50</multiplier>
+      <multiplier>100</multiplier>
     </plugin>
     <plugin name="Frame-RCWheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-RCWheel</joint>

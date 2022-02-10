@@ -19,8 +19,8 @@ public class GripDetector extends TargetDetector{
     Rect best = null;
     Rect biggest = null;
     Rect best_shape = null;
-    public double xfov=60;
-    public double yfov=50;
+    public double xfov=29.6;
+    public double yfov=49.7;
     public double ideal_ratio=2.5;
     public final int BEST_SHAPE=1;
     public final int LARGEST = 0;
