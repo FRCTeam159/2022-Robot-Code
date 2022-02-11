@@ -6,11 +6,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Timing;
 import utils.PathData;
 import utils.PlotUtils;
 
 public class Calibrate extends CommandBase {
-  Timer m_timer;
+  //Timer m_timer;
    private double lastVelocity = 0;
   ArrayList<PathData> plotdata = new ArrayList<PathData>();
  
@@ -48,23 +49,24 @@ public class Calibrate extends CommandBase {
     m_drive = drive;
     //m_simulation=m_drive.simulation;
     addRequirements(drive);
-    m_timer = new Timer();
-    m_timer.start();
-    m_timer.reset();
+    //m_timer = new Timer();
+    //m_timer.start();
+    //m_timer.reset();
   }
 
   // Called just before this Command runs the first time
   public void initialize() {
     plot_type=PlotUtils.auto_plot_option;
     m_drive.reset(); // reset encoders
-    m_timer.start();
-    m_timer.reset();
+    //m_timer.start();
+    //m_timer.reset();
+    Timing.reset();
     acc_average.reset();
     vel_average.reset();
     plotdata.clear();
     lastTime = 0;
     lastVelocity = 0;
-    m_drive.startAuto();
+    m_drive.enable();
     cnt = 0;
     set_value=vel_start;
     next_step=warmup_time;
@@ -74,7 +76,7 @@ public class Calibrate extends CommandBase {
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = m_drive.getTime();
+    elapsed = Timing.getTime();
     if (elapsed > next_step) {
       if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
         max_power = set_value;

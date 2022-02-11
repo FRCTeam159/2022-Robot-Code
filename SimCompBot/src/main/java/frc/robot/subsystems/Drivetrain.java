@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
 	private SparkMotor leftMotor;
 	private SparkMotor rightMotor;
 
-	private Simulation simulation;
+	//private Simulation simulation;
 	
 	public Gyroscope gyro = new Gyroscope();
 
@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
 	private Pose2d field_pose;
 
 	public Drivetrain() {
-		simulation = new Simulation(this);
+		//simulation = new Simulation(this);
 
 		leftMotor = new SparkMotor(FRONT_LEFT);
 		rightMotor = new SparkMotor(FRONT_RIGHT);
@@ -81,14 +81,17 @@ public class Drivetrain extends SubsystemBase {
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
 	}
+	/*
 	public double getTime(){
 		return simulation.getSimTime();
 	}
+	
 	public void startAuto(){
 		simulation.reset();
 		simulation.start();
 		enable();
 	}
+	*/
 	public void init(){
 		System.out.println("Drivetrain.init");
 		field_pose=getPose();
@@ -103,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
 		//simulation.end();
 	}
 	public void enable(){
-		simulation.run();
+		//simulation.run();
 		System.out.println("Drivetrain.enable");
 		leftMotor.enable();
 		rightMotor.enable();

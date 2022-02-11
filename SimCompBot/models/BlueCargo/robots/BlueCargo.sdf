@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sdf version="1.5">
+<sdf version="1.7">
   <model name="BlueCargo">
     <pose>0 0 0 0 0 0</pose>
     <link name="Ball">
@@ -10,7 +10,7 @@
       <!---->
       <velocity_decay>
         <linear>0.00</linear>
-        <angular>0.001</angular>
+        <angular>0.05</angular>
       </velocity_decay>
       
       <!---->
@@ -31,7 +31,7 @@
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <scale>0.9 0.9 0.9</scale>
+            <scale>0.93 0.93 0.93</scale>
             <uri>model://BlueCargo/meshes/Ball_col.STL</uri>
           </mesh>
         </geometry>
@@ -63,7 +63,7 @@
         </material>
         <geometry>
           <mesh>
-            <scale>0.9 0.9 0.9</scale>
+            <scale>0.93 0.93 0.93</scale>
             <uri>model://BlueCargo/meshes/Ball.STL</uri>
           </mesh>
         </geometry>

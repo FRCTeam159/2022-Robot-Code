@@ -18,10 +18,10 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean intake_is_on=false;
   private boolean shooter_is_on = false;
   private boolean ball_captured = false;
-  private double shooter_speed=17;
+  private double shooter_speed=16;
   private double intake_speed=10;
   private double intake_hold=3;
-  private double shooter_hold=3;
+  private double shooter_hold=2;
 
   public Shooting() {
     intake = new SparkMotor(INTAKE);
@@ -57,7 +57,7 @@ public class Shooting extends SubsystemBase implements Constants {
       intake_is_on=true;
   }
   public void setIntakeOff() {
-    intake.set(-shooter_hold);
+    intake.set(-intake_hold);
     intake_is_on=false;
  } 
  public boolean isIntakeOn(){
@@ -70,7 +70,7 @@ public class Shooting extends SubsystemBase implements Constants {
   return limit_switch.inContact();
  }
  public void reset(){
-  setIntakeOff();
+  setShooterOff();
   setIntakeOff();
  }
   @Override

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Timing;
 import utils.PathData;
 import utils.PlotUtils;
 
@@ -32,7 +33,7 @@ public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
   private final RamseteController m_ramsete = new RamseteController();
-  private final Timer m_timer = new Timer();
+  //private final Timer m_timer = new Timer();
   private final Drivetrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
@@ -86,12 +87,13 @@ public class DrivePath extends CommandBase {
 
     m_drive.resetOdometry(p);
 
-    m_timer.reset();
-    m_timer.start();
+    //m_timer.reset();
+    //m_timer.start();
+    Timing.reset();
     m_drive.enable();
 
     pathdata.clear();
-    m_drive.startAuto();
+    //m_drive.startAuto();
     elapsed=0;
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
@@ -103,7 +105,7 @@ public class DrivePath extends CommandBase {
   @Override
   public void execute() {
     //elapsed = m_timer.get();
-    elapsed = m_drive.getTime();
+    elapsed = Timing.getTime();
     if (elapsed < 0.02)
       return;
 

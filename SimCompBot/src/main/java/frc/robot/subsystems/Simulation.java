@@ -19,32 +19,33 @@ public class Simulation extends SubsystemBase {
   /** Creates a new SimulationControl. */
   private SimControl m_simcontrol = new SimControl();
   private Drivetrain m_drive;
+  private Shooting m_shoot;
   private boolean resetting = false;
   private final Field2d m_fieldSim = new Field2d();
   
-  private final Timer m_timer = new Timer();
+  private static final Timer m_timer = new Timer();
 
   double simtime = 0;
   private boolean running = false;
   private boolean disabling = false;
 
-  private SimClock m_simclock = new SimClock();
+  private static SimClock m_simclock = new SimClock();
 
-  public Simulation(Drivetrain drivetrain) {
+  public Simulation(Drivetrain drivetrain, Shooting shoot) {
     m_drive = drivetrain;
+    m_shoot = shoot;
     SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putBoolean("Gazebo", false);
     SmartDashboard.putNumber("SimTime", 0);
-    SmartDashboard.putNumber("SimClock", 0);
     SmartDashboard.putData("Field", m_fieldSim);
     m_timer.start();
   }
 
-  public double getSimTime() {
+  public static double getSimTime() {
     return m_simclock.getTime();
   }
 
-  public double getClockTime() {
+  public static double getClockTime() {
     return m_timer.get();
   }
 
@@ -104,20 +105,18 @@ public class Simulation extends SubsystemBase {
   }
 
   public void simulationPeriodic() {
-    setFieldPose(); 
-    simtime = getClockTime();
-    if (running)
-      SmartDashboard.putNumber("SimClock", getClockTime());
-    else
-      SmartDashboard.putNumber("SimClock", 0);
+    setFieldPose();
+    SmartDashboard.putNumber("SimTime", getSimTime());
+    
     boolean m = SmartDashboard.getBoolean("Gazebo", false);
     boolean b = SmartDashboard.getBoolean("Reset", false);
     if (b) {
       if (!resetting) {
+        m_shoot.reset();       
         resetting = true;
         if (m)
           clear();       
-        m_drive.reset();    
+        m_drive.reset();
         m_timer.reset();
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {
@@ -144,6 +143,11 @@ public class Simulation extends SubsystemBase {
 
   public void disable() {
     end();
+  }
+
+  public void startAuto() {
+    reset();
+		start();
   }
 
   public void run() {

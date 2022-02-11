@@ -41,7 +41,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-    m_simulation=new Simulation(m_drivetrain);
+    m_simulation=new Simulation(m_drivetrain,m_shoot);
     m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller));
     configureButtonBindings();
   }
@@ -69,10 +69,16 @@ public class RobotContainer {
     m_drivetrain.disable();
     m_simulation.disable();
   }
+
+  public void autonomousInit(){
+    //m_drivetrain.disable();
+    m_simulation.startAuto();
   }
+  
   public void robotInit(){
     m_drivetrain.init();
     m_simulation.init();
     m_streams.start();
   }
+
 }

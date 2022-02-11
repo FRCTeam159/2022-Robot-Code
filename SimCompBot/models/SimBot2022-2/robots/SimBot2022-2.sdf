@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sdf version="1.5">
+<sdf version="1.7">
   <model name="SimBot2022-2">
+    <!--
+    <frame name="robot">-->
     <pose>0 0 0 0 0 0</pose>
     <link name="Frame">
       <gravity>1</gravity>
@@ -57,7 +59,7 @@
       </visual>
     </link>
     <link name="shooter">  
-      <self_collide>0</self_collide>    
+      <self_collide>0</self_collide>
       <pose>-0.339857661155341 0.00613558288465832 0.112751803631496 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>    
       <gravity>1</gravity>
@@ -177,10 +179,10 @@
       <parent>Frame</parent>
       <child>shooter</child>
       <axis>
-        <xyz>0 0 1</xyz>
+        <xyz>1 0 0</xyz>
           <limit>
-          <upper>0</upper>
-          <lower>0</lower>
+          <upper>0.1</upper>
+          <lower>0.1</lower>
           </limit>
       </axis>
     </joint>
@@ -212,7 +214,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://SimBot2022-2/meshes/IntakeWheels_col.STL</uri>
+            <uri>model://SimBot2022-2/meshes/IntakeWheels.STL</uri>
           </mesh>
         </geometry>
         <surface>
@@ -268,7 +270,8 @@
     <link name="ShooterWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.177655024091721 -0.00250787604435686 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>
+      <!--<pose>-0.177655024091721 -0.00250787604435686 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>-->
+      <pose>-0.177655024091721 0.0 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
@@ -353,14 +356,22 @@
             <uri>model://SimBot2022-2/meshes/LimitSwitch_col.STL</uri>
           </mesh>
         </geometry>
+         <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        <!---->
         <surface>
           <contact>
            <ode>
-            <kd>1</kd>
-            <kp>1e5</kp>
+            <kd>10</kd>
+            <kp>10</kp>
           </ode>
           </contact>
         </surface>
+        
       </collision>
       <visual name="LimitSwitch_visual">
         <pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>
@@ -386,20 +397,21 @@
         </plugin>
       </sensor>
     </link>
-    <joint name="shooter-LimitSwitch" type="prismatic">
-      <parent>shooter</parent>
+    
+    <joint name="shooter-LimitSwitch" type="fixed">
+      <parent>Frame</parent>
       <child>LimitSwitch</child>
-      <!-- -->
-      <pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>
+       <pose>0.26 -1.85 0.13 0 0 0</pose>
+      <!--<pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>-->
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
           <upper>0</upper>
           <lower>0</lower>
         </limit>
-      </axis>
-     
+      </axis>    
     </joint>
+    
     <joint name="shooter-ShooterWheels" type="revolute">
       <parent>shooter</parent>
       <child>ShooterWheels</child>
@@ -420,7 +432,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -493,7 +505,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -566,7 +578,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -639,7 +651,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -712,7 +724,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -785,7 +797,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0\.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -920,8 +932,8 @@
         </dynamics>
         
         <limit>
-          <upper>0.25</upper>
-          <lower>-0.15</lower>
+          <upper>-0.02</upper>
+          <lower>-0.12</lower>
           <!--
           <effort>80</effort>
           -->
@@ -947,8 +959,8 @@
       <joint>shooter-ShooterWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/8</topic>
       <multiplier>1</multiplier>
-      <P>6</P>
-      <I>4</I>
+      <P>10</P>
+      <I>20</I>
       <D>0.0</D>
     </plugin>
     <plugin name="shooter-ShooterWheels_encoder" filename="sim_encoder.dll">
