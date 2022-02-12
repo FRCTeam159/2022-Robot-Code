@@ -4,14 +4,14 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class DriveWithGamepad extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
   private final XboxController m_controller;
   private boolean started=false;
 
@@ -24,7 +24,7 @@ public class DriveWithGamepad extends CommandBase {
    * @param subsystem The subsystem used by this command.
    * @param m_Controller
    */
-  public DriveWithGamepad(Drivetrain subsystem, XboxController controller) {
+  public DriveWithGamepad(DriveTrain subsystem, XboxController controller) {
     m_drive = subsystem;
     m_controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.

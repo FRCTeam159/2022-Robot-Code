@@ -1,5 +1,17 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Target" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="192" y="164"/>
+		<width>54</width>
+	</widget>
+	<widget field="Yoffset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="363" y="160"/>
+		<width>97</width>
+	</widget>
+	<widget field="Xoffset" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="256" y="162"/>
+		<width>93</width>
+	</widget>
 	<widget field="Ball captured" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
 		<location x="206" y="121"/>
 		<height>14</height>
@@ -9,15 +21,15 @@
 		<width>63</width>
 	</widget>
 	<widget field="Shooter on" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="121" y="121"/>
+		<location x="117" y="118"/>
 		<width>72</width>
 	</widget>
 	<widget field="Target speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="428" y="117"/>
+		<location x="170" y="86"/>
 		<width>123</width>
 	</widget>
 	<widget field="Shooter speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="290" y="118"/>
+		<location x="28" y="86"/>
 		<width>129</width>
 	</widget>
 	<widget field="record" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
@@ -27,7 +39,7 @@
 		<location x="149" y="582"/>
 	</widget>
 	<widget field="Front Camera" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="44" y="582"/>
+		<location x="44" y="583"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="25" y="143"/>
@@ -39,15 +51,15 @@
 		<location x="454" y="0"/>
 	</widget>
 	<widget field="Distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="24" y="21"/>
+		<location x="19" y="10"/>
 		<width>99</width>
 	</widget>
 	<widget field="Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="133" y="21"/>
+		<location x="129" y="9"/>
 		<width>90</width>
 	</widget>
 	<widget field="Arcade mode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="131" y="84"/>
+		<location x="269" y="52"/>
 	</widget>
 	<widget field="reversed" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
 		<location x="583" y="97"/>
@@ -67,31 +79,34 @@
 		<height>21</height>
 	</widget>
 	<widget field="Enable gyro" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="34" y="83"/>
+		<location x="574" y="117"/>
 	</widget>
 	<widget field="Heading" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="234" y="20"/>
+		<location x="235" y="8"/>
 		<width>102</width>
 	</widget>
 	<widget field="SendableChooser[1]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="351" y="-1"/>
 	</widget>
 	<widget field="SimTime" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="31" y="55"/>
+		<location x="20" y="52"/>
 		<width>92</width>
 		<height>20</height>
 	</widget>
 	<widget field="Reset" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="140" y="53"/>
+		<location x="130" y="53"/>
 	</widget>
 	<widget field="Gazebo" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.CheckBox">
-		<location x="199" y="53"/>
+		<location x="197" y="53"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="281" y="54"/>
+		<location x="313" y="96"/>
 	</static-widget>
 </dashboard>
 <live-window>
+	<widget field="DriveTrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="339"/>
+	</widget>
 	<widget field="Drivetrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
 		<location x="0" y="316"/>
 	</widget>
@@ -139,9 +154,14 @@
 			<height>155</height>
 			<width>139</width>
 		</widget>
+		<widget field="PIDController[4]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="171"/>
+			<height>155</height>
+			<width>139</width>
+		</widget>
 		<location x="0" y="0"/>
 		<width>151</width>
-		<height>177</height>
+		<height>332</height>
 	</widget>
 </live-window>
 	<hidden field="Field"/>

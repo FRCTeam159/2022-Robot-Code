@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.CameraStreams;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Targeting;
 
 public class DriveToTarget extends CommandBase {
@@ -16,9 +16,9 @@ public class DriveToTarget extends CommandBase {
   // - add camera specs fov aspect
   // - add camera geometry height angle of camera position
   
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
   private final Targeting m_targeting;
-  public DriveToTarget(Drivetrain drive,Targeting targeting) {
+  public DriveToTarget(DriveTrain drive,Targeting targeting) {
     m_drive=drive;
     m_targeting=targeting;
     addRequirements(drive,targeting);

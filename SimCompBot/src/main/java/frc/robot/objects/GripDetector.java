@@ -97,8 +97,8 @@ public class GripDetector extends TargetDetector{
         double height = br.y - tl.y;
         double xcenter=br.x+0.5*width;
         double ycenter=br.y+0.5*height;
-        target.tx=xfov*(xcenter-0.5*image_width)/image_width;
-        target.ty=yfov*(ycenter-0.5*image_height)/image_height;
+        target.tx=100*(xcenter-0.5*image_width)/image_width;
+        target.ty=100*(ycenter-0.5*image_height)/image_height;
         target.ta=100*(width*height)/(image_width*image_height);
         target.tr=width/height;
         //System.out.println(target.ta);

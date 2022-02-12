@@ -6,14 +6,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 
 public class TurnToAngle extends CommandBase {
-  Drivetrain m_drive;
+  DriveTrain m_drive;
   double m_angle;
   final PIDController m_controller=new PIDController(0.3,0,0.1);
 
-  public TurnToAngle(Drivetrain drive, double angle) { 
+  public TurnToAngle(DriveTrain drive, double angle) { 
     m_drive=drive;
     m_angle=angle;
   }

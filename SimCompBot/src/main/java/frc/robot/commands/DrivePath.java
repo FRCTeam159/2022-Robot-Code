@@ -21,7 +21,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Timing;
 import utils.PathData;
 import utils.PlotUtils;
@@ -34,7 +34,7 @@ public class DrivePath extends CommandBase {
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
   private final RamseteController m_ramsete = new RamseteController();
   //private final Timer m_timer = new Timer();
-  private final Drivetrain m_drive;
+  private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
 
@@ -50,7 +50,7 @@ public class DrivePath extends CommandBase {
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
 
-  public DrivePath(Drivetrain drive, double x, double y, double r, boolean rev) {
+  public DrivePath(DriveTrain drive, double x, double y, double r, boolean rev) {
     reversed=rev;
     xPath=x;
     yPath=y;
@@ -77,7 +77,7 @@ public class DrivePath extends CommandBase {
     if(m_trajectory==null)
       return;
 
-    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, Drivetrain.kTrackWidth);
+    PlotUtils.setInitialPose(m_trajectory.sample(0).poseMeters, DriveTrain.kTrackWidth);
     // PlotUtils.setDistanceUnits(PlotUtils.UnitType.FEET);
 
     runtime = m_trajectory.getTotalTimeSeconds();
@@ -182,7 +182,7 @@ public class DrivePath extends CommandBase {
   // - just need to reverse order of points to drive backwards
   // =================================================
   Trajectory makeTrajectory(List<Pose2d> points, boolean reversed) {
-    TrajectoryConfig config = new TrajectoryConfig(Drivetrain.kMaxVelocity, Drivetrain.kMaxAcceleration);
+    TrajectoryConfig config = new TrajectoryConfig(DriveTrain.kMaxVelocity, DriveTrain.kMaxAcceleration);
     config.setReversed(reversed);
     if (reversed)
       Collections.reverse(points); // reverse order of waypoints first point=orig last point
@@ -205,7 +205,7 @@ public class DrivePath extends CommandBase {
         state.timeSeconds,
         state.poseMeters,
         m_drive.getPose(),
-        Drivetrain.kTrackWidth);
+        DriveTrain.kTrackWidth);
     pathdata.add(pd);
   }
 
@@ -230,7 +230,7 @@ public class DrivePath extends CommandBase {
         h * m_drive.getRightDistance(),
         m_drive.getHeading(),
 
-        Drivetrain.kTrackWidth);
+        DriveTrain.kTrackWidth);
     pathdata.add(pd);
   }
 

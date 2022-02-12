@@ -4,6 +4,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Autonomous": "Subsystem",
       "/LiveWindow/Cameras": "Subsystem",
+      "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/Shooting": "Subsystem",
       "/LiveWindow/Simulation": "Subsystem",
@@ -36,6 +37,9 @@
         "open": true
       }
     },
+    "TargetData": {
+      "open": true
+    },
     "gazebo": {
       "camera": {
         "0": {
@@ -66,8 +70,5 @@
     "plotdata": {
       "open": true
     }
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }

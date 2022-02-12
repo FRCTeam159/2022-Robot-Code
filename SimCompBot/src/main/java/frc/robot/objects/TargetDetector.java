@@ -45,10 +45,6 @@ public class TargetDetector implements VideoInterface{
     
     public void publish(){
         ta= m_target_table.getEntry("ta");
-        if(ta==null){
-            System.out.println("publish error");
-            return;
-        }
         ta.setDouble(target.ta);
         tx= m_target_table.getEntry("tx");
         tx.setDouble(target.tx);

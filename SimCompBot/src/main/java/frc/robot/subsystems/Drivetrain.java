@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.objects.Gyroscope;
 import frc.robot.objects.SparkMotor;
 
-public class Drivetrain extends SubsystemBase {
+public class DriveTrain extends SubsystemBase {
 
 	private SparkMotor leftMotor;
 	private SparkMotor rightMotor;
@@ -57,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
 
 	private Pose2d field_pose;
 
-	public Drivetrain() {
+	public DriveTrain() {
 		//simulation = new Simulation(this);
 
 		leftMotor = new SparkMotor(FRONT_LEFT);

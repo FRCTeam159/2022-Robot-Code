@@ -24,7 +24,7 @@ public class Autonomous extends SubsystemBase {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
-  Drivetrain m_drive;
+  DriveTrain m_drive;
   Targeting m_targeting;
 
   public static final int CALIBRATE = 0;
@@ -37,7 +37,7 @@ public class Autonomous extends SubsystemBase {
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
-  public Autonomous(Drivetrain drive,Targeting targeting) {
+  public Autonomous(DriveTrain drive,Targeting targeting) {
     m_drive=drive;
     m_targeting=targeting;
    

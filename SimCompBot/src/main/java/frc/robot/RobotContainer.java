@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.objects.CameraStreams;
+import frc.robot.subsystems.Targeting;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Simulation;
-import frc.robot.subsystems.Targeting;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,10 +25,10 @@ import frc.robot.subsystems.Targeting;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final DriveTrain m_drivetrain = new DriveTrain();
   private final Cameras m_cameras = new Cameras();
   private final CameraStreams m_streams = new CameraStreams();
-  private final Targeting m_targeting = new Targeting();
+  private final Targeting m_targeting = new Targeting(m_drivetrain);
   private final Shooting m_shoot = new Shooting();
   private Simulation m_simulation;
  
@@ -42,7 +42,7 @@ public class RobotContainer {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
     m_simulation=new Simulation(m_drivetrain,m_shoot);
-    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller));
+    m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller, m_targeting, m_drivetrain));
     configureButtonBindings();
   }
 

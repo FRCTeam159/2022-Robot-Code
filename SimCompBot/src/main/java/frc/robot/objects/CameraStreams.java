@@ -36,8 +36,8 @@ public class CameraStreams extends Thread {
       m_front_detector = new LimelightDetector();
       m_back_detector = new AxonDetector();
     } else {
-      m_back_detector = new GripBackCamera();
-      m_front_detector = new GripFrontCamera();
+      m_back_detector = new GripBallDetector();
+      m_front_detector = new GripTapeDetector();
     }
   }
 
