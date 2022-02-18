@@ -69,7 +69,7 @@ public class GripDetector extends TargetDetector{
             double width = br.x - tl.x;
             double height = br.y - tl.y;
             double xVal = tl.x + 0.5 * width;
-            double yVal = tl.y;
+            double yVal = tl.y + 0.5 * height;
             double xTweek = 0;//horizontalTweek()/angleFactorWidth;
             //double xTweek = (xOff * width) / targetWidth;
             double yTweek = 0;//verticalTweek() / angleFactorHeight;
@@ -95,8 +95,8 @@ public class GripDetector extends TargetDetector{
         Point br = best.br();
         double width = br.x - tl.x;
         double height = br.y - tl.y;
-        double xcenter=br.x+0.5*width;
-        double ycenter=br.y+0.5*height;
+        double xcenter=tl.x+0.5*width;
+        double ycenter=tl.y+0.5*height;
         target.tx=100*(xcenter-0.5*image_width)/image_width;
         target.ty=100*(ycenter-0.5*image_height)/image_height;
         target.ta=100*(width*height)/(image_width*image_height);

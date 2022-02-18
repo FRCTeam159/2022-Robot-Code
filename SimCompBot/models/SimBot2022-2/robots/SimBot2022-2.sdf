@@ -57,6 +57,32 @@
           </mesh>
         </geometry>
       </visual>
+       <sensor name="BackCamera" type="camera">
+        <visualize>0</visualize>
+        <always_on>1</always_on>
+        <pose>0.0 0.0 0.25 0 4.7 4.71238898038469</pose>
+        <camera name="intakecamera">
+          <horizontal_fov>1.04</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <plugin name="camera2" filename="sim_camera.dll">
+          <topic>~/gazebo/frc/simulator/camera/1</topic>
+          <port>9001</port>
+          <fps>20</fps>
+          <enabled>true</enabled>
+          <savepath>tmp</savepath>
+          <maxframes>0</maxframes>
+          <video>back.avi</video>
+        </plugin>
+      </sensor>   
     </link>
     <link name="shooter">  
       <self_collide>0</self_collide>
@@ -70,7 +96,7 @@
       </velocity_decay>
       -->
       <inertial>
-        <mass>2.64835775028861</mass>
+        <mass>20</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.0657125942820998</ixx>
@@ -82,7 +108,7 @@
         </inertia>
       </inertial>
       <collision name="shooter_collision">
-        <pose>0.0762062131558806 -0.0854912788471308 -0.12764875073239 0 0 0</pose>
+        <pose>0.094064405138414 -0.136535024719067 -0.247027989201184 0 0 0</pose>
         <!-- -->
         <geometry>
           <mesh>
@@ -147,32 +173,6 @@
           <video>front.avi</video>
         </plugin>
       </sensor>
-      <sensor name="BackCamera" type="camera">
-        <visualize>0</visualize>
-        <always_on>1</always_on>
-        <pose>0.00 0.114878062181823 0.135 0 4.71238898038469 4.71238898038469</pose>
-        <camera name="intakecamera">
-          <horizontal_fov>1.04</horizontal_fov>
-          <image>
-            <width>640</width>
-            <height>480</height>
-            <format>R8G8B8</format>
-          </image>
-          <clip>
-            <near>0.1</near>
-            <far>100</far>
-          </clip>
-        </camera>
-        <plugin name="camera2" filename="sim_camera.dll">
-          <topic>~/gazebo/frc/simulator/camera/1</topic>
-          <port>9001</port>
-          <fps>20</fps>
-          <enabled>true</enabled>
-          <savepath>tmp</savepath>
-          <maxframes>0</maxframes>
-          <video>back.avi</video>
-        </plugin>
-      </sensor>     
     </link>
     <joint name="Frame-shooter" type="revolute">
       <parent>Frame</parent>
@@ -482,14 +482,14 @@
       <child>Shield</child>
       <pose>0 -0.0731903814322627 -0.205283493605891 0 0 0</pose>
       <axis>
-        <xyz>1 0 0</xyz>
+        <xyz>-1 0 0</xyz>
         <dynamics>
           <damping>0</damping>
           <friction>0</friction>
         </dynamics>
         <limit>
-          <upper>0</upper>
-          <lower>0</lower>
+          <upper>-0.12</upper>
+          <lower>-0.12</lower>
           <effort>1</effort>
         </limit>
       </axis>
@@ -501,7 +501,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -562,9 +562,6 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
       </axis>
     </joint>
     <link name="LCWheel">
@@ -574,7 +571,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -635,9 +632,6 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
       </axis>
     </joint>
     <link name="LBWheel">
@@ -647,7 +641,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -708,9 +702,6 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
       </axis>
     </joint>
     <link name="RFWheel">
@@ -720,7 +711,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -781,9 +772,6 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
       </axis>
     </joint>
     <link name="RCWheel">
@@ -793,7 +781,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -854,9 +842,7 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
+
       </axis>
     </joint>
     <link name="RBWheel">
@@ -866,7 +852,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0\.01</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       <inertial>
         <mass>0.255325203825891</mass>
@@ -927,9 +913,6 @@
           <damping>1</damping>
           <friction>1</friction>
         </dynamics>
-        <limit>
-          <effort>100</effort>
-        </limit>
       </axis>
     </joint>
     <link name="Intake">
@@ -942,7 +925,7 @@
         <angular>1</angular>
       </velocity_decay>
       <inertial>
-        <mass>10</mass>
+        <mass>2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0</ixx>
@@ -998,25 +981,23 @@
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
-        </dynamics>
-        
+        </dynamics>    
         <limit>
           <upper>0.1</upper>
-          <lower>0</lower>
-          <!--
-          <effort>80</effort>
-          -->
-        </limit>
-        
+          <lower>-0.1</lower>
+        </limit>       
       </axis>
     </joint>
      <plugin name="Intake-IntakeWheels_motor" filename="sim_motor.dll">
       <joint>Intake-IntakeWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/7</topic>
+      
+      <!-- -->
       <multiplier>1</multiplier>
       <P>5</P>
-      <I>1</I>
-      <D>0.0</D>
+      <I>0</I>
+      <D>0</D>
+     
     </plugin>
     <plugin name="Intake-IntakeWheels_encoder" filename="sim_encoder.dll">
       <joint>Intake-IntakeWheels</joint>

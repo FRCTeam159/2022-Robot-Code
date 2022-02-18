@@ -64,6 +64,8 @@ public class DriveTrain extends SubsystemBase {
 		rightMotor = new SparkMotor(FRONT_RIGHT);
 		leftMotor.setDistancePerRotation(distancePerRotation);
 		rightMotor.setDistancePerRotation(distancePerRotation);
+		leftMotor.setScale(1);
+		rightMotor.setScale(1);
 	
 		rightMotor.setInverted();
 	

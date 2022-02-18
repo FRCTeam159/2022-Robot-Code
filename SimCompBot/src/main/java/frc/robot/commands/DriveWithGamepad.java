@@ -61,7 +61,7 @@ public class DriveWithGamepad extends CommandBase {
     }
 
     if(m_drive.arcade_mode)
-      m_drive.arcadeDrive(-zs, xs);
+      m_drive.arcadeDrive(-zs, -xs);
     else
       m_drive.odometryDrive(-zs,xs);
   }

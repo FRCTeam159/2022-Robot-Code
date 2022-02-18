@@ -10,5 +10,6 @@ public class TargetData {
     public double tx=0;
     public double ty=0;
     public double tr=0;
+    public boolean tc=true;
     public boolean tv=false;  
 }

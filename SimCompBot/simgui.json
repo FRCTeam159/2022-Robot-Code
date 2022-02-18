@@ -40,6 +40,9 @@
     "TargetData": {
       "open": true
     },
+    "TargetSpecs": {
+      "open": true
+    },
     "gazebo": {
       "camera": {
         "0": {
@@ -59,6 +62,9 @@
       },
       "motor": {
         "1": {
+          "open": true
+        },
+        "2": {
           "open": true
         },
         "7": {

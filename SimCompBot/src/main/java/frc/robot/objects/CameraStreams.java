@@ -9,6 +9,8 @@ import org.opencv.core.Mat;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -17,11 +19,14 @@ public class CameraStreams extends Thread {
   TargetDetector m_front_detector;
   TargetDetector m_back_detector;
   boolean front_camera = true;
-  NetworkTable table;
+
+  protected static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+  protected static final NetworkTable m_target_table=inst.getTable("TargetData");
 
   protected static CvSource dualStream;
   public int image_width = 640;
   public int image_height = 480;
+  private NetworkTableEntry tc; // camera (0=front 1=back)
 
   protected final Timer m_timer = new Timer();
 
@@ -29,6 +34,7 @@ public class CameraStreams extends Thread {
     System.out.println("new Targeting " + Robot.isReal());
     SmartDashboard.putBoolean("Front Camera", true);
     SmartDashboard.putBoolean("Show HVS threshold", false);
+    tc= m_target_table.getEntry("tc");
 
     dualStream = CameraServer.putVideo("SwitchedCamera", image_width, image_height);
 
@@ -57,6 +63,7 @@ public class CameraStreams extends Thread {
       }
       TargetDetector.show_hsv_threshold = SmartDashboard.getBoolean("Show HVS threshold", true);
       boolean is_front = SmartDashboard.getBoolean("Front Camera", true);
+      tc.setBoolean(is_front);
       if (is_front != front_camera) {
         if (is_front)
           System.out.println("setting front camera");
