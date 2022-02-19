@@ -47,7 +47,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	public static final double kMaxAngularSpeed = 180; // one rotation per second
     public static double kMaxAcceleration = 1; //mps
 
-	private final AnalogGyro gyro = new AnalogGyro(0);
+	private final AnalogGyro gyro; 
+
 
 	private final PIDController leftPIDController = new PIDController(0.5, 0, 0);
 	private final PIDController rightPIDController = new PIDController(0.5, 0, 0);
@@ -60,10 +61,11 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 	public boolean m_driveArcade = true; 
-	public boolean useGyro = false;
+	public boolean useGyro = true;
 	
 	public static double kTrackWidth = i2M(flagPancake?28.25:24); // inches
 	public static double kWheelRadius = i2M(flagPancake?2.13:4.0); // inches
+
 
 	// public static final double WHEEL_DIAMETER = 4.26;
 	//if (flagPancake == true) {
@@ -81,14 +83,16 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontRight = new SparkMotor(FRONT_RIGHT);
 		backLeft = new SparkMotor(BACK_LEFT);
 		backRight = new SparkMotor(BACK_RIGHT);
+		gyro = new AnalogGyro(0);
+		//gyro.initGyro();
+		//gyro.setSensitivity(0.0128);
 		frontLeft.setDistancePerRotation(distancePerRotationGearDown);
 		frontRight.setDistancePerRotation(distancePerRotationGearDown);
 		backLeft.setDistancePerRotation(distancePerRotationGearDown);
 		backRight.setDistancePerRotation(distancePerRotationGearDown);
-		gyro.reset();
-
+	
 		odometry = new DifferentialDriveOdometry(getRotation2d());
-
+	
 		leftGroup = new MotorControllerGroup(frontLeft, backLeft);
 		rightGroup = new MotorControllerGroup(frontRight, backRight);
 		rightGroup.setInverted(true);
@@ -114,9 +118,14 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	}
 
 	public Rotation2d getRotation2d() {
-		double delta = getLeftDistance() - getRightDistance();
+		if (useGyro) {
+			return new Rotation2d(-gyro.getAngle());
+		} else {
+			double delta = getLeftDistance() - getRightDistance();
 		Rotation2d r = new Rotation2d(-delta/kTrackWidth); //remove neg if add neg at omega radianspersecond
 		return r;
+		}
+		
 	}
 
 
@@ -225,6 +234,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		// This method will be called once per scheduler run
 		updateOdometry();
 		log();
+
 	}
 
 	@Override

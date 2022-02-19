@@ -9,28 +9,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Aiming extends SubsystemBase {
 
-  private final PIDController m_turnController = new PIDController(0.03, 0.01, 0);
-  private final PIDController m_moveController = new PIDController(0.1, 0, 0.0);
+  private final PIDController m_turnController = new PIDController(0.02, 0.0, 0.0);
+  private final PIDController m_moveController = new PIDController(0.03, 0.005, 0.0);
   public double aimX;
   DriveTrain m_drive;
   Limelight m_limelight;
-  public final double idealDistance = 57; // Ideal Distance limelight to target, inches
+  public final double idealDistance = 102; // Ideal Distance limelight to target, inches
   // public final double limelightArea =
   // 4*idealDistance*idealDistance*Math.tan(29.8)*Math.tan(29.2); //inches^2
-  public final double iA = 102.15;
-  public final double iB = 0.95;
-  public final double iC = 3.22;
+  public final double iA = 75.1;
+  public final double iB = 0.989;
+  public final double iC = -24.5;
   public final double idealX = 0; // future robotics problem
-  public final double idealY = iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
-  public boolean isTurn;
+  public final double idealY = -9.3;
+  //iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
 
   public Aiming(DriveTrain D, Limelight limelight) {
     m_drive = D;
     m_limelight = limelight;
     m_turnController.enableContinuousInput(-29.8, 29.8);
-    m_turnController.setTolerance(1.5, 0.1);
+    m_turnController.setTolerance(1.0, 0.05);
     m_moveController.enableContinuousInput(-24.85, 24.85);
-    m_moveController.setTolerance(0.25, 0.1);
+    m_moveController.setTolerance(1.0, 0.1);
   }
 
   public void adjust() {
@@ -38,7 +38,8 @@ public class Aiming extends SubsystemBase {
     double correctionX = m_turnController.calculate(m_limelight.limeX, idealX);
     double correctionY = m_moveController.calculate(m_limelight.limeY, idealY);
     m_drive.arcadeDrive(correctionY, -correctionX);
-    //System.out.println(correctionX + ": " + correctionY);
+    System.out.println(m_limelight.limeX + ": " + m_limelight.limeY);
+    System.out.println(correctionX + ": " + correctionY);
   }
 
 
@@ -48,6 +49,10 @@ public class Aiming extends SubsystemBase {
 
   public boolean turnDoneY() {
     return m_moveController.atSetpoint();
+  }
+
+  public boolean seeTarget() {
+    return m_limelight.limeV == 1;
   }
 
   
@@ -66,6 +71,8 @@ public class Aiming extends SubsystemBase {
   
   public void aimOn() {
     m_limelight.limelightOn();
+    m_turnController.reset();
+    m_moveController.reset();
   }
   
 
