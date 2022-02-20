@@ -16,37 +16,47 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean intake_is_on = false;
   private boolean shooter_is_on = false;
   private DigitalInput m_dio = new DigitalInput(0);
-  public static double kIntakeForward = -0.3;
-  public static double kIntakeBackward = 0.3;
-  public static double kShootSpeed = -0.1;
+  public static double kIntakeForward = -0.4;
+  public static double kIntakeBackward = 0.12;
+  public static double kShootSpeed = -1.5;
 
   public Shooting() {
     intake = new SparkMotor(INTAKE);
     shoot = new SparkMotor(SHOOTER);
     SmartDashboard.putNumber("shooter speed", 0);
     SmartDashboard.putNumber("intake speed", 0);
+    SmartDashboard.putNumber("spinback Speed", 0.12);
   }
+
   public boolean ballCapture() {
     return m_dio.get();
   }
 
-  public void setIntake(double speed) {
-    intake.set(speed);
-    SmartDashboard.putNumber("intake speed", intake.getRate());
+  public void setIntakeHold() {
+    intake.set(kIntakeBackward);
+    intake_is_on = true;
+  }
+
+  public void setIntakeOn() {
+    intake.set(kIntakeForward);
+    intake_is_on = true;
   }
 
   public void setShooter(double speed) {
     shoot.set(speed);
-    SmartDashboard.putNumber("shooter speed", shoot.getRate());
+
   }
 
-  public void setIntakeOn(double speed) {
-    setIntake(speed); //base val -0.5
-    intake_is_on = true;
+  public double getIntake() {
+    return intake.get();
+  }
+
+  public double getShoot() {
+    return shoot.getRate();
   }
 
   public void setIntakeOff() {
-    setIntake(0);
+    intake.set(0);
     intake_is_on = false;
   }
 
@@ -60,7 +70,6 @@ public class Shooting extends SubsystemBase implements Constants {
     shooter_is_on = false;
   }
 
-
   public boolean isIntakeOn() {
     return intake_is_on;
   }
@@ -73,5 +82,8 @@ public class Shooting extends SubsystemBase implements Constants {
   public void periodic() {
     // This method will be called once per scheduler run
     // System.out.println("ballCapture = " + ballCapture());
+    SmartDashboard.putNumber("intake speed", intake.getRate());
+    SmartDashboard.putNumber("shooter speed", shoot.getRate());
+    kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.12);
   }
 }

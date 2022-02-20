@@ -34,12 +34,12 @@ public class ShootingCommand extends CommandBase {
   private final int state_LOOKING = 1;
   private final int state_AIM = 2;
   private final int state_FOUND = 3;
-  private final int state_SHOOT = 4;
+  private final int state_RUNUP = 4;
+  private final int state_SHOOT = 5;
   private final Timer m_timer = new Timer();
   private final Timer m_timeOut = new Timer();
-  final double runUpTime = 3.0;
+  final double runUpTime = 1.8;
   private boolean autoAim;
-  private boolean spinBack;
 
   private boolean goodVarNamesAreNotForAlpineRobotics;
 
@@ -63,10 +63,10 @@ public class ShootingCommand extends CommandBase {
 
     if (newstate) {
       if (m_shoot.isIntakeOn()) {
-        m_shoot.setIntakeOff();
+        m_shoot.setIntakeHold();
         System.out.println("intake is off");
       } else {
-        m_shoot.setIntakeOn(-0.5);
+        m_shoot.setIntakeOn();
         System.out.println("intake is on");
       }
     }
@@ -104,8 +104,9 @@ public class ShootingCommand extends CommandBase {
     state = state_OFF;
     m_timer.reset();
     m_timeOut.reset();
+    m_timer.start();
+    m_timeOut.start();
     autoAim = false;
-    spinBack = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -114,35 +115,30 @@ public class ShootingCommand extends CommandBase {
     if (test == true) {
       testIntake();
       testShooter();
+      m_shoot.ballCapture();
     } else {
       switch (state) {
         case state_OFF:
-          //System.out.println("off");
+          // System.out.println(".");
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
-          m_timer.reset();
+          m_aim.aimOff();
           if (m_controller.getRawButtonPressed(2)) {
-            spinBack = false;
+            autoAim = false;
+            m_timer.reset();
             state = state_LOOKING;
           }
           break;
         case state_LOOKING:
           m_shoot.setShooterOff();
-          if (!spinBack) {
-            m_shoot.setIntakeOn(Shooting.kIntakeForward);
-          }
+          m_shoot.setIntakeOn();
           if (m_shoot.ballCapture()) {
-            System.out.println("BALL");
-            if (m_timer.get() == 0.0) {
-              m_timer.start();
-              spinBack = true;
-            } else if (!spinBack){
-              m_timer.reset();
-            }
-            m_shoot.setIntakeOn(Shooting.kIntakeBackward);
-          }
-          if (m_timer.get() > 0.2) {
+            System.out.println("going to aim");
             state = state_AIM;
+          }
+          if (m_controller.getRawButtonPressed(2)) {
+            m_timeOut.reset();
+            state = state_OFF;
           }
           break;
         case state_AIM:
@@ -150,60 +146,67 @@ public class ShootingCommand extends CommandBase {
           m_shoot.setIntakeOff();
           System.out.println("ready to aim");
           if (m_controller.getRawButtonPressed(5)) {
+            System.out.println("ready for auto aim");
             autoAim = true;
+            m_aim.aimOn();
             m_timeOut.reset();
-            m_timeOut.start();
-            m_aim.isTurn = true;
           }
           if (m_controller.getRawButtonPressed(2)) {
-            state = state_OFF;
             m_timeOut.reset();
+            state = state_OFF;
           }
-          if (autoAim) {
-            // do aiming stuff here
-            m_aim.aimOn();
+          if (!m_aim.seeTarget()) {
+            System.out.println("no target");
+            autoAim = false;
+          }
+          if (autoAim && m_aim.seeTarget()) {
+            // do aiming stuff her
+            System.out.println("aiming");
             m_aim.adjust();
             if (m_aim.onTarget()) {
-              state = state_FOUND;
               m_timer.reset();
-              m_timer.start();
+              state = state_FOUND;
               System.out.println("on target");
-              // aimOff();
-              if(m_timeOut.get() > 10) {
-                state = state_OFF;
-              }
+            }
+            if (m_timeOut.get() > 10) {
+              state = state_OFF;
+            }
           }
-        }
           if (m_controller.getRawButtonPressed(6)) {
-            System.out.println("Finding Call");
+            System.out.println("isacc shooty shoot");
+            m_timer.reset();
             state = state_FOUND;
             // isaac thing here
-            m_timer.reset();
-            m_timer.start();
           }
           break;
         case state_FOUND:
-          m_shoot.setShooterOn();
-          m_shoot.setIntakeOff();
-          System.out.println("running up");
-          // System.out.println("Finding Case");
-          // odometryDrive();
-          if (m_timer.get() > runUpTime) {
-            state = state_SHOOT;
+          m_shoot.setIntakeHold();
+          if (m_shoot.isIntakeOn()) {
+            System.out.println(m_shoot.getIntake());
+          }
+          if (!m_shoot.ballCapture() || m_timer.get() > 1.5) {
+            System.out.println("goin to run up");
             m_timer.reset();
-            System.out.println("Shooting");
-            m_timer.start();
+            state = state_RUNUP;
           }
           break;
+        case state_RUNUP:
+        //System.out.println("time: " + m_timer.get());
+        //System.out.println("speed: " + m_shoot.getShoot());
+          m_shoot.setShooterOn();
+        if (m_timer.get() > runUpTime) {
+          state = state_SHOOT;
+        }
+        break;
         case state_SHOOT:
           // arcadeDrive();
           m_shoot.setShooterOn();
-          m_shoot.setIntakeOn(Shooting.kIntakeForward);
+          m_shoot.setIntakeOn();
           autoAim = false;
           if (m_timer.get() > 1) {
             System.out.println("Test end");
-            state = state_OFF;
             m_timer.reset();
+            state = state_OFF;
           }
           break;
       }

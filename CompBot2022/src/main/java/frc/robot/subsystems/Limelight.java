@@ -16,10 +16,12 @@ public class Limelight extends SubsystemBase {
   public NetworkTableEntry tx = table.getEntry("tx");
   public NetworkTableEntry ty = table.getEntry("ty");
   public NetworkTableEntry ta = table.getEntry("ta");
+  public NetworkTableEntry tv = table.getEntry("tv");
 
   public double limeX;
   public double limeA;
   public double limeY;
+  public double limeV;
 
   public Limelight() {
 
@@ -40,6 +42,7 @@ public class Limelight extends SubsystemBase {
     limeX = tx.getDouble(0.0);
     limeY = ty.getDouble(0.0);
     limeA = ta.getDouble(0.0);
+    limeV = tv.getDouble(0.0);
 
     // post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", limeX);
