@@ -61,7 +61,7 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 	public boolean m_driveArcade = true; 
-	public boolean useGyro = true;
+	public boolean useGyro = false;
 	
 	public static double kTrackWidth = i2M(flagPancake?28.25:24); // inches
 	public static double kWheelRadius = i2M(flagPancake?2.13:4.0); // inches
@@ -84,7 +84,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		backLeft = new SparkMotor(BACK_LEFT);
 		backRight = new SparkMotor(BACK_RIGHT);
 		gyro = new AnalogGyro(0);
-		//gyro.initGyro();
+		gyro.calibrate();
+		gyro.initGyro();
 		//gyro.setSensitivity(0.0128);
 		frontLeft.setDistancePerRotation(distancePerRotationGearDown);
 		frontRight.setDistancePerRotation(distancePerRotationGearDown);
@@ -250,4 +251,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
     public double getRightDistance() {
         return frontRight.getDistance();
     }
+
+	public double getTotalDistance(){
+		return 0.5*(getLeftDistance()+getRightDistance());
+	}
 }

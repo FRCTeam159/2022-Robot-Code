@@ -6,8 +6,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-public class Aiming extends SubsystemBase {
+public class Aiming extends SubsystemBase implements Constants {
 
   private final PIDController m_turnController = new PIDController(0.02, 0.0, 0.0);
   private final PIDController m_moveController = new PIDController(0.03, 0.005, 0.0);
@@ -21,7 +22,7 @@ public class Aiming extends SubsystemBase {
   public final double iB = 0.989;
   public final double iC = -24.5;
   public final double idealX = 0; // future robotics problem
-  public final double idealY = -9.3;
+  public final double idealY = (!flagPancake)? -1.3 : 9;
   //iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
 
   public Aiming(DriveTrain D, Limelight limelight) {
@@ -38,8 +39,8 @@ public class Aiming extends SubsystemBase {
     double correctionX = m_turnController.calculate(m_limelight.limeX, idealX);
     double correctionY = m_moveController.calculate(m_limelight.limeY, idealY);
     m_drive.arcadeDrive(correctionY, -correctionX);
-    System.out.println(m_limelight.limeX + ": " + m_limelight.limeY);
-    System.out.println(correctionX + ": " + correctionY);
+    //System.out.println(m_limelight.limeX + ": " + m_limelight.limeY);
+    //System.out.println(correctionX + ": " + correctionY);
   }
 
 
