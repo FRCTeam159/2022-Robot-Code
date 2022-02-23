@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Limelight extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -17,27 +21,62 @@ public class Limelight extends SubsystemBase {
   public NetworkTableEntry ty = table.getEntry("ty");
   public NetworkTableEntry ta = table.getEntry("ta");
   public NetworkTableEntry tv = table.getEntry("tv");
+  public ToggleButton switchCamera; 
 
   public double limeX;
   public double limeA;
   public double limeY;
   public double limeV;
+  public boolean frontCamera = true;
 
-  public Limelight() {
+  private UsbCamera IntakeCamera;
+  private XboxController m_Controller;
 
+  public Limelight(XboxController Controller) {
+    m_Controller = Controller;
+    switchCamera = new ToggleButton(new JoystickButton(Controller, 4));
+    //IntakeCamera = CameraServer.startAutomaticCapture(0);
+    //IntakeCamera.setResolution(320, 240);
+    //IntakeCamera.setFPS(25);
+    setCameraFront();
+  }
+
+  public void setCameraFront(){
+    //lr stands for lower right
+    table.getEntry("stream").setNumber(1);
+    frontCamera = true;
+  }
+
+  public void setCameraBack(){
+    table.getEntry("stream").setNumber(2);
+    frontCamera = false;
+  }
+
+  public void switchView() {
+    boolean newstate = switchCamera.newState();
+
+    if (newstate) {
+      if (frontCamera) {
+        setCameraBack();
+      } else {
+        setCameraFront();
+      }
+    }
   }
   
   public void limelightOff() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(1);
+    table.getEntry("ledMode").setNumber(1);
+    table.getEntry("camMode").setNumber(1);
   }
   public void limelightOn() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(3);
+    table.getEntry("ledMode").setNumber(3);
+    table.getEntry("camMode").setNumber(0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    switchView();
     // read values periodically
     limeX = tx.getDouble(0.0);
     limeY = ty.getDouble(0.0);

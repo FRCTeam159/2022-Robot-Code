@@ -38,7 +38,6 @@ public class ShootingCommand extends CommandBase {
   private final int state_SHOOT = 5;
   private final Timer m_timer = new Timer();
   private final Timer m_timeOut = new Timer();
-  final double runUpTime = 1.8;
   private boolean autoAim;
 
   private boolean goodVarNamesAreNotForAlpineRobotics;
@@ -115,6 +114,7 @@ public class ShootingCommand extends CommandBase {
     if (test == true) {
       testIntake();
       testShooter();
+      m_aim.aimOn();
       m_shoot.ballCapture();
     } else {
       switch (state) {
@@ -184,7 +184,7 @@ public class ShootingCommand extends CommandBase {
           if (m_shoot.isIntakeOn()) {
             System.out.println(m_shoot.getIntake());
           }
-          if (!m_shoot.ballCapture() || m_timer.get() > 1.5) {
+          if (!m_shoot.ballCapture() || m_timer.get() > m_shoot.kInputHoldTime) {
             System.out.println("goin to run up");
             m_timer.reset();
             state = state_RUNUP;
@@ -194,7 +194,7 @@ public class ShootingCommand extends CommandBase {
         //System.out.println("time: " + m_timer.get());
         //System.out.println("speed: " + m_shoot.getShoot());
           m_shoot.setShooterOn();
-        if (m_timer.get() > runUpTime) {
+        if (m_timer.get() > m_shoot.kRunUpTime) {
           state = state_SHOOT;
         }
         break;
