@@ -20,8 +20,9 @@ public class GripTapeDetector extends GripDetector{
         setIdealRatio(2.5);
         target_info.idealA=1;
         target_info.idealX=0;
-        target_info.idealY=-6;
+        target_info.idealY=-7;
         target_info.yTol=2;
+        target_info.xTol=2;
     }
     
     public Mat getFrame(){

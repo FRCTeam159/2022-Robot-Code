@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -21,8 +19,8 @@ public class Targeting extends SubsystemBase {
   protected static final NetworkTable m_target_data = inst.getTable("TargetData");
   protected static final NetworkTable m_target_specs = inst.getTable("TargetSpecs");
 
-  private final PIDController m_moveXController = new PIDController(0.03, 0.01, 0);
-  private final PIDController m_moveYController = new PIDController(0.03, 0.00, 0.0);
+  private final PIDController m_moveXController = new PIDController(0.04, 0.01, 0);
+  private final PIDController m_moveYController = new PIDController(0.02, 0.005, 0.0);
   private final PIDController m_moveAController = new PIDController(0.01, 0.00, 0.0);
 
   DriveTrain m_drive;
@@ -51,9 +49,9 @@ public class Targeting extends SubsystemBase {
   public Targeting(DriveTrain D) {
     m_drive = D;
     m_moveXController.enableContinuousInput(-50, 50);
-    m_moveXController.setTolerance(1, 0.1);
+    m_moveXController.setTolerance(2, 0.5);
     m_moveYController.enableContinuousInput(-50, 50);
-    m_moveYController.setTolerance(2, 0.1);
+    m_moveYController.setTolerance(2, 0.5);
     //m_moveAController.enableContinuousInput(0, 101);
     m_moveAController.setTolerance(10, 1);
     SmartDashboard.putNumber("Xoffset", 0);
@@ -157,12 +155,19 @@ public class Targeting extends SubsystemBase {
     target_info.aTol = aTol.getDouble(1.0);
   }
 
+  public void reset(){
+    m_moveXController.reset();
+    m_moveYController.reset();
+    m_moveAController.reset();
+  }
   public void enable() {
+    reset();
     m_moveXController.setTolerance(target_info.xTol, 0.1 * target_info.xTol);
     m_moveYController.setTolerance(target_info.yTol, 0.1 * target_info.yTol);
     m_moveAController.setTolerance(target_info.aTol, 0.1 * target_info.aTol);
   }
 
   public void disable() {
+    reset();
   }
 }

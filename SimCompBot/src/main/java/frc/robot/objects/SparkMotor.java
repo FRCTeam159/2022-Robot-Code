@@ -9,8 +9,11 @@ package frc.robot.objects;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import gazebo.SimEncMotor;
+import utils.Averager;
 
 /**
  * Add your docs here.
@@ -23,14 +26,26 @@ public class SparkMotor implements MotorInterface {
     private SimEncMotor sim_motor;
     private CANSparkMax real_motor;
     private double scale=1;
+    private double last_velocity=0;
+    private double last_time=0;
+    private Averager acc_averager = new Averager(10);
+    private Averager vel_averager = new Averager(2);
+    private double ave_acc = 0;
+    private double ave_vel = 0;
+    private double max_acc=-1;
+    private int chnl;
+
+    private Timer timer=new Timer();
 
     public SparkMotor(int id) {
+        chnl=id;
         if (Robot.isReal()) {
             real_motor = new CANSparkMax(id, CANSparkMaxLowLevel.MotorType.kBrushless);
             zeroValue = real_motor.getEncoder().getPosition();
         } else {
             sim_motor = new SimEncMotor(id);
         }
+        timer.start();
         enable();
         // System.out.println("IsReal "+Robot.isReal());
     }
@@ -40,6 +55,26 @@ public class SparkMotor implements MotorInterface {
     }
     private double getRotations() {
         return real_motor.getEncoder().getPosition();
+    }
+    public double getAcceleration() {
+        double tm=timer.get();
+        double vel=getRate();
+        double accel=0;
+        if(tm>0){
+            accel=(vel-last_velocity)/(tm-last_time);
+        }
+        last_velocity=vel;
+        last_time=tm; 
+        return accel; 
+    }
+    public void setMaxAccel(double a){
+        max_acc=a;
+    }
+    public double aveVelocity(){
+        return ave_vel;
+    }
+    public double aveAcceleration(){
+        return ave_acc;
     }
     @Override
     public void reset() {
@@ -80,11 +115,19 @@ public class SparkMotor implements MotorInterface {
     public void enable() {
         if (!Robot.isReal())
             sim_motor.enable();
+        timer.reset();
     }
 
     @Override
     public void set(double v) {
         double r=scale*v/distancePerRotation;
+        double mag_acc=Math.abs(ave_acc);   
+        if(max_acc>0 && mag_acc>max_acc){
+            ave_acc = acc_averager.getAve(getAcceleration());
+            ave_vel = vel_averager.getAve(getRate());
+            //System.out.println(chnl+" acc:"+mag_acc+" r1:"+r+" r2:"+r*max_acc/mag_acc);
+            r*=max_acc/mag_acc;
+        }
         if (Robot.isReal())
             real_motor.set(r);
         else

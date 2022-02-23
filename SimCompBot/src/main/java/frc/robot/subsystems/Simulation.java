@@ -20,14 +20,14 @@ public class Simulation extends SubsystemBase {
   private SimControl m_simcontrol = new SimControl();
   private DriveTrain m_drive;
   private Shooting m_shoot;
-  private boolean resetting = false;
+  private static boolean resetting = false;
   private final Field2d m_fieldSim = new Field2d();
   
   private static final Timer m_timer = new Timer();
 
   double simtime = 0;
-  private boolean running = false;
-  private boolean disabling = false;
+  private static boolean running = false;
+  private static boolean disabling = false;
 
   private static SimClock m_simclock = new SimClock();
 
@@ -65,7 +65,7 @@ public class Simulation extends SubsystemBase {
     running = false;
   }
 
-  public void start() {
+  public static void start() {
     System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();

@@ -20,7 +20,10 @@ public class Timing extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public static void reset(){
+
     m_timer.reset();
+    if(!Robot.isReal())
+      Simulation.start();
   }
   public static double getTime(){
     if(Robot.isReal())

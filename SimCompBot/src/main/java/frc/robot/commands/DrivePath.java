@@ -49,6 +49,7 @@ public class DrivePath extends CommandBase {
   boolean reversed = false;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
+  Timer m_timer=new Timer();
 
   public DrivePath(DriveTrain drive, double x, double y, double r, boolean rev) {
     reversed=rev;
@@ -67,10 +68,6 @@ public class DrivePath extends CommandBase {
     plot_type = PlotUtils.auto_plot_option;
     System.out.println("DrivePath.start");
 
-    //xPath = SmartDashboard.getNumber("xPath", xPath);
-    //yPath = SmartDashboard.getNumber("yPath", yPath);
-    //rPath = SmartDashboard.getNumber("rPath", rPath);
-
     PlotUtils.initPlot();
 
     m_trajectory=programPath();
@@ -87,14 +84,15 @@ public class DrivePath extends CommandBase {
 
     m_drive.resetOdometry(p);
 
-    //m_timer.reset();
-    //m_timer.start();
-    Timing.reset();
+    m_timer.reset();
+    m_timer.start();
+    
     m_drive.enable();
 
     pathdata.clear();
     //m_drive.startAuto();
     elapsed=0;
+    Timing.reset();
 
     System.out.println("runtime:" + runtime + " states:" + states + " intervals:" + intervals);
   }
@@ -104,8 +102,8 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    //elapsed = m_timer.get();
-    elapsed = Timing.getTime();
+    elapsed = m_timer.get();
+    //elapsed = Timing.getTime();
     if (elapsed < 0.02)
       return;
 
@@ -113,7 +111,6 @@ public class DrivePath extends CommandBase {
 
     ChassisSpeeds speeds = m_ramsete.calculate(m_drive.getPose(), reference);
     m_drive.odometryDrive(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
-
     if (plot_type == PlotUtils.PLOT_DISTANCE)
       plotDistance(reference);
     else if (plot_type == PlotUtils.PLOT_DYNAMICS)

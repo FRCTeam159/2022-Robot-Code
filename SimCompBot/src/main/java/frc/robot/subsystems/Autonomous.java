@@ -21,7 +21,6 @@ import frc.robot.objects.CameraStreams;
 import utils.PlotUtils;
 
 public class Autonomous extends SubsystemBase {
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
   DriveTrain m_drive;
@@ -62,7 +61,7 @@ public class Autonomous extends SubsystemBase {
   }
 
   public CommandGroupBase getCommand(){
-    //PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
+    PlotUtils.auto_plot_option=m_auto_plot_option.getSelected();
     selected_path=m_path_chooser.getSelected();
     
     CommandGroupBase.clearGroupedCommands();

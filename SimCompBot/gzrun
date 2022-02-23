@@ -1,5 +1,5 @@
 #!/bin/bash
 start_gazebo
-smartdashboard &
+#smartdashboard &
 #gazebo --verbose tank8-empty-field.world &
 GzProgram.exe;

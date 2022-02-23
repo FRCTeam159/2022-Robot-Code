@@ -15,7 +15,7 @@
       
       
       <inertial>
-        <mass>0.1</mass>
+        <mass>0.3</mass>
         <pose>0 0 0 0 0 0</pose>
         <!---->
         <inertia>
@@ -30,10 +30,10 @@
       </inertial>
       
       <collision name="Ball_collision">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 -0.12065 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <scale>0.93 0.93 0.93</scale>
+            <scale>.95 .95 .95</scale>
             <uri>model://BlueCargo/meshes/Ball_col.STL</uri>
           </mesh>
         </geometry>
@@ -48,6 +48,7 @@
           </ode>
         </friction>
         <contact>
+          <elastic_modulus>3</elastic_modulus>
           <ode>
             <max_vel>10</max_vel>
             <kd>1</kd>
@@ -58,14 +59,14 @@
 		  </surface>      
       </collision>
       <visual name="Ball_visual">
-        <pose>0 0 0 0 0 0</pose>
+        <pose>0 -0.12065 0 0 0 0</pose>
         <material>
           <ambient>0 0 1 1</ambient>
           <diffuse>0 0 1 1</diffuse>
         </material>
         <geometry>
           <mesh>
-            <scale>0.93 0.93 0.93</scale>
+            <scale>.95 .95 .95</scale>
             <uri>model://BlueCargo/meshes/Ball.STL</uri>
           </mesh>
         </geometry>

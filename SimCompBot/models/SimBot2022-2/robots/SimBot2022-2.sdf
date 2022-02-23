@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.7">
   <model name="SimBot2022-2">
-    <!--
-    <frame name="robot">-->
+    
     <pose>0 0 0 0 0 0</pose>
     <link name="Frame">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.0916854891449772 0 -0.0184942437490389 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>1</must_be_base_link>
-      <velocity_decay>
-        <linear>0.001</linear>
-        <angular>0.001</angular>
+       <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
       </velocity_decay>
       <inertial>
-        <mass>130</mass>
+        <mass>50</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.0</ixx>
-          <ixy>0.0</ixy>
-          <ixz>0.0</ixz>
-          <iyy>0.0</iyy>
+          <ixx>5</ixx>
+          <ixy>0.014</ixy>
+          <ixz>0.015</ixz>
+          <iyy>7</iyy>
           <iyz>0</iyz>
-          <izz>0</izz>
+          <izz>2</izz>
         </inertia>
       </inertial>
       <collision name="Frame_collision">
@@ -33,16 +32,7 @@
             <uri>model://SimBot2022-2/meshes/Frame_col.STL</uri>
           </mesh>
         </geometry>
-        <surface>
-          <contact>     
-             <ode>
-              <min_depth>0.001</min_depth>
-              <kp>1e7</kp>
-              <kd>1</kd>
-            </ode>
-            <!--  <collide_without_contact>1</collide_without_contact>-->
-          </contact>
-        </surface>
+        
       </collision>
       <visual name="Frame_visual">
         <pose>0.087928821262285 -0.0052889773385317 0.00114418280918003 0 0 0</pose>
@@ -69,8 +59,8 @@
             <format>R8G8B8</format>
           </image>
           <clip>
-            <near>0.1</near>
-            <far>100</far>
+            <near>0.01</near>
+            <far>50</far>
           </clip>
         </camera>
         <plugin name="camera2" filename="sim_camera.dll">
@@ -84,32 +74,31 @@
         </plugin>
       </sensor>   
     </link>
+    
     <link name="shooter">  
       <self_collide>0</self_collide>
       <pose>-0.339857661155341 0.00613558288465832 0.112751803631496 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>    
       <gravity>1</gravity>
-      <!--
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.0</angular>
       </velocity_decay>
-      -->
       <inertial>
-        <mass>20</mass>
+        <mass>5.22101990724176</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.0657125942820998</ixx>
-          <ixy>0.00251964711416978</ixy>
-          <ixz>0.00649752782097611</ixz>
-          <iyy>0.0836547125526032</iyy>
-          <iyz>0.0188079955240835</iyz>
-          <izz>0.0677114012195621</izz>
+          <ixx>0.114299340025415</ixx>
+          <ixy>0.00269283476076011</ixy>
+          <ixz>0.00519033218114686</ixz>
+          <iyy>0.134101261463111</iyy>
+          <iyz>0.0125219035483829</iyz>
+          <izz>0.182046035406737</izz>
         </inertia>
-      </inertial>
+      </inertial>     
       <collision name="shooter_collision">
         <pose>0.094064405138414 -0.136535024719067 -0.247027989201184 0 0 0</pose>
-        <!-- -->
+
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -126,10 +115,10 @@
           </contact>
            <friction>
             <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-              <slip1>0.5</slip1>
-              <slip2>0.5</slip2>
+              <mu>0</mu>
+              <mu2>0</mu2>
+              <slip1>0.9</slip1>
+              <slip2>0.9</slip2>
             </ode>
           </friction> 
         </surface>      
@@ -185,99 +174,22 @@
           </limit>
       </axis>
     </joint>
-    <link name="IntakeWheels">
-      <gravity>1</gravity>
-      <self_collide>0</self_collide>
-      <pose>-0.469753566757535 -0.0108552498965759 0.120727981986896 1.5707963267949 0 -1.5707963267949</pose>
-      <must_be_base_link>0</must_be_base_link>
-      <!--
-      <velocity_decay>
-        <linear>0.1</linear>
-        <angular>0.005</angular>
-      </velocity_decay>
-      -->
-      <inertial>
-        <mass>0.185936472459736</mass>
-        <pose>0 0 0 0 0 0</pose>
-        <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
-        </inertia>
-      </inertial>
-      <collision name="IntakeWheels_collision">
-        <pose>0.0770735723571798 -0.144511203074467 -0.376923894803378 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://SimBot2022-2/meshes/IntakeWheels.STL</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-          <ode>
-            <kd>1000</kd>
-            <kp>1e7</kp>
-            <min_depth>0.001</min_depth>
-          </ode>
-          </contact>
-         <!-- -->
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction> 
-         
-        </surface>
-      </collision>
-      <visual name="IntakeWheels_visual">
-        <pose>0.0770735723571798 -0.144511203074467 -0.376923894803378 0 0 0</pose>
-        <material>
-          <ambient>0 0.250980392156863 1 1</ambient>
-          <diffuse>0 0.250980392156863 1 1</diffuse>
-        </material>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://SimBot2022-2/meshes/IntakeWheels.STL</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <joint name="Intake-IntakeWheels" type="revolute">
-      <parent>Intake</parent>
-      <child>IntakeWheels</child>
-      <pose>0 0 0 0 0 0</pose>
-      <axis>
-        <xyz>1 0 0</xyz>
-         <!--
-        <limit>
-          <effort>1000</effort>
-        </limit>
-       
-        <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
-        </dynamics>
-       -->
-      </axis>
-    </joint>
+
+    
+
     <link name="ShooterWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--<pose>-0.177655024091721 -0.00250787604435686 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>-->
       <pose>-0.177655024091721 0.0 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
+
       <velocity_decay>
         <linear>0</linear>
-        <angular>0</angular>
+        <angular>0.0</angular>
       </velocity_decay>
+
       <inertial>
-        <mass>0.142802443720399</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
           <inertia>
           <ixx>0</ixx>
@@ -288,6 +200,7 @@
           <izz>0</izz>
         </inertia>
       </inertial>
+     
       <collision name="ShooterWheels_collision">
         <pose>0.0854209462093988 -0.220633221086678 -0.0848253521375637 0 0 0</pose>
         <geometry>
@@ -299,11 +212,12 @@
         <surface>
           <contact>
             <ode>
-              <kd>1000</kd>
-              <kp>1e7</kp>
+              <kd>10</kd>
+              <kp>5e6</kp>
+              <soft_cfm>2.0</soft_cfm>
               <min_depth>0.001</min_depth>
             </ode>
-          </contact>    
+          </contact> 
           <friction>
             <ode>
               <mu>2</mu>
@@ -335,6 +249,7 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
+
       <inertial>
         <mass>0.00457179713622319</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -347,6 +262,7 @@
           <izz>0</izz>
         </inertia>
       </inertial>
+      
       <collision name="LimitSwitch_collision">
         <pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>
         <geometry>
@@ -361,7 +277,6 @@
               <mu2>0</mu2>
             </ode>
           </friction>
-        <!---->
         <surface>
           <contact>
            <ode>
@@ -400,7 +315,6 @@
       <parent>Frame</parent>
       <child>LimitSwitch</child>
        <pose>0.26 -1.85 0.13 0 0 0</pose>
-      <!--<pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>-->
       <axis>
         <xyz>1 0 0</xyz>
         <limit>
@@ -415,11 +329,6 @@
       <pose>0 0 0 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
-        <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
-        </dynamics>
-        
       </axis>
     </joint>
     <link name="Shield">
@@ -431,18 +340,20 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
+
       <inertial>
-        <mass>1.13036926242878</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.00558354491864702</ixx>
-          <ixy>5.01265624844789E-06</ixy>
-          <ixz>1.40504057601377E-05</ixz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
           <iyy>0.0140256747777912</iyy>
           <iyz>0.0016963246209557</iyz>
           <izz>0.0112740976678991</izz>
         </inertia>
       </inertial>
+      
       <collision name="Shield_collision">
         <pose>0.0878682565006262 -0.293823602518869 -0.290108845485391 0 0 0</pose>
         <geometry>
@@ -488,12 +399,153 @@
           <friction>0</friction>
         </dynamics>
         <limit>
-          <upper>-0.12</upper>
-          <lower>-0.12</lower>
+          <upper>-0.1</upper>
+          <lower>-0.1</lower>
           <effort>1</effort>
         </limit>
       </axis>
     </joint>
+    
+     <link name="Intake">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.424484874242734 9.92754253803518E-09 0.120699564654734 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+     
+      <inertial>
+        <mass>1e-2</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>     
+      <collision name="Intake_collision">
+        <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022-2/meshes/Intake.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+            </ode>
+          </friction>
+        </surface> 
+      </collision>
+      <visual name="Intake_visual">
+        <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
+        <material>
+          <ambient>1 0.250980392156863 0.501960784313725 1</ambient>
+          <diffuse>1 0.250980392156863 0.501960784313725 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022-2/meshes/Intake.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+     
+    <joint name="shooter-Intake" type="revolute">
+      <parent>shooter</parent>
+      <child>Intake</child>
+      <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
+      <axis>
+        <xyz>-1 0 0</xyz>
+        <!---->
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>  
+          
+        <limit>
+          <upper>0.0</upper>
+          <lower>-0.1</lower>
+        </limit>       
+      </axis>
+    </joint>
+   
+    <link name="IntakeWheels">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.469753566757535 -0.0108552498965759 0.120727981986896 1.5707963267949 0 -1.5707963267949</pose>
+      <must_be_base_link>0</must_be_base_link>
+      
+      <inertial>
+        <mass>1e-2</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0</iyy>
+          <iyz>0</iyz>
+          <izz>0</izz>
+        </inertia>
+      </inertial>
+     
+      <collision name="IntakeWheels_collision">
+        <pose>0.0770735723571798 -0.144511203074467 -0.376923894803378 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022-2/meshes/IntakeWheels.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode>
+              <min_depth>0.001</min_depth>
+              <soft_cfm>2.0</soft_cfm>
+              <kd>1</kd>
+              <kp>1e7</kp>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+              <mu>2</mu>
+              <mu2>2</mu2>
+            </ode>
+          </friction>      
+        </surface>
+      </collision>
+      <visual name="IntakeWheels_visual">
+        <pose>0.0770735723571798 -0.144511203074467 -0.376923894803378 0 0 0</pose>
+        <material>
+          <ambient>0 0.250980392156863 1 1</ambient>
+          <diffuse>0 0.250980392156863 1 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://SimBot2022-2/meshes/IntakeWheels.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Intake-IntakeWheels" type="revolute">
+      <parent>Intake</parent>
+      <child>IntakeWheels</child>
+      <pose>0 0 0 0 0 0</pose>
+      <axis>
+        <xyz>1 0 0</xyz>
+      </axis>
+    </joint>
+
     <link name="LFWheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -504,15 +556,15 @@
         <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
+          <ixx>0.00636122013463714</ixx>
           <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
+          <ixz>1.02386629412868E-19</ixz>
+          <iyy>0.00340889332640425</iyy>
           <iyz>0</iyz>
-          <izz>0</izz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="LFWheel_collision">
@@ -526,17 +578,18 @@
         <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="LFWheel_visual">
         <pose>-0.227970387686939 0.00644277891242817 -0.290904249561907 0 0 0</pose>
@@ -559,9 +612,12 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
     <link name="LCWheel">
@@ -571,18 +627,18 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+       <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
+          <ixx>0.00636122013463714</ixx>
+          <ixy>7.97906990264509E-20</ixy>
+          <ixz>1.02386629412868E-19</ixz>
+          <iyy>0.00340889332640425</iyy>
+          <iyz>3.68262106610134E-19</iyz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="LCWheel_collision">
@@ -596,17 +652,18 @@
         <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="LCWheel_visual">
         <pose>-0.223207887686939 0.00644277891242926 -0.0369042495619069 0 0 0</pose>
@@ -629,9 +686,12 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
     <link name="LBWheel">
@@ -644,15 +704,15 @@
         <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
+          <ixx>0.00636122013463714</ixx>
+          <ixy>7.97906990264509E-20</ixy>
+          <ixz>1.02386629412868E-19</ixz>
+          <iyy>0.00340889332640425</iyy>
+          <iyz>3.68262106610134E-19</iyz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="LBWheel_collision">
@@ -666,17 +726,18 @@
         <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="LBWheel_visual">
         <pose>-0.227970387686938 0.00644277891243034 0.217095750438093 0 0 0</pose>
@@ -699,9 +760,12 @@
       <axis>
         <xyz>-1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
     <link name="RFWheel">
@@ -714,15 +778,15 @@
         <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
+          <ixx>0.00636122013463714</ixx>
+          <ixy>7.97906990264509E-20</ixy>
+          <ixz>1.02386629412868E-19</ixz>
+          <iyy>0.00340889332640425</iyy>
+          <iyz>3.68262106610134E-19</iyz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="RFWheel_collision">
@@ -736,17 +800,18 @@
         <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="RFWheel_visual">
         <pose>0.403828032194447 0.0064427789124282 -0.290815649166525 0 0 0</pose>
@@ -767,11 +832,14 @@
       <child>RFWheel</child>
      <pose>0 0 0 0 0 0</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
     <link name="RCWheel">
@@ -784,15 +852,15 @@
         <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
+          <ixx>0.00636122013463714</ixx>
+          <ixy>7.97906990264509E-20</ixy>
+          <ixz>1.02386629412868E-19</ixz>
+          <iyy>0.00340889332640425</iyy>
+          <iyz>3.68262106610134E-19</iyz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="RCWheel_collision">
@@ -806,17 +874,18 @@
         <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="RCWheel_visual">
         <pose>0.399065532194447 0.00644277891242927 -0.0368156491665249 0 0 0</pose>
@@ -837,12 +906,14 @@
       <child>RCWheel</child>
       <pose>0 0 0 0 0 0</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>2</damping>
           <friction>1</friction>
         </dynamics>
-
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
     <link name="RBWheel">
@@ -855,15 +926,15 @@
         <angular>0.01</angular>
       </velocity_decay>
       <inertial>
-        <mass>0.255325203825891</mass>
+        <mass>1.3252011832177</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0</ixx>
+          <ixx>0.00636122013463714</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0</iyy>
+          <iyy>0.00340889332640425</iyy>
           <iyz>0</iyz>
-          <izz>0</izz>
+          <izz>0.00340889332640425</izz>
         </inertia>
       </inertial>
       <collision name="RBWheel_collision">
@@ -877,17 +948,18 @@
        <surface>
           <contact>
           <ode>
-            <kd>1</kd>
-            <kp>1e7</kp>
+            <kd>25</kd>
+            <kp>50000</kp>
+            <min_depth>0.0001</min_depth>
           </ode>
           </contact>
-          <friction>
-            <ode>
-              <mu>2</mu>
-              <mu2>2</mu2>
-            </ode>
-          </friction>
-        </surface>
+              <friction>
+                <ode>
+                  <mu>2</mu>
+                  <mu2>2</mu2>
+                </ode>
+              </friction>
+          </surface>
       </collision>
       <visual name="RBWheel_visual">
         <pose>0.403828032194447 0.00644277891242929 0.217184350833475 0 0 0</pose>
@@ -908,96 +980,27 @@
       <child>RBWheel</child>
       <pose>0 0 0 0 0 0</pose>
       <axis>
-        <xyz>-1 0 0</xyz>
-        <dynamics>
-          <damping>1</damping>
-          <friction>1</friction>
-        </dynamics>
-      </axis>
-    </joint>
-    <link name="Intake">
-      <gravity>1</gravity>
-      <self_collide>0</self_collide>
-      <pose>-0.424484874242734 9.92754253803518E-09 0.120699564654734 1.5707963267949 0 -1.5707963267949</pose>
-      <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>1</angular>
-      </velocity_decay>
-      <inertial>
-        <mass>2</mass>
-        <pose>0 0 0 0 0 0</pose>
-        <inertia>
-          <ixx>0</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>1</iyy>
-          <iyz>0</iyz>
-          <izz>0</izz>
-        </inertia>
-      </inertial>
-      <collision name="Intake_collision">
-        <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://SimBot2022-2/meshes/Intake.STL</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode>
-            </ode>
-          </contact>
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-            </ode>
-          </friction>
-        </surface>
-        
-      </collision>
-      <visual name="Intake_visual">
-        <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
-        <material>
-          <ambient>1 0.250980392156863 0.501960784313725 1</ambient>
-          <diffuse>1 0.250980392156863 0.501960784313725 1</diffuse>
-        </material>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://SimBot2022-2/meshes/Intake.STL</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <joint name="shooter-Intake" type="revolute">
-      <parent>shooter</parent>
-      <child>Intake</child>
-      <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
-      <axis>
-        <xyz>-1 0 0</xyz>
+        <xyz>1 0 0</xyz>
         <dynamics>
           <damping>2</damping>
           <friction>1</friction>
-        </dynamics>    
+        </dynamics>
         <limit>
-          <upper>0.1</upper>
-          <lower>-0.1</lower>
-        </limit>       
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
-     <plugin name="Intake-IntakeWheels_motor" filename="sim_motor.dll">
+    <!---->
+   
+    <plugin name="Intake-IntakeWheels_motor" filename="sim_motor.dll">
       <joint>Intake-IntakeWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/7</topic>
-      
-      <!-- -->
+
       <multiplier>1</multiplier>
       <P>5</P>
       <I>0</I>
-      <D>0</D>
-     
+      <D>0</D>   
+      
     </plugin>
     <plugin name="Intake-IntakeWheels_encoder" filename="sim_encoder.dll">
       <joint>Intake-IntakeWheels</joint>
@@ -1009,59 +1012,71 @@
       <joint>shooter-ShooterWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/8</topic>
       <multiplier>1</multiplier>
-      <P>10</P>
-      <I>20</I>
-      <D>0.0</D>
+
+      <P>5</P>
+      <I>0</I>
+      <D>0</D>
+      
     </plugin>
     <plugin name="shooter-ShooterWheels_encoder" filename="sim_encoder.dll">
       <joint>shooter-ShooterWheels</joint>
        <topic>~/gazebo/frc/simulator/encoder/8</topic>
       <multiplier>1</multiplier>  
     </plugin>
+
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
     <plugin name="Body_gyro" filename="sim_gyro.dll">
       <link>Frame</link>
-      <topic>~/gazebo/frc/simulator/gyro</topic>
+      <topic>~/gazebo/frc/simulator/gyro/0</topic>
       <units>degrees</units>
       <axis>yaw</axis>
+      <num_axis>3</num_axis>
     </plugin>
+
     <plugin name="Frame-LFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LFWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+    
     <plugin name="Frame-LCWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LCWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+
     <plugin name="Frame-LBWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LBWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+   
     <plugin name="Frame-LCWheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-LCWheel</joint>
        <topic>~/gazebo/frc/simulator/encoder/1</topic>
       <multiplier>1</multiplier>
     </plugin>
+
     <plugin name="Frame-RFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RFWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+    
     <plugin name="Frame-RCWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RCWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+
     <plugin name="Frame-RBWheel_motor" filename="sim_motor.dll">
       <joint>Frame-RBWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/2</topic>
-      <multiplier>100</multiplier>
+      <multiplier>25</multiplier>
     </plugin>
+   
     <plugin name="Frame-RCWheel_encoder" filename="sim_encoder.dll">
       <joint>Frame-RCWheel</joint>
        <topic>~/gazebo/frc/simulator/encoder/2</topic>

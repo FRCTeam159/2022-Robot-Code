@@ -9,16 +9,16 @@ import frc.robot.Robot;
 import gazebo.SimGyro;
 
 /** Add your docs here. */
-public class Gyroscope implements GyroInterface{
+public class Gyro implements GyroInterface{
     SimGyro sim_gyro;
     AnalogGyro real_gyro;
     boolean enabled=true;
 
-    public Gyroscope(){
+    public Gyro(int chnl){
         if(Robot.isReal())
-            real_gyro = new AnalogGyro(0);
+            real_gyro = new AnalogGyro(chnl);
         else
-            sim_gyro=new SimGyro();
+            sim_gyro=new SimGyro(chnl);
     }
 
     @Override
@@ -42,6 +42,18 @@ public class Gyroscope implements GyroInterface{
             sim_gyro.reset();
     }
 
+    public double getPitch() {
+        if(!enabled || Robot.isReal())
+            return 0;
+        else
+            return sim_gyro.getPitch();
+    }
+    public double getRoll() {
+        if(!enabled || Robot.isReal())
+            return 0;
+        else
+            return sim_gyro.getRoll();
+    }
     @Override
     public double getRate() {
         if(!enabled)

@@ -17,8 +17,9 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.objects.Gyroscope;
+import frc.robot.objects.Gyro;
 import frc.robot.objects.SparkMotor;
+import utils.MathUtils;
 
 public class DriveTrain extends SubsystemBase {
 
@@ -27,21 +28,21 @@ public class DriveTrain extends SubsystemBase {
 
 	//private Simulation simulation;
 	
-	public Gyroscope gyro = new Gyroscope();
+	public Gyro gyro = new Gyro(0);
 
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
 	
 	public static double kMaxVelocity = 1.5; // meters per second
-	public static double kMaxAcceleration = 4.0; //  meters/second/second
-	public static double kMaxAngularSpeed = 180; // degrees per second
+	public static double kMaxAcceleration = 3; //  meters/second/second
+	public static double kMaxAngularSpeed = 20; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
 	private final DifferentialDriveOdometry odometry;
 
 	private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1,1);
-	private final PIDController leftPIDController = new PIDController(0.25, 0.0, 0.0);
-	private final PIDController rightPIDController = new PIDController(0.25, 0.0, 0.0);
+	private final PIDController leftPIDController = new PIDController(0.1, 0.0, 0.0);
+	private final PIDController rightPIDController = new PIDController(0.1, 0.0, 0.0);
 
 	private final SlewRateLimiter speedLimiter = new SlewRateLimiter(kMaxVelocity);
 	private final SlewRateLimiter rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
@@ -54,6 +55,7 @@ public class DriveTrain extends SubsystemBase {
 	public boolean enable_gyro = true;
 	private double last_heading=0;
 	public boolean arcade_mode=false;
+	public boolean dampen_tilt=false;
 
 	private Pose2d field_pose;
 
@@ -66,6 +68,8 @@ public class DriveTrain extends SubsystemBase {
 		rightMotor.setDistancePerRotation(distancePerRotation);
 		leftMotor.setScale(1);
 		rightMotor.setScale(1);
+		//leftMotor.setMaxAccel(kMaxAcceleration);
+		//rightMotor.setMaxAccel(kMaxAcceleration);
 	
 		rightMotor.setInverted();
 	
@@ -83,21 +87,10 @@ public class DriveTrain extends SubsystemBase {
 	private static double coerce(double min, double max, double value) {
 		return Math.max(min, Math.min(value, max));
 	}
-	/*
-	public double getTime(){
-		return simulation.getSimTime();
-	}
 	
-	public void startAuto(){
-		simulation.reset();
-		simulation.start();
-		enable();
-	}
-	*/
 	public void init(){
 		System.out.println("Drivetrain.init");
 		field_pose=getPose();
-		//simulation.init();
 		enable();
 	}
 	public void disable(){
@@ -105,10 +98,8 @@ public class DriveTrain extends SubsystemBase {
 		leftMotor.disable();
 		rightMotor.disable();
 		gyro.disable();
-		//simulation.end();
 	}
 	public void enable(){
-		//simulation.run();
 		System.out.println("Drivetrain.enable");
 		leftMotor.enable();
 		rightMotor.enable();
@@ -174,10 +165,17 @@ public class DriveTrain extends SubsystemBase {
 	public double getDistance(){
 		return  0.5*(getLeftDistance()+getRightDistance());
 	}
+	public double aveVelocity(){
+		return  0.5*(leftMotor.aveVelocity()+rightMotor.aveVelocity());
+	}
+	public double aveAcceleration(){
+		return  0.5*(leftMotor.aveAcceleration()+rightMotor.aveAcceleration());
+	}
 	public void log(){
 		SmartDashboard.putNumber("Heading", getHeading());
 		SmartDashboard.putNumber("Distance", getDistance());
-		SmartDashboard.putNumber("Velocity", getVelocity());
+		SmartDashboard.putNumber("Velocity", aveVelocity());
+		SmartDashboard.putNumber("Accel", aveAcceleration());
 		enable_gyro=SmartDashboard.getBoolean("Enable gyro", enable_gyro); 
 		arcade_mode=SmartDashboard.getBoolean("Arcade mode", arcade_mode);	
 	}
@@ -211,8 +209,7 @@ public class DriveTrain extends SubsystemBase {
 
 		final double leftOutput = leftPIDController.calculate(leftMotor.getRate(), speeds.leftMetersPerSecond);
 		final double rightOutput = rightPIDController.calculate(rightMotor.getRate(),speeds.rightMetersPerSecond);
-		leftMotor.set(leftOutput + leftFeedforward);
-		rightMotor.set(rightOutput + rightFeedforward);
+		set(leftOutput + leftFeedforward,rightOutput + rightFeedforward);
 	}
 
     /** Updates the field-relative position. */
@@ -234,6 +231,17 @@ public class DriveTrain extends SubsystemBase {
 	public Pose2d getFieldPose() {
         return field_pose;
     }
+
+	public void set(double left,double right) {
+		double damping=1.0;
+		if(enable_gyro && dampen_tilt){
+			double lift=Math.abs(gyro.getRoll());
+			damping=MathUtils.lerp(lift, 0.5, 4, 1, 0.1);
+		}
+		leftMotor.set(left*damping);
+		rightMotor.set(right*damping);
+		log();
+	}
 	public void set(double value) {
 		leftMotor.set(value);
 		rightMotor.set(value);
@@ -281,8 +289,6 @@ public class DriveTrain extends SubsystemBase {
 		// Make sure values are between -1 and 1
 		leftMotorOutput = coerce(-1, 1, speeds.getX());
 		rightMotorOutput = coerce(-1, 1, speeds.getY());
-		leftMotor.set(leftMotorOutput);
-		rightMotor.set(rightMotorOutput);
-		log();
+		set(leftMotorOutput,rightMotorOutput);
 	}
 }
