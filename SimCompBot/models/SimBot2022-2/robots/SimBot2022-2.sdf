@@ -553,7 +553,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
@@ -627,7 +627,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-       <angular>0.01</angular>
+       <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
@@ -701,7 +701,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
@@ -775,7 +775,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
@@ -849,7 +849,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
@@ -923,7 +923,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-        <angular>0.01</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1.3252011832177</mass>
