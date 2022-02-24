@@ -174,9 +174,6 @@
           </limit>
       </axis>
     </joint>
-
-    
-
     <link name="ShooterWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -243,13 +240,14 @@
     <link name="LimitSwitch">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <pose>-0.292938637967147 -0.00167438091144598 0.0190079876439564 1.5707963267949 0 -1.5707963267949</pose>
+       <!--<pose>-0.292938637967147 -0.00167438091144598 0.0190079876439564 1.5707963267949 0 -1.5707963267949</pose>-->
+
+      <pose>-0.31 -0.00167438091144598 0.0190079876439564 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-
       <inertial>
         <mass>0.00457179713622319</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -261,13 +259,12 @@
           <iyz>0</iyz>
           <izz>0</izz>
         </inertia>
-      </inertial>
-      
+      </inertial>     
       <collision name="LimitSwitch_collision">
         <pose>0.0862544413423097 -0.042791208731527 -0.20010896601299 0 0 0</pose>
         <geometry>
           <mesh>
-            <scale>1 1 1</scale>
+            <scale>1.0 1.0 1.0</scale>
             <uri>model://SimBot2022-2/meshes/LimitSwitch_col.STL</uri>
           </mesh>
         </geometry>
@@ -295,7 +292,7 @@
         </material>
         <geometry>
           <mesh>
-            <scale>1 1 1</scale>
+            <scale>1.0 1.0 1.0</scale>
             <uri>model://SimBot2022-2/meshes/LimitSwitch.STL</uri>
           </mesh>
         </geometry>
@@ -340,7 +337,6 @@
         <linear>0</linear>
         <angular>0</angular>
       </velocity_decay>
-
       <inertial>
         <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -353,7 +349,6 @@
           <izz>0.0112740976678991</izz>
         </inertia>
       </inertial>
-      
       <collision name="Shield_collision">
         <pose>0.0878682565006262 -0.293823602518869 -0.290108845485391 0 0 0</pose>
         <geometry>
@@ -405,13 +400,11 @@
         </limit>
       </axis>
     </joint>
-    
      <link name="Intake">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.424484874242734 9.92754253803518E-09 0.120699564654734 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-     
       <inertial>
         <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -459,7 +452,6 @@
         </geometry>
       </visual>
     </link>
-     
     <joint name="shooter-Intake" type="revolute">
       <parent>shooter</parent>
       <child>Intake</child>
@@ -478,7 +470,6 @@
         </limit>       
       </axis>
     </joint>
-   
     <link name="IntakeWheels">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -543,9 +534,15 @@
       <pose>0 0 0 0 0 0</pose>
       <axis>
         <xyz>1 0 0</xyz>
+        <dynamics>
+          <damping>2</damping>
+          <friction>1</friction>
+        </dynamics>
+        <limit>
+          <effort>50</effort>
+        </limit>
       </axis>
     </joint>
-
     <link name="LFWheel">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
@@ -990,8 +987,6 @@
         </limit>
       </axis>
     </joint>
-    <!---->
-   
     <plugin name="Intake-IntakeWheels_motor" filename="sim_motor.dll">
       <joint>Intake-IntakeWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/7</topic>
@@ -1023,7 +1018,6 @@
        <topic>~/gazebo/frc/simulator/encoder/8</topic>
       <multiplier>1</multiplier>  
     </plugin>
-
     <plugin name="clock" filename="sim_clock.dll">
       <topic>~/gazebo/frc/simulator/clock</topic>
     </plugin>
@@ -1034,13 +1028,11 @@
       <axis>yaw</axis>
       <num_axis>3</num_axis>
     </plugin>
-
     <plugin name="Frame-LFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LFWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>
       <multiplier>25</multiplier>
     </plugin>
-    
     <plugin name="Frame-LCWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LCWheel</joint>
       <topic>~/gazebo/frc/simulator/motor/1</topic>

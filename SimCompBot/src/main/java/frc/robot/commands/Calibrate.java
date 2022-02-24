@@ -44,8 +44,8 @@ public class Calibrate extends CommandBase {
   private final DriveTrain m_drive;
 
   public Calibrate(DriveTrain drive) {
-    SmartDashboard.putNumber("Max Power", max_power);
-    SmartDashboard.putNumber("Max Speed", max_vel); 
+    //SmartDashboard.putNumber("Max Power", max_power);
+   // SmartDashboard.putNumber("Max Speed", max_vel); 
     m_drive = drive;
     //m_simulation=m_drive.simulation;
     addRequirements(drive);
@@ -76,15 +76,15 @@ public class Calibrate extends CommandBase {
 
   // Called repeatedly when this Command is scheduled to run
   public void execute() {
-    elapsed = Timing.getTime();
+    elapsed = Timing.get();
     if (elapsed > next_step) {
       if (max_vel > 0.1 && (max_vel - last_max_vel) / (max_vel) > 0.05)
         max_power = set_value;
       set_value += vel_delta;
       next_step += run_time;
       last_max_vel = max_vel;
-      SmartDashboard.putNumber("Max Power", max_power);
-      SmartDashboard.putNumber("Max Speed", max_vel); 
+     // SmartDashboard.putNumber("Max Power", max_power);
+      //SmartDashboard.putNumber("Max Speed", max_vel); 
     }
     if (next_step <= end_time) {
       m_drive.set(set_value);
@@ -132,8 +132,8 @@ public class Calibrate extends CommandBase {
     double a=Math.sqrt(max_acc);
     System.out.println("Calibrate.end()");
     System.out.format("max power=%f max velocity=%f\n", max_power,max_vel); 
-    SmartDashboard.putNumber("Max Power", max_power);
-    SmartDashboard.putNumber("Max Speed", max_vel); 
+    //SmartDashboard.putNumber("Max Power", max_power);
+    //SmartDashboard.putNumber("Max Speed", max_vel); 
 
     if (PlotUtils.auto_plot_option!=PlotUtils.PLOT_NONE) {
       utils.PlotUtils.publish(plotdata,3,PlotUtils.PLOT_CALIBRATE);

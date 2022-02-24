@@ -20,7 +20,7 @@ public class Camera implements CameraInterface {
     UsbCamera usb_camera;
     MJpegReader video_source;
     CvSink cvSink;
-    protected Mat mat;
+    protected Mat mat=new Mat();
     public Camera(int id){
         chnl=id;
         if (!Robot.isReal()){
@@ -58,8 +58,9 @@ public class Camera implements CameraInterface {
     }
     @Override
     public Mat getFrame() {
-        if (!Robot.isReal())
-            return video_source.getFrame();
+        if (!Robot.isReal()){
+           return video_source.getFrame();
+        }
         cvSink.grabFrame(mat);
         return mat;
     }

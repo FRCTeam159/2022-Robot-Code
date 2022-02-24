@@ -33,9 +33,9 @@ public class DriveTrain extends SubsystemBase {
 	public static final double kTrackWidth = i2M(2*23); // bug? need to double actual value for geometry to work
 	public static final double kWheelDiameter = i2M(7.8); // wheel diameter in tank model
 	
-	public static double kMaxVelocity = 1.5; // meters per second
-	public static double kMaxAcceleration = 3; //  meters/second/second
-	public static double kMaxAngularSpeed = 20; // degrees per second
+	public static double kMaxVelocity = 1.36; // meters per second
+	public static double kMaxAcceleration = 0.25; //  meters/second/second
+	public static double kMaxAngularSpeed = 180; // degrees per second
 
 	private final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(2*kTrackWidth);
 	private final DifferentialDriveOdometry odometry;

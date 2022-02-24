@@ -12,7 +12,8 @@ public class Timing extends SubsystemBase {
   private static final Timer m_timer = new Timer();
   /** Creates a new Timing. */
   public Timing() {
-    m_timer.start();
+    if(Robot.isReal())
+      m_timer.start();
   }
 
   @Override
@@ -20,12 +21,12 @@ public class Timing extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public static void reset(){
-
-    m_timer.reset();
     if(!Robot.isReal())
       Simulation.start();
+    else
+      m_timer.reset();
   }
-  public static double getTime(){
+  public static double get(){
     if(Robot.isReal())
       return m_timer.get();
     else

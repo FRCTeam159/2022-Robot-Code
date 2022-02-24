@@ -9,5 +9,6 @@ import org.opencv.core.Mat;
 /** Add your docs here. */
 public interface VideoInterface {
     Mat getFrame();
+    void process();
     boolean isConnected();
 }

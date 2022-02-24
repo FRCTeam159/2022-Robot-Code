@@ -16,6 +16,7 @@ import org.opencv.imgproc.Imgproc;
 public class GripDetector extends TargetDetector{
     ArrayList<MatOfPoint> contours;
     ArrayList<Rect> rects = new ArrayList<Rect>();
+    MatOfPoint bounding_box;
     Rect best = null;
     Rect biggest = null;
     Rect best_shape = null;
@@ -24,6 +25,7 @@ public class GripDetector extends TargetDetector{
     public double ideal_ratio=2.5;
     public final int BEST_SHAPE=1;
     public final int LARGEST = 0;
+    boolean use_bounding_box=false;
 
     protected int best_attribute=BEST_SHAPE;
 
@@ -32,6 +34,9 @@ public class GripDetector extends TargetDetector{
     }
     public void setIdealRatio(double a){
         ideal_ratio=a;
+    }
+    public void useBoundingBox(boolean b){
+        use_bounding_box=b;
     }
 
     void getTargets(){
@@ -42,6 +47,28 @@ public class GripDetector extends TargetDetector{
         for (int i = 0; i < contours.size(); i++) {
             MatOfPoint contour = contours.get(i);
             Rect r = Imgproc.boundingRect(contour);
+            rects.add(r);
+        }
+        if(use_bounding_box && rects.size()>0){
+            int xmin=1000;
+            int xmax=0;
+            int ymin=1000;
+            int ymax=0;
+            for (int i = 0; i < rects.size(); i++) {
+                Rect r = rects.get(i);
+                int x2=r.x+r.width;
+                int y2=r.y+r.height;
+                xmin=r.x<xmin?r.x:xmin;
+                xmax=x2>xmax?x2:xmax;
+                ymin=r.y<ymin?r.y:ymin;
+                ymax=y2>ymax?y2:ymax;
+            }
+            Rect b=new Rect((int)xmin,(int)ymin,(int)(xmax-xmin),(int)(ymax-ymin));
+            rects.clear();
+            rects.add(b);
+        }
+        for (int i = 0; i < rects.size(); i++) {
+            Rect r = rects.get(i);
             double area = r.area();
             double ratio_err=Math.abs(r.width/r.height-ideal_ratio);
 
@@ -58,7 +85,6 @@ public class GripDetector extends TargetDetector{
                 best=best_shape;
             else
                 best=biggest;
-            rects.add(r);
         }
     }
     void markTargets(){

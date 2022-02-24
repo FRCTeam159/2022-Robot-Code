@@ -38,6 +38,9 @@ public class ShootingCommand extends CommandBase {
   private boolean autoAim;
   private boolean spinBack;
   private boolean manualAim;
+  private String last_msg;
+  boolean was_front=false;
+
 
   public ShootingCommand(Shooting shoot, XboxController controller, Targeting aim, DriveTrain drive) {
     m_drive = drive;
@@ -55,7 +58,8 @@ public class ShootingCommand extends CommandBase {
   void whichCamera() {
     boolean newstate = m_switchCamera.newState();
     if (newstate) {
-      boolean is_front = SmartDashboard.getBoolean("Front Camera", true);
+      boolean is_front = Targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
+      Targeting.setFrontTarget(!is_front);
       SmartDashboard.putBoolean("Front Camera", !is_front);
     }
   }
@@ -83,14 +87,15 @@ public class ShootingCommand extends CommandBase {
       m_timer.reset();
       if (m_shoot.isShooterOn()) {
         m_shoot.setShooterOff();
-        SmartDashboard.putString("Status", "Shooter is On");
-        System.out.println("shooter is on");
-      } else {
-        m_shoot.setShooterOn();       
         SmartDashboard.putString("Status", "Shooter is Off");
         System.out.println("shooter is off");
+      } else {
+        m_shoot.setShooterOn();       
+        SmartDashboard.putString("Status", "Shooter is On");
+        System.out.println("shooter is on");
       }
     }
+   
     //double a=m_shoot.shooterAcceleration();
     //if(Math.abs(a)>0.5)
     //System.out.println(m_shoot.shooterVelocity()+" "+m_shoot.shooterAcceleration());
@@ -119,7 +124,11 @@ public class ShootingCommand extends CommandBase {
       return;
     }
     whichCamera();
-    if(m_aim.frontTarget())
+    boolean is_front=Targeting.frontCamera();
+    if(is_front!=was_front)
+      state=state_OFF;
+    was_front=is_front;
+    if(is_front)
       front_target_program();
     else
       back_target_program(); 
@@ -128,22 +137,33 @@ public class ShootingCommand extends CommandBase {
   private void back_target_program() {
     switch (state) {
       case state_OFF:
-        m_shoot.setShooterOff();
-        m_shoot.setIntakeHold();
+        manualAim = false;
+        autoAim = false;
         if (m_shoot.isBallCaptured()){
           state = state_FOUND;
+          m_shoot.setIntakeHold();
         }
+        else 
+          m_shoot.setIntakeOff();
+        m_shoot.setShooterOff();
         if (m_controller.getRawButtonPressed(2)) {
-          SmartDashboard.putString("Status", "Intake starting");
+          showStatus("Intake starting");
           m_shoot.setIntakeOn();
           state = state_LOOKING;
         }
         break;
       case state_LOOKING:
         if (m_controller.getRawButtonPressed(5)) {
-          SmartDashboard.putString("Status", "Starting Auto intake");
+          showStatus("Starting Auto intake");
           autoAim = true;
+          manualAim = false;
           m_aim.enable();
+          state=state_AIM;
+        }
+        if (m_controller.getRawButtonPressed(6)) {
+          showStatus("Starting manual intake");
+          autoAim = false;
+          manualAim = true;
           state=state_AIM;
         }
         if (m_shoot.isBallCaptured()){
@@ -158,25 +178,26 @@ public class ShootingCommand extends CommandBase {
         if (m_shoot.isBallCaptured()) {
           state = state_FOUND;
           m_shoot.setIntakeHold();
-          SmartDashboard.putString("Status", "Ball captured");
+          showStatus("Ball captured");
         }
         if (m_controller.getRawButtonPressed(2)) {
-          SmartDashboard.putString("Status", "Intake cancelled");
+          showStatus("Intake cancelled");
           state = state_OFF;
           autoAim = false;
         }
         if (m_controller.getRawButtonPressed(6)) {
-          SmartDashboard.putString("Status", "Auto Intake cancelled");
+          if(autoAim)
+          showStatus("Auto Intake cancelled");
           autoAim = false;
         }
         break;
       case state_FOUND:
         if (!m_shoot.isBallCaptured()){
-          SmartDashboard.putString("Status", "Ball Lost");
+          showStatus("Ball Lost");
           state = state_OFF;
         }
         if (m_controller.getRawButtonPressed(2)){
-          SmartDashboard.putString("Status", "Intake cancelled");
+          showStatus("Intake cancelled");
           state = state_OFF;
         }
       break;
@@ -188,99 +209,77 @@ public class ShootingCommand extends CommandBase {
       case state_OFF:
         manualAim = false;
         autoAim = false;
-
-        if(m_shoot.isShooterOn())
-          m_shoot.setShooterOff();
+        m_shoot.setShooterOff();
         if(m_shoot.isBallCaptured())
-          m_shoot.setIntakeHold();
-        SmartDashboard.putString("Status", "Manual Driving");
+           m_shoot.setIntakeHold();
+         else
+           m_shoot.setIntakeOff();
+        showStatus("Manual Driving");
         if (m_controller.getRawButtonPressed(2)) {
             m_timer.reset();
-            SmartDashboard.putString("Status", "Waiting for ball");
-            spinBack = false;
-            state = state_LOOKING;
-        }
-      
-        break;
-      case state_LOOKING:
-        m_shoot.setShooterOff();
-        if (!spinBack)
-          m_shoot.setIntakeOn();
-        if (m_shoot.isBallCaptured()) {
-          if (!spinBack) {
-            SmartDashboard.putString("Status", "Have Ball");
-            m_shoot.setIntakeHold();
-            m_timer.reset();
-            spinBack = true;
-          } else if (m_timer.get() > Shooting.kSpinbackTime) {
-            state = state_AIM;
-            SmartDashboard.putString("Status", "Ready to aim");
-            System.out.println("ready to aim");
-          }
+            if(!m_shoot.isBallCaptured())
+              showStatus("Waiting for ball");
+            else{
+              showStatus("Ready to aim");
+              state = state_AIM;
+            }
         }
         break;
+     
       case state_AIM:
         if(!manualAim && m_shoot.isShooterOn())
           m_shoot.setShooterOff();
-        if(m_shoot.isIntakeOn())
-          m_shoot.setIntakeHold();
+         m_shoot.setIntakeHold();
 
         if (m_controller.getRawButtonPressed(5)) {
-          SmartDashboard.putString("Status", "Aiming ...");
+          showStatus("Starting Auto-Aiming");
           autoAim = true;
         }
         if (!manualAim && m_controller.getRawButtonPressed(6)) {
-          SmartDashboard.putString("Status", "Starting Manual-aiming");
-          System.out.println("Starting Manual-aiming");
+          showStatus("Starting Manual-aiming");
           autoAim = false;
           manualAim = true;
           m_shoot.setIntakeHold();
           m_shoot.setShooterOn();
         }
         if (m_controller.getRawButtonPressed(2)) {
-          SmartDashboard.putString("Status", "Targeting cancelled");
+          showStatus("Targeting cancelled");
           state = state_OFF;
           autoAim = false;
         }
         if (autoAim) {
-          // do aiming stuff here
           m_aim.enable();
           m_aim.adjust();
           m_shoot.setIntakeHold();
           m_shoot.setShooterOff();
           if (m_aim.onTarget()) {
-            SmartDashboard.putString("Status", "On Target");
+            showStatus("On Target");
             state = state_FOUND;
             m_timer.reset();
-            System.out.println("on target - running up");
             m_aim.disable();
             m_shoot.setShooterOn();
           }
         }
-        
         if (manualAim && m_controller.getRawButtonPressed(1)) {
           m_timer.reset();
           state = state_SHOOT;
-          System.out.println("Shooting");
         }
         break;
       case state_FOUND:
-      if (m_shoot.shooterReady() || m_timer.get() > Shooting.kRunUpTime) {
+      if (m_shoot.shooterReady() /* || m_timer.get() > Shooting.kShooterRunUpTime*/) {
           state = state_SHOOT;
-          SmartDashboard.putString("Status", "Shooting");
-          System.out.println(m_timer.get()+" Shooting "+m_shoot.aveShooterVel());
+          showStatus("Shooting");
           m_timer.reset();
         }
         break;
       case state_SHOOT:
-        // m_shoot.setShooterOn();
         m_shoot.setIntakeOn();
         autoAim = false;
-        if (m_timer.get() > 4) {
+        if (m_timer.get() > 3) {
           if (m_shoot.isBallCaptured())
-            SmartDashboard.putString("Status", "Shot Failed");
+            showStatus("Shot Failed");
           else
-            SmartDashboard.putString("Status", "Shot Complete");
+            showStatus("Shot Complete");
           System.out.println("Test end");
           state = state_OFF;
           m_timer.reset();
@@ -289,6 +288,12 @@ public class ShootingCommand extends CommandBase {
     }
   }
 
+  private void showStatus(String msg){
+    SmartDashboard.putString("Status", msg);
+    if(!msg.equals(last_msg))
+      System.out.println(msg);
+    last_msg=msg;
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

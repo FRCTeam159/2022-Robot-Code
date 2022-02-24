@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.subsystems.Targeting;
 
 public class CameraStreams extends Thread {
   TargetDetector m_front_detector;
@@ -27,6 +28,7 @@ public class CameraStreams extends Thread {
   public int image_width = 640;
   public int image_height = 480;
   private NetworkTableEntry tc; // camera (0=front 1=back)
+  private static Mat m1,m2;
 
   protected final Timer m_timer = new Timer();
 
@@ -62,7 +64,7 @@ public class CameraStreams extends Thread {
         System.out.println("exception)");
       }
       TargetDetector.show_hsv_threshold = SmartDashboard.getBoolean("Show HVS threshold", true);
-      boolean is_front = SmartDashboard.getBoolean("Front Camera", true);
+      boolean is_front = Targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
       tc.setBoolean(is_front);
       if (is_front != front_camera) {
         if (is_front)
@@ -70,11 +72,15 @@ public class CameraStreams extends Thread {
         else
           System.out.println("setting back camera");
       }
-      if (is_front) {
-        putFrame(dualStream, m_front_detector.getFrame());
+      m1=m_front_detector.getFrame();
+      m2=m_back_detector.getFrame();
+      if (is_front && m1 !=null) {
+        m_front_detector.process();
+        putFrame(dualStream, m1);
         m_front_detector.publish();
-      } else {
-        putFrame(dualStream, m_back_detector.getFrame());
+      } else if (m2 !=null){
+        m_back_detector.process();
+        putFrame(dualStream, m2);
         m_back_detector.publish();
       }
       front_camera = is_front;

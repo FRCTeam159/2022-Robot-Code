@@ -38,6 +38,8 @@ public class TargetDetector implements VideoInterface{
     private NetworkTableEntry xTol;
     private NetworkTableEntry yTol;
     private NetworkTableEntry aTol;
+    private NetworkTableEntry xScale;
+    private NetworkTableEntry yScale;
 
     public int image_width=640;
     public int image_height=480;
@@ -72,6 +74,11 @@ public class TargetDetector implements VideoInterface{
         yTol.setDouble(target_info.yTol);
         aTol=m_target_specs.getEntry("aTol");
         aTol.setDouble(target_info.aTol);
+        xScale = m_target_specs.getEntry("xScale");
+        xScale.setDouble(target_info.xScale);
+        yScale = m_target_specs.getEntry("yScale");
+        yScale.setDouble(target_info.yScale);
+
     }
     protected void setTargetData(){
         ta= m_target_table.getEntry("ta");
@@ -85,12 +92,17 @@ public class TargetDetector implements VideoInterface{
         tr= m_target_table.getEntry("tr");
         tr.setDouble(target.tr);     
     }
+    
     @Override
     public Mat getFrame(){
         return null;
     }
+    
     @Override
     public boolean isConnected() {
         return m_connected;
+    }
+    @Override
+    public void process() {
     }
 }

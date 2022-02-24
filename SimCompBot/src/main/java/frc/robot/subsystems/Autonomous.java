@@ -15,6 +15,7 @@ import frc.robot.commands.DrivePath;
 import frc.robot.commands.DriveToCargo;
 import frc.robot.commands.DriveToTarget;
 import frc.robot.commands.GrabCargo;
+import frc.robot.commands.SetTargetSource;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.objects.CameraStreams;
@@ -23,22 +24,29 @@ import utils.PlotUtils;
 public class Autonomous extends SubsystemBase {
   SendableChooser<Integer> m_auto_plot_option = new SendableChooser<>();
 
-  DriveTrain m_drive;
-  Targeting m_targeting;
+  private final DriveTrain m_drive;
+  private final Targeting m_targeting;
+  private final Shooting m_shoot;
 
   public static final int CALIBRATE = 0;
   public static final int PROGRAM = 1;
-  public static final int AUTOTEST1 = 2;
-  public static final int AUTOTEST2 = 3;
- 
+  public static final int DRIVEBACK = 3;
+  public static final int ONEBALL = 4;
+  public static final int TWOBALL = 5;
+
+  public static double totalRuntime;
+  public static boolean autoFailed = false;
+  public static boolean autoFinished = false;
+
  
   public int selected_path=PROGRAM;
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
   /** Creates a new AutoCommands. */
-  public Autonomous(DriveTrain drive,Targeting targeting) {
+  public Autonomous(DriveTrain drive,Targeting targeting,Shooting shoot) {
     m_drive=drive;
     m_targeting=targeting;
+    m_shoot=shoot;
    
     m_auto_plot_option.setDefaultOption("No Plot", PlotUtils.PLOT_NONE);
     m_auto_plot_option.addOption("Plot Distance", PlotUtils.PLOT_DISTANCE);
@@ -48,14 +56,15 @@ public class Autonomous extends SubsystemBase {
     m_path_chooser.setDefaultOption("Program", PROGRAM);
     m_path_chooser.addOption("Calibrate", CALIBRATE);
 
-	  m_path_chooser.addOption("AutoTest 1", AUTOTEST1);
-    m_path_chooser.addOption("AutoTest 2", AUTOTEST2);
+    m_path_chooser.addOption("DriveBack", DRIVEBACK);
+	  m_path_chooser.addOption("OneBall", ONEBALL);
+    m_path_chooser.addOption("TwoBall", TWOBALL);
 
     SmartDashboard.putBoolean("reversed", false);
     SmartDashboard.putNumber("xPath", 4);
     SmartDashboard.putNumber("yPath", 0);
     SmartDashboard.putNumber("rPath", 0);
-   
+    
 		SmartDashboard.putData(m_path_chooser);
     SmartDashboard.putData(m_auto_plot_option);
   }
@@ -65,16 +74,21 @@ public class Autonomous extends SubsystemBase {
     selected_path=m_path_chooser.getSelected();
     
     CommandGroupBase.clearGroupedCommands();
-      
+    totalRuntime=0;
+    autoFailed=false;
+    autoFinished=false;
+
     switch (selected_path){
     case CALIBRATE:
       return new SequentialCommandGroup(new Calibrate(m_drive));
     case PROGRAM:
       return programPath();
-    case AUTOTEST1:
-      return autoTest1();
-    case AUTOTEST2:
-      return autoTest2();
+    case DRIVEBACK:
+      return driveBack();
+    case ONEBALL:
+      return oneBall();
+    case TWOBALL:
+      return twoBall();
     }
     return null;
   }
@@ -87,20 +101,30 @@ public class Autonomous extends SubsystemBase {
     commands.addCommands(new DrivePath(m_drive,x,y,r,rev));
     return commands;
   }
-  CommandGroupBase autoTest1(){
+  private CommandGroupBase driveBack() {
     SequentialCommandGroup commands = new SequentialCommandGroup();
-    commands.addCommands(new TurnToAngle(m_drive,90.0));
-    commands.addCommands(new DrivePath(m_drive,4.0,0.0,0.0,false));
+    commands.addCommands(new DrivePath(m_drive,1.5,0,0,true));
     return commands;
   }
-  CommandGroupBase autoTest2(){
+
+  CommandGroupBase oneBall(){
     SequentialCommandGroup commands = new SequentialCommandGroup();
-    commands.addCommands(new DrivePath(m_drive,0.75,0.0,0,true)); // backup 1 meter
-    commands.addCommands(new DriveToTarget(m_drive,m_targeting)); // acquire target using limelight
-    commands.addCommands(new Shoot());    // shoot
-    commands.addCommands(new DriveToCargo(m_drive,m_targeting));  // drive to ball using Axon
-    commands.addCommands(new DriveToTarget(m_drive,m_targeting)); // acquire target using limelight
-    commands.addCommands(new Shoot());    // shoot
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
     return commands;
+  }
+  CommandGroupBase twoBall(){
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
+    commands.addCommands(new DriveToCargo(m_targeting,m_shoot));
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
+    return commands;
+  }
+  public static void setAutoStatus(){
+    SmartDashboard.putNumber("Auto time",totalRuntime);
+    SmartDashboard.putBoolean("Auto failed", autoFailed);
+  }
+  @Override
+  public void periodic() {
+    setAutoStatus();
   }
 }

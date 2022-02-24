@@ -23,16 +23,20 @@ public class GripTapeDetector extends GripDetector{
         target_info.idealY=-7;
         target_info.yTol=2;
         target_info.xTol=2;
+        target_info.xScale=1.5;
+        target_info.yScale=1;
+
+        useBoundingBox(true);
     }
     
     public Mat getFrame(){
         mat=camera.getFrame();
-        if(mat !=null)
-           process();     
         return mat;
     }
     
-    void process() {
+    public void process() {
+        if(mat == null)
+            return;
         grip.process(mat);
         if (show_hsv_threshold)
             mat = grip.hsvThresholdOutput();

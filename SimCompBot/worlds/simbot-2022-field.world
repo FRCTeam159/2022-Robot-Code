@@ -4,11 +4,11 @@
   <frame name="explicit_frame"/>
   <physics type="ode">
       <ode>
-          
+         <!-- 
          <solver>
-        <iters>200</iters>
+        <iters>100</iters>
         </solver>
-         <!-- -->
+          -->
         <constraints>
           <contact_max_correcting_vel>1</contact_max_correcting_vel>
           <contact_surface_layer>0.0001</contact_surface_layer>
@@ -39,16 +39,16 @@
       <uri>model://Hub</uri>
       <pose>0.74 1.18 0 1.570 0 -0.4</pose>
     </include>
-
+<!---->
     <include>
-      <uri>model://Hanger</uri>
+      <uri>model://FakeHanger</uri>
       <name>Red-Hanger</name>
       <pose>7.39 -1.44 0 1.570 0 0</pose>
     </include>
 
      <include>
       <uri>model://SimBot2022-2</uri>
-      <pose>0.13064 -0.988 0.1216 0 0 1.57907</pose>
+      <pose>0.3 -0.96 0.1216 0 0 1.57907</pose>
       <!--<pose>0.267 -1.85 0.13 0 0 1.43</pose>-->
     </include>
 

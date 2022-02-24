@@ -32,7 +32,7 @@ public class RobotContainer {
   private final Shooting m_shoot = new Shooting();
   private Simulation m_simulation;
  
-  private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting);
+  private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting,m_shoot);
   private final XboxController m_controller = new XboxController(0);
 
   private DriveWithGamepad m_driveCommand = null; // TODO
