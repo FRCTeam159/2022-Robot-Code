@@ -14,8 +14,9 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import utils.MJpegClient;
 
-public class SwitchCamera extends SubsystemBase {
+public class SwitchCamera extends Thread {
   /** Creates a new SwitchCamera. */
   private UsbCamera IntakeCamera;
   protected static CvSource dualStream;
@@ -23,20 +24,22 @@ public class SwitchCamera extends SubsystemBase {
   private XboxController m_controller;
   private boolean frontCamera;
   private String limelight_url = "http://10.1.59.11:5800/";
-  private VideoCapture limelight;
+  private MJpegClient limelight;
   private boolean limelight_connected;
   private CvSink UsbCameraSink;
+  private static Mat m1, m2;
 
   public SwitchCamera(XboxController x) {
-  m_controller = x;
-  IntakeCamera = CameraServer.startAutomaticCapture(0);
-  IntakeCamera.setResolution(320, 240);
-  IntakeCamera.setFPS(25);
-  dualStream =  CameraServer.putVideo("SwitchCamera", 320, 240);
-  switchCamera = new ToggleButton(new JoystickButton(m_controller, 4));
-  limelight = new VideoCapture();
-  limelight_connected = limelight.open(limelight_url);
-  UsbCameraSink = CameraServer.getVideo(IntakeCamera);
+    m_controller = x;
+    IntakeCamera = CameraServer.startAutomaticCapture(0);
+    IntakeCamera.setResolution(640, 480);
+    IntakeCamera.setFPS(25);
+    dualStream = CameraServer.putVideo("SwitchCamera", 640, 480);
+    switchCamera = new ToggleButton(new JoystickButton(m_controller, 4));
+    limelight = new MJpegClient(limelight_url);
+    limelight_connected = limelight.isConnected();
+    UsbCameraSink = CameraServer.getVideo(IntakeCamera);
+    setCameraFront();
   }
 
   public void switchView() {
@@ -45,29 +48,33 @@ public class SwitchCamera extends SubsystemBase {
     if (newstate) {
       if (frontCamera) {
         setCameraBack();
+        System.out.println("back cam");
       } else {
         setCameraFront();
+        System.out.println("front cam");
       }
     }
   }
-  
+
   public void putFrame(CvSource source, Mat m) {
-    source.putFrame(m);
+    if (m != null) {
+      source.putFrame(m);
+    }
   }
 
   public Mat getLimelightFrame() {
-    Mat mat =  new Mat();
-    limelight.read(mat);
+    Mat mat = new Mat();
+    mat = limelight.read();
     return mat;
   }
 
   private Mat getUsbCameraFrame() {
-    Mat mat =  new Mat();
+    Mat mat = new Mat();
     UsbCameraSink.grabFrame(mat);
     return mat;
   }
 
-  private void setCameraFront() {;
+  private void setCameraFront() {
     frontCamera = true;
   }
 
@@ -76,9 +83,23 @@ public class SwitchCamera extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void run() {
     // This method will be called once per scheduler run
-    switchView();
-    
+    while (true) {
+      try {
+        Thread.sleep(20);
+        switchView();
+        m1 = getLimelightFrame();
+        m2 = getUsbCameraFrame();
+        if (frontCamera) {
+          putFrame(dualStream, m1);
+        } else {
+          putFrame(dualStream, m2);
+        }
+      } catch (Exception exception) {
+        System.out.println("error " + exception);
+      }
+
+    }
   }
 }

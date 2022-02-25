@@ -16,6 +16,7 @@ import frc.robot.subsystems.Aiming;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
+import frc.robot.subsystems.SwitchCamera;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -33,6 +34,7 @@ public class RobotContainer {
   private final Shooting m_shoot = new Shooting();
   private final Aiming m_aim = new Aiming(m_Drive, m_limelight);
   private final Autonomous m_auto = new Autonomous(m_Drive, m_aim, m_shoot);
+  private final SwitchCamera m_cameras = new SwitchCamera(m_Controller);
  
 
   //command
@@ -70,5 +72,12 @@ public class RobotContainer {
 
   public void reset() {
     m_Drive.reset();
+  }
+
+  public void robotInit() {
+    m_cameras.start();
+    m_limelight.limelightOff();
+    
+    
   }
 }

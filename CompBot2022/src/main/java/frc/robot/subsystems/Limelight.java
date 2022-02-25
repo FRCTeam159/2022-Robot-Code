@@ -38,45 +38,47 @@ public class Limelight extends SubsystemBase {
     //IntakeCamera = CameraServer.startAutomaticCapture(0);
     //IntakeCamera.setResolution(320, 240);
     //IntakeCamera.setFPS(25);
-    setCameraFront();
+    //setCameraFront();
   }
 
-  public void setCameraFront(){
-    //lr stands for lower right
-    table.getEntry("stream").setNumber(1);
-    frontCamera = true;
-  }
+  // public void setCameraFront(){
+  //   //lr stands for lower right
+  //   table.getEntry("stream").setNumber(1);
+  //   frontCamera = true;
+  // }
 
-  public void setCameraBack(){
-    table.getEntry("stream").setNumber(2);
-    frontCamera = false;
-  }
+  // public void setCameraBack(){
+  //   table.getEntry("stream").setNumber(2);
+  //   frontCamera = false;
+  // }
 
-  public void switchView() {
-    boolean newstate = switchCamera.newState();
+  // public void switchView() {
+  //   boolean newstate = switchCamera.newState();
 
-    if (newstate) {
-      if (frontCamera) {
-        setCameraBack();
-      } else {
-        setCameraFront();
-      }
-    }
-  }
+  //   if (newstate) {
+  //     if (frontCamera) {
+  //       setCameraBack();
+  //     } else {
+  //       setCameraFront();
+  //     }
+  //   }
+  // }
   
   public void limelightOff() {
     table.getEntry("ledMode").setNumber(1);
     table.getEntry("camMode").setNumber(1);
+    System.out.println("limelight off");
   }
   public void limelightOn() {
     table.getEntry("ledMode").setNumber(3);
     table.getEntry("camMode").setNumber(0);
+    System.out.println("limelight on");
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    switchView();
+    //switchView();
     // read values periodically
     limeX = tx.getDouble(0.0);
     limeY = ty.getDouble(0.0);

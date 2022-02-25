@@ -106,6 +106,7 @@ public class ShootingCommand extends CommandBase {
     m_timer.start();
     m_timeOut.start();
     autoAim = false;
+    m_aim.aimOff();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -122,7 +123,6 @@ public class ShootingCommand extends CommandBase {
           // System.out.println(".");
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
-          m_aim.aimOff();
           if (m_controller.getRawButtonPressed(2)) {
             autoAim = false;
             m_timer.reset();
