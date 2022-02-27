@@ -7,12 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ClimberCommands;
 import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.objects.CameraStreams;
 import frc.robot.subsystems.Targeting;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Simulation;
@@ -24,16 +26,19 @@ import frc.robot.subsystems.Simulation;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final XboxController m_controller = new XboxController(0);
+  
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_drivetrain = new DriveTrain();
   private final Cameras m_cameras = new Cameras();
   private final CameraStreams m_streams = new CameraStreams();
   private final Targeting m_targeting = new Targeting(m_drivetrain);
   private final Shooting m_shoot = new Shooting();
+  private final Climber m_climber=new Climber();
   private Simulation m_simulation;
  
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting,m_shoot);
-  private final XboxController m_controller = new XboxController(0);
+
 
   private DriveWithGamepad m_driveCommand = null; // TODO
  
@@ -41,8 +46,9 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-    m_simulation=new Simulation(m_drivetrain,m_shoot);
+    m_simulation=new Simulation(m_drivetrain,m_shoot,m_climber);
     m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller, m_targeting, m_drivetrain));
+    m_climber.setDefaultCommand(new ClimberCommands(m_controller, m_climber));
     configureButtonBindings();
   }
 
@@ -77,6 +83,7 @@ public class RobotContainer {
   
   public void robotInit(){
     m_drivetrain.init();
+    m_climber.init();
     m_simulation.init();
     m_streams.start();
   }

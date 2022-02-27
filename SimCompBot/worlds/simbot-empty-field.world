@@ -26,7 +26,7 @@
     </include>
 
     <include>
-      <uri>model://SimBot2022-2</uri>
+      <uri>model://SimBot2022</uri>
       <pose>0 0 0.1 0 0 0</pose>
     </include>
 

@@ -4,6 +4,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Autonomous": "Subsystem",
       "/LiveWindow/Cameras": "Subsystem",
+      "/LiveWindow/Climber": "Subsystem",
       "/LiveWindow/DriveTrain": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/Shooting": "Subsystem",
@@ -37,9 +38,6 @@
         "open": true
       }
     },
-    "TargetSpecs": {
-      "open": true
-    },
     "gazebo": {
       "camera": {
         "0": {
@@ -59,12 +57,16 @@
         "2": {
           "open": true
         },
+        "5": {
+          "open": true
+        },
         "7": {
           "open": true
         },
         "8": {
           "open": true
-        }
+        },
+        "open": true
       },
       "gyro": {
         "0": {
@@ -77,9 +79,21 @@
         },
         "2": {
           "open": true
-        }
+        },
+        "5": {
+          "open": true
+        },
+        "open": true
       },
-      "open": true
+      "open": true,
+      "piston": {
+        "1": {
+          "open": true
+        }
+      }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }
