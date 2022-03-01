@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,27 +23,33 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean intake_is_holding = false;
   private boolean shooter_is_on = false;
   private boolean ball_captured = false;
-  private double shooter_err_tol = 0.5;
-  private double shooter_err_vel_tol = 0.1;
+  private double shooter_err_tol = 0.1;
+  private double shooter_err_vel_tol = 0.02;
   private double last_err;
 
   public static double kIntakeSpeed = 8;
-  public static double kIntakeHold = -1.5;
-  public static double kShootSpeed = 16;
+  public static double kIntakeHold = -1;
+  public static double kShootSpeed = 17.5;
   public static double kShootHold = 0;
-  public static double kShooterRunUpTime = 2;
-  public static double kIntakeRunUpTime = 2;
+  public static double kShooterRunUpTime = 3;
+  public static double kIntakeRunUpTime = 1;
+  public static double kIntakeRunDownTime = 1;
+
+  private final static PIDController m_shooter_controller = new PIDController(0.1, 0.0, 0);
+
   public static double kSpinbackTime = 2;
 
   private boolean shooter_ramp = true;
   private boolean intake_ramp = true;
 
-  private Ramp shooterRamp=new Ramp();
-  private Ramp intakeRamp=new Ramp();
+  private Ramp shooterRamp=new Ramp("shooter");
+  private Ramp intakeRamp=new Ramp("intake");
   
   public Shooting() {
     intake = new SparkMotor(INTAKE);
     shoot = new SparkMotor(SHOOTER);
+
+    m_shooter_controller.setTolerance(shooter_err_tol, shooter_err_vel_tol);
 
     shoot.setInverted();
     
@@ -85,6 +92,8 @@ public class Shooting extends SubsystemBase implements Constants {
   public void setIntakeOff() {
     if(intake_ramp && intake_is_on)
       intakeRamp.config(kSpinbackTime,kIntakeSpeed,0,0.5);
+    if(intake_ramp && intake_is_holding)
+      intakeRamp.config(kIntakeRunDownTime,0, kIntakeHold,0.5);
    
     intake_is_on = false;
     intake_is_holding=false;
@@ -94,6 +103,8 @@ public class Shooting extends SubsystemBase implements Constants {
   public void setIntakeHold() {
     if(intake_ramp && intake_is_on)
       intakeRamp.config(kSpinbackTime,kIntakeSpeed,kIntakeHold,0.5);
+    else if(intake_ramp && intake_is_off)
+      intakeRamp.config(kIntakeRunDownTime,0,kIntakeHold,0.5);
    
     intake_is_on = false;
     intake_is_off=false;
@@ -129,16 +140,20 @@ public class Shooting extends SubsystemBase implements Constants {
     return intake.getRate();
   }
   public boolean shooterReady() {
-
+    double correction=m_shooter_controller.calculate(aveShooterVel(),kShootSpeed);
+    boolean ready = m_shooter_controller.atSetpoint();
+    /*
     boolean ready = false;
-    double r = shoot.getRate();
+    //double r = shoot.getRate();
 
-    //double r = aveShooterVel();
+    double r = aveShooterVel();
     double err = Math.abs(r - kShootSpeed);
     double delta_err = Math.abs(err - last_err);
+    System.out.println("ave-v:"+r+" target:"+kShootSpeed+" delta_err:"+delta_err);
     if (shooter_is_on && err < shooter_err_tol && delta_err < shooter_err_vel_tol)
       ready = true;
     last_err = err;
+    */
     return ready;
   }
 
@@ -148,7 +163,10 @@ public class Shooting extends SubsystemBase implements Constants {
 
   public void reset() {
     setShooterOff();
-    setIntakeOff();
+   // if(isBallCaptured())
+      setIntakeHold();
+    //else
+    //  setIntakeOff();
   }
 
   private void setShooterSpeed(){
@@ -191,9 +209,11 @@ public class Shooting extends SubsystemBase implements Constants {
     private boolean m_ramping=false;
     private double m_start=0;
     private double m_end=0;
+    private String m_name;
 
     private Timer timer = new Timer();
-    Ramp(){
+    Ramp(String name){
+      m_name=name;
       m_ramping=false;
       timer.start();
     }
@@ -204,6 +224,7 @@ public class Shooting extends SubsystemBase implements Constants {
       m_start=start;
       m_end=end;
       m_ramping=true;
+      System.out.println(m_name+ " config "+start+" "+end+" "+delay);
       timer.reset();
     }
     public void reset(){

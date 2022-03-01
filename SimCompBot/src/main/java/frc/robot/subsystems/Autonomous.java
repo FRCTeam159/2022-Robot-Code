@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,11 +13,6 @@ import frc.robot.commands.Calibrate;
 import frc.robot.commands.DrivePath;
 import frc.robot.commands.DriveToCargo;
 import frc.robot.commands.DriveToTarget;
-import frc.robot.commands.GrabCargo;
-import frc.robot.commands.SetTargetSource;
-import frc.robot.commands.Shoot;
-import frc.robot.commands.TurnToAngle;
-import frc.robot.objects.CameraStreams;
 import utils.PlotUtils;
 
 public class Autonomous extends SubsystemBase {

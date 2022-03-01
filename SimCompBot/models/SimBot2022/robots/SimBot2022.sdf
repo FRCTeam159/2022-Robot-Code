@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sdf version="1.7">
   <model name="SimBot2022">
-    
     <pose>0 0 0 0 0 0</pose>
     <link name="Frame">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.0916854891449772 0 -0.0184942437490389 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>1</must_be_base_link>
-       <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
-      <inertial>
-        <!--<mass>50</mass>-->
-        <mass>5</mass>
+     <inertial>
+        <mass>50</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>5</ixx>
@@ -32,8 +26,7 @@
             <scale>1 1 1</scale>
             <uri>model://SimBot2022/meshes/Frame_col.STL</uri>
           </mesh>
-        </geometry>
-        
+        </geometry>       
       </collision>
       <visual name="Frame_visual">
         <pose>0.087928821262285 -0.0052889773385317 0.00114418280918003 0 0 0</pose>
@@ -75,20 +68,15 @@
         </plugin>
       </sensor>   
     </link>
-    
     <link name="shooter">  
       <self_collide>0</self_collide>
       <pose>-0.339857661155341 0.00613558288465832 0.112751803631496 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>    
-      <gravity>1</gravity>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0.0</angular>
-      </velocity_decay>
+      <gravity>1</gravity>   
       <inertial>
-        <!--<mass>5.22101990724176</mass>-->
-        <mass>1</mass>
+        <mass>5.22101990724176</mass>
         <pose>0 0 0 0 0 0</pose>
+        <!--
         <inertia>
           <ixx>0.114299340025415</ixx>
           <ixy>0.00269283476076011</ixy>
@@ -97,10 +85,10 @@
           <iyz>0.0125219035483829</iyz>
           <izz>0.182046035406737</izz>
         </inertia>
+        -->
       </inertial>     
       <collision name="shooter_collision">
         <pose>0.094064405138414 -0.136535024719067 -0.247027989201184 0 0 0</pose>
-
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -181,12 +169,6 @@
       <self_collide>0</self_collide>
       <pose>-0.177655024091721 0.0 0.196849999999108 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0.0</angular>
-      </velocity_decay>
-
       <inertial>
         <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -242,14 +224,8 @@
     <link name="LimitSwitch">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-       <!--<pose>-0.292938637967147 -0.00167438091144598 0.0190079876439564 1.5707963267949 0 -1.5707963267949</pose>-->
-
       <pose>-0.31 -0.00167438091144598 0.0190079876439564 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
       <inertial>
         <mass>0.00457179713622319</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -335,10 +311,7 @@
       <self_collide>0</self_collide>
       <pose>-0.382938517439548 -6.05657531295434E-05 0.270040381431298 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+      
       <inertial>
         <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -402,7 +375,7 @@
         </limit>
       </axis>
     </joint>
-     <link name="Intake">
+    <link name="Intake">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.424484874242734 9.92754253803518E-09 0.120699564654734 1.5707963267949 0 -1.5707963267949</pose>
@@ -418,7 +391,7 @@
           <iyz>0</iyz>
           <izz>0</izz>
         </inertia>
-      </inertial>     
+      </inertial>
       <collision name="Intake_collision">
         <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
         <geometry>
@@ -454,18 +427,15 @@
         </geometry>
       </visual>
     </link>
-     <link name="Climber">
+   <!----> 
+    <link name="Climber">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.108165830024222 -0.00754421414214484 0.403396336666603 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+      
       <inertial>
-        <!--<mass>5.63318317898918</mass>-->
-        <mass>1</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.180340671375589</ixx>
@@ -510,17 +480,31 @@
         </geometry>
       </visual>
     </link>
+    <joint name="Frame-Climber" type="fixed">
+      <parent>Frame</parent>
+      <child>Climber</child>
+      <pose>0.0803846081116108 -0.427179557754174 -0.0153361580700651 0 0 0</pose>
+      <axis>
+        <xyz>0 0 0</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <upper>0</upper>
+          <lower>0</lower>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+   
     <link name="VertHooks">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
-      <!--<pose>-0.0899896312618392 0 1.01296401885983 1.5707963267949 0 -1.5707963267949</pose>-->
       <pose>-0.0899896312618392 0 0.6 1.5707963267949 0 -1.5707963267949</pose>
-
-      <must_be_base_link>0</must_be_base_link>
-    
+      <must_be_base_link>0</must_be_base_link> 
       <inertial>
-        <!--<mass>1.35490666446053</mass>-->
-        <mass>0.2</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.00137697291971476</ixx>
@@ -540,13 +524,12 @@
           </mesh>
           
         </geometry>
-        <!--  -->
          <surface>
           <contact>
             <ode>
               <min_depth>0.0001</min_depth>
               <kd>1</kd>
-              <kp>1e7</kp>
+              <kp>1e9</kp>
             </ode>
           </contact>
           <friction>
@@ -576,22 +559,18 @@
       <parent>Climber</parent>
       <child>VertHooks</child>
       <pose>0 0.0 0 0 0 0</pose>
-      <!--<pose>-0.19685 0 0.0312719304731663 0 0 0</pose>-->
-
+      <pose>-0.19685 0 0.0312719304731663 0 0 0</pose>
       <axis>
         <xyz>0 1 0</xyz>
         <dynamics>
-          <damping>1</damping>
+          <damping>6</damping>
           <friction>1</friction>
         </dynamics>
         
-        <limit>
-       
+        <limit> 
           <upper>0.6</upper>
           <lower>0</lower>
-          <velocity>0.5</velocity>
-          
-          
+          <velocity>8</velocity>     
         </limit>
         
       </axis>
@@ -602,12 +581,9 @@
       <self_collide>0</self_collide>
       <pose>0.183295209439459 0.00126999999999841 0.665732235239805 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+      
       <inertial>
-        <mass>1</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.00764916813046532</ixx>
@@ -636,11 +612,8 @@
           </contact>
           <friction>
             <ode>
-              <mu>0</mu>
-              <mu2>0</mu2>
-              <!--
-              <slip1>0</slip1>
-              <slip2>1</slip2>-->
+              <mu>1</mu>
+              <mu2>1</mu2>
             </ode>
           </friction>      
         </surface>
@@ -672,44 +645,30 @@
         </dynamics>
         <limit>
           <upper>1.5</upper>
-          <lower>-0.5</lower>    
+          <lower>-0.5</lower>  
+         
         </limit>      
       </axis>
     </joint>
-      <joint name="DiagHooks-PistonRods" type="revolute">
+    <joint name="DiagHooks-PistonRods" type="revolute">
       <parent>DiagHooks</parent>
       <child>PistonRods</child>
       <pose>0 0.0104158787113845 0.0117395065044273 0 0 0</pose>
-      <!--<pose>0 0.0 0.01 0 0 0</pose>-->
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
           <damping>0</damping>
           <friction>0</friction>
         </dynamics>
-         
-        <limit>
-          <!--<upper>0</upper>
-          <lower>0</lower>-->
-          <effort>1</effort>
-        </limit>
-       
       </axis>
     </joint>
-   
     <link name="Piston">
       <gravity>1</gravity>
       <self_collide>0</self_collide>
       <pose>-0.174869870786539 0.00227777821870752 0.368539982718424 1.5707963267949 0 -1.5707963267949</pose>
-      <!--<pose>-0.181 0.00227777821870752 0.34 1.5707963267949 0 -1.5707963267949</pose>-->
-
-      <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+      <must_be_base_link>0</must_be_base_link>  
       <inertial>
-        <mass>0.00137498856819801</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>2.98130535270462E-05</ixx>
@@ -757,21 +716,13 @@
     <joint name="Climber-Piston" type="revolute">
       <parent>Climber</parent>
       <child>Piston</child>
-      <!--<pose>0 -0.171689985144763 0.0511666941839474 0 0 0</pose>-->
       <pose>0 -0.171689985144763 0.0 0 0 0</pose>
-
       <axis>
         <xyz>1 0 0</xyz>
         <dynamics>
           <damping>0</damping>
           <friction>0</friction>
         </dynamics>
-        
-        <limit><!--
-          <upper>0</upper>
-          <lower>0</lower>-->
-          <effort>1</effort>
-        </limit>
       </axis>
     </joint>
     <link name="PistonRods">
@@ -779,12 +730,9 @@
       <self_collide>0</self_collide>
       <pose>-0.0828529879447265 0.00196850000000066 0.675813105104607 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      <velocity_decay>
-        <linear>0</linear>
-        <angular>0</angular>
-      </velocity_decay>
+     
       <inertial>
-        <mass>0.0191944833232126</mass>
+        <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>4.36637761620829E-05</ixx>
@@ -835,7 +783,6 @@
       <pose>0.292100000000002 0.00364184932885847 0.0135589700495809 0 0 0</pose>
       <axis>
         <xyz>6.47015957867634E-16 -0.965770063546253 0.259399661445165</xyz>
-        <!--<xyz>0 -1 0</xyz>-->
         <dynamics>
           <damping>0</damping>
           <friction>0</friction>
@@ -843,35 +790,20 @@
         <limit>
           <upper>0.5</upper>
           <lower>-0.4</lower> 
+          <velocity>0.5</velocity>
         </limit>
       </axis>
     </joint>
-    <joint name="Frame-Climber" type="fixed">
-      <parent>Frame</parent>
-      <child>Climber</child>
-      <pose>0.0803846081116108 -0.427179557754174 -0.0153361580700651 0 0 0</pose>
-      <axis>
-        <xyz>0 0 0</xyz>
-        <dynamics>
-          <damping>0</damping>
-          <friction>0</friction>
-        </dynamics>
-        <limit>
-          <upper>0</upper>
-          <lower>0</lower>
-          <effort>1</effort>
-        </limit>
-      </axis>
-    </joint>
+    
+    
     <joint name="shooter-Intake" type="revolute">
       <parent>shooter</parent>
       <child>Intake</child>
       <pose>0.0879288321812983 -0.144482785742305 -0.331655202288577 0 0 0</pose>
       <axis>
         <xyz>-1 0 0</xyz>
-        <!---->
         <dynamics>
-          <damping>2</damping>
+          <damping>4</damping>
           <friction>1</friction>
         </dynamics>  
           
@@ -886,7 +818,6 @@
       <self_collide>0</self_collide>
       <pose>-0.469753566757535 -0.0108552498965759 0.120727981986896 1.5707963267949 0 -1.5707963267949</pose>
       <must_be_base_link>0</must_be_base_link>
-      
       <inertial>
         <mass>1e-2</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -899,22 +830,21 @@
           <izz>0</izz>
         </inertia>
       </inertial>
-     
       <collision name="IntakeWheels_collision">
         <pose>0.0770735723571798 -0.144511203074467 -0.376923894803378 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://SimBot2022/meshes/IntakeWheels.STL</uri>
+            <uri>model://SimBot2022/meshes/IntakeWheels_col.STL</uri>
           </mesh>
         </geometry>
         <surface>
           <contact>
             <ode>
-              <min_depth>0.001</min_depth>
+              <min_depth>0.0001</min_depth>
               <soft_cfm>2.0</soft_cfm>
-              <kd>1</kd>
-              <kp>1e7</kp>
+              <kd>10</kd>
+              <kp>1e6</kp>
             </ode>
           </contact>
           <friction>
@@ -1035,7 +965,7 @@
       <must_be_base_link>0</must_be_base_link>
       <velocity_decay>
         <linear>0</linear>
-       <angular>0.03</angular>
+        <angular>0.03</angular>
       </velocity_decay>
       <inertial>
         <mass>1</mass>
@@ -1398,7 +1328,7 @@
         </limit>
       </axis>
     </joint>
-
+    <!---->
     <plugin name="Climber_motor" filename="sim_motor.dll">
       <joint>Climber-VertHooks</joint>
       <topic>~/gazebo/frc/simulator/motor/5</topic>
@@ -1410,6 +1340,14 @@
        <topic>~/gazebo/frc/simulator/encoder/5</topic>
        <multiplier>10</multiplier>
     </plugin>
+    <plugin name="DiagHooksPiston" filename="sim_piston.dll">
+      <joint>Piston-PistonRods</joint>
+      <topic>~/gazebo/frc/simulator/piston/1</topic>
+      <forward-force>400</forward-force>
+      <reverse-force>400</reverse-force>
+      <direction>reversed</direction>
+    </plugin>
+    
     <plugin name="Intake-IntakeWheels_motor" filename="sim_motor.dll">
       <joint>Intake-IntakeWheels</joint>
       <topic>~/gazebo/frc/simulator/motor/7</topic>
@@ -1449,13 +1387,6 @@
       <units>degrees</units>
       <axis>yaw</axis>
       <num_axis>3</num_axis>
-    </plugin>
-    <plugin name="DiagHooksPiston" filename="sim_piston.dll">
-      <joint>Piston-PistonRods</joint>
-      <topic>~/gazebo/frc/simulator/piston/1</topic>
-      <forward-force>100</forward-force>
-      <reverse-force>100</reverse-force>
-      <direction>reversed</direction>
     </plugin>
     <plugin name="Frame-LFWheel_motor" filename="sim_motor.dll">
       <joint>Frame-LFWheel</joint>

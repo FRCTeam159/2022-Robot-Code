@@ -3,6 +3,7 @@
   <world name="default">
    <gui fullscreen='0'>
       <camera name='user_camera'>
+
         <pose>-6.058 3.21758 3.20992 0 1.10764 1.5802</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
@@ -11,17 +12,18 @@
   <frame name="explicit_frame"/>
   <physics type="ode">
       <ode>
-     <!--
-        <solver>
-        <iters>400</iters>
-        </solver>
-       -->   
-          
-        <constraints>
-          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
-          <contact_surface_layer>0.0001</contact_surface_layer>
-        </constraints>
       
+        <solver>
+        <iters>200</iters>
+        </solver>
+         
+      <!--    
+        <constraints>
+          <contact_max_correcting_vel>2</contact_max_correcting_vel>
+          <contact_surface_layer>0.01</contact_surface_layer>
+          
+        </constraints>
+     -->
       
       </ode>
       <!--<max_step_size>0.001</max_step_size>-->
@@ -56,9 +58,8 @@
     </include>
 
      <include>
-      <uri>model://SimBot2022</uri>
+      <uri>model://SimBot2022-climber</uri>
       <pose>-5.67 4.3 0.1216 0 0 0</pose>
-      <!--<pose>0.267 -1.85 0.13 0 0 1.43</pose>-->
     </include>
 
     <!-- Cargo 
@@ -73,7 +74,7 @@
 
       <pose  relative_to="SimBot2022">-0.35 -0.0 0.12 0 0 0</pose>
     </include> 
--->
+
     <include>
       <uri>model://BlueCargo</uri>
       <name>Blue1</name>
@@ -150,7 +151,7 @@
       <name>RedStation</name>
       <pose>7.81 3.95 0.12 0 0 0</pose>
     </include>
-
+-->
 
   </world>
 </sdf>

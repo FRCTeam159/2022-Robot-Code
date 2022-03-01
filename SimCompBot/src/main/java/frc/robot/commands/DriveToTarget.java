@@ -20,6 +20,8 @@ public class DriveToTarget extends CommandBase {
   
   private final Targeting m_aim;
   private final Shooting m_shoot;
+  private double init_delay=0.05;
+  private boolean initialized=false;
   boolean have_ball=false;
  // Timer m_timer = new Timer();
   protected TargetSpecs target_info=new TargetSpecs();
@@ -27,7 +29,14 @@ public class DriveToTarget extends CommandBase {
   public DriveToTarget(Targeting targeting, Shooting shoot) {
     m_aim=targeting;
     m_shoot=shoot;
-
+    target_info.idealA=1;
+    target_info.idealX=0;
+    target_info.idealY=-14;
+    target_info.yTol=1;
+    target_info.xTol=2;
+    target_info.xScale=1.5;
+    target_info.yScale=1.0;
+    initialized=false;
     //m_timer.start();
     addRequirements(shoot,targeting);
   }
@@ -45,22 +54,20 @@ public class DriveToTarget extends CommandBase {
     shooting=false;
     starting=false;
     runtime = 0;
-    target_info.idealA=1;
-    target_info.idealX=0;
-    target_info.idealY=-7;
-    target_info.yTol=2;
-    target_info.xTol=2;
-    target_info.xScale=1.5;
-    target_info.yScale=1;
+    
     Targeting.setTargetSpecs(target_info);
     Targeting.setFrontTarget(true);
-    Targeting.enable();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!haveTarget)
+    if(Timing.get()>init_delay && !initialized){
+      Targeting.enable();
+      initialized=true;
+    }
+    else if(!haveTarget)
       m_aim.adjust();
   }
 
@@ -68,8 +75,8 @@ public class DriveToTarget extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     Targeting.disable();
-    m_shoot.setShooterOff();
-    m_shoot.setIntakeOff();
+     m_shoot.setShooterOff();
+   // m_shoot.setIntakeOff();
     runtime += Timing.get();
     Autonomous.totalRuntime += runtime;
     System.out.println("DriveToTarget.end " + runtime + " total time: " + Autonomous.totalRuntime);

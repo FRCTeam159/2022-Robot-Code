@@ -11,17 +11,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
 
-public class ClimberCommands extends CommandBase implements Constants{
-  /** Creates a new ClimberCommands. 
+public class ClimberCommands extends CommandBase implements Constants {
+  /**
+   * Creates a new ClimberCommands.
+   * 
    * @param climber
    * @param controller
-   * */
+   */
 
   XboxController m_controller;
   Climber m_climber;
+
   public ClimberCommands(XboxController controller, Climber climber) {
-    m_climber=climber;
-    m_controller=controller;
+    m_climber = climber;
+    m_controller = controller;
     addRequirements(climber);
   }
 
@@ -29,27 +32,32 @@ public class ClimberCommands extends CommandBase implements Constants{
   @Override
   public void initialize() {
     m_climber.enable();
-   
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     int direction = m_controller.getPOV(0);
-    switch (direction){
+    switch (direction) {
+      case 0:
+        m_climber.setLifterUp();
+      break;
+      case 180:
+        m_climber.setLifterDown();
+    break;
       case 90:
-      m_climber.armsOut();
-      break;
+        m_climber.armsOut();
+        break;
       case 270:
-      m_climber.armsIn();
-      break;
+        m_climber.armsIn();
+        break;
     }
     double left = m_controller.getRawAxis(LEFT_TRIGGER);
-    double right =m_controller.getRawAxis(RIGHT_TRIGGER);
-    if(left>0.2){
+    double right = m_controller.getRawAxis(RIGHT_TRIGGER);
+    if (left > 0.2) {
       m_climber.setLifterDown(left);
-    }
-    else if(right>0.2){
+    } else if (right > 0.2) {
       m_climber.setLifterUp(right);
     }
 
@@ -57,7 +65,8 @@ public class ClimberCommands extends CommandBase implements Constants{
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

@@ -2,6 +2,22 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// climbing routine
+// 1) position bot in back of second bar facing outward (vert,diag arms retracted)
+// 2) extent vert arms to max ht
+// 3) drive forward so hooks are over bar
+// 4) retract vert arms to min ht
+// 5) extend diag arms (should be over bar)
+// 6) extend vert arms to max ht (weight should transfer to diag arms)
+// 7) robot should tilt back so vert arms behind 2nd bar
+// 8) when that happens, retract vert bars to <= 1/2 ht
+// 9) then quickly extend vert bars to full ht
+// 10) robot base should swing out towards field
+// 11) when at max swing pull in diag arms (should slide off top of first bar)
+// 12) robot has reached 3rd bar at this point with vert arm extended and diag arms in
+// 13) repeat 4-11 for top bar
+ 
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,17 +33,17 @@ public class Climber extends SubsystemBase implements Constants{
   Piston m_piston=new Piston(1);
   boolean m_arms_out;
   double setval=0;
-  double adjust_delta=0.01;
-  double max_setpoint=1;
+  double adjust_delta=0.005;
+  double max_setpoint=1.05;
   double min_setpoint=0;
-  final PIDController m_controller=new PIDController(0.5,0.5,0);
+  final PIDController m_controller=new PIDController(1,0.5,0.0);
   
   public Climber() {
     SmartDashboard.putBoolean("Arms out",m_arms_out);
     SmartDashboard.putNumber("Lifter",0);
     m_lifter.setDistancePerRotation(1);
-    m_controller.setTolerance(0.02, 0.05);
-    m_controller.setIntegratorRange(-5, 1.0);
+    m_controller.setTolerance(0.05, 0.05);
+    m_controller.setIntegratorRange(-4, 4.0);
     m_lifter.setInverted();
     m_arms_out=false;
     reset();
@@ -59,6 +75,13 @@ public class Climber extends SubsystemBase implements Constants{
     m_piston.disable();
   }
  
+  public void setLifterUp(){
+    setval=max_setpoint;
+  }
+  public void setLifterDown(){
+    setval=min_setpoint;
+  }
+
   public void setLifterUp(double f){
     adjustSetpoint(f);
   }

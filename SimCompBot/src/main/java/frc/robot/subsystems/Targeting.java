@@ -177,6 +177,7 @@ public class Targeting extends SubsystemBase {
   }
 
   public static void reset(){
+    correctionMove=correctionTurn=0;
     m_moveXController.reset();
     m_moveYController.reset();
     m_moveAController.reset();

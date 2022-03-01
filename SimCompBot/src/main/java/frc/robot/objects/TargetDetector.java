@@ -15,11 +15,9 @@ public class TargetDetector implements VideoInterface{
     
     protected static final NetworkTableInstance inst = NetworkTableInstance.getDefault();
     protected static final NetworkTable m_target_table=inst.getTable("TargetData");
-    protected static final NetworkTable m_target_specs=inst.getTable("TargetSpecs");
    
     protected Mat mat;
     protected static TargetData target=new TargetData();
-    protected TargetSpecs target_info=new TargetSpecs();
    
     protected boolean m_annotate=false;
     protected boolean m_connected=false;
@@ -30,16 +28,6 @@ public class TargetDetector implements VideoInterface{
     private NetworkTableEntry ty;
     private NetworkTableEntry tv;
     private NetworkTableEntry tr;
-
-    private NetworkTableEntry idealX;
-    private NetworkTableEntry idealY;
-    private NetworkTableEntry idealA;
-    private NetworkTableEntry useArea;
-    private NetworkTableEntry xTol;
-    private NetworkTableEntry yTol;
-    private NetworkTableEntry aTol;
-    private NetworkTableEntry xScale;
-    private NetworkTableEntry yScale;
 
     public int image_width=640;
     public int image_height=480;
@@ -56,30 +44,9 @@ public class TargetDetector implements VideoInterface{
     }
     
     public void publish(){
-        setTargetSpecs();
         setTargetData();  
     }
-    protected void setTargetSpecs(){
-        idealX=m_target_specs.getEntry("idealX");
-        idealX.setDouble(target_info.idealX);
-        idealY=m_target_specs.getEntry("idealY");
-        idealY.setDouble(target_info.idealY);
-        idealA=m_target_specs.getEntry("idealA");
-        idealA.setDouble(target_info.idealA);
-        useArea=m_target_specs.getEntry("useArea");
-        useArea.setBoolean(target_info.useArea);
-        xTol=m_target_specs.getEntry("xTol");
-        xTol.setDouble(target_info.xTol);
-        yTol=m_target_specs.getEntry("yTol");
-        yTol.setDouble(target_info.yTol);
-        aTol=m_target_specs.getEntry("aTol");
-        aTol.setDouble(target_info.aTol);
-        xScale = m_target_specs.getEntry("xScale");
-        xScale.setDouble(target_info.xScale);
-        yScale = m_target_specs.getEntry("yScale");
-        yScale.setDouble(target_info.yScale);
-
-    }
+    
     protected void setTargetData(){
         ta= m_target_table.getEntry("ta");
         ta.setDouble(target.ta);

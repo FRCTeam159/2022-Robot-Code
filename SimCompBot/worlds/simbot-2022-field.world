@@ -8,14 +8,13 @@
          <solver>
         <iters>100</iters>
         </solver>
-          -->
+          
         <constraints>
-          <contact_max_correcting_vel>1</contact_max_correcting_vel>
+          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
           <contact_surface_layer>0.0001</contact_surface_layer>
         </constraints>
-    
+    -->
       </ode>
-      <!--<max_step_size>0.001</max_step_size>-->
     </physics>
   <!---->
     <include>
