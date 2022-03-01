@@ -1,5 +1,14 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="limelight_Stream" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="708"/>
+	</widget>
+	<widget field="limelight_Interface" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="688"/>
+	</widget>
+	<widget field="limelight_PipelineName" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="163"/>
+	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
 		<location x="20" y="198"/>
 		<width>692</width>
@@ -70,78 +79,73 @@
 	<widget field="SendableChooser[0]" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="604" y="80"/>
 	</widget>
+	<widget field="Shooting" type="Subsystem" class="edu.wpi.first.smartdashboard.gui.elements.Subsystem">
+		<location x="308" y="0"/>
+	</widget>
 </dashboard>
 <live-window>
 	<widget field="Aiming" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="132"/>
+		<location x="9" y="2"/>
 	</widget>
 	<widget field="Shooting" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="110"/>
+		<location x="5" y="30"/>
 	</widget>
 	<widget field="ToggleButton" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="88"/>
+		<location x="10" y="25"/>
 	</widget>
 	<widget field="Limelight" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="66"/>
+		<location x="7" y="1"/>
 	</widget>
 	<widget field="DriveTrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="44"/>
+		<location x="3" y="31"/>
 	</widget>
 	<widget field="Autonomous" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="0" y="22"/>
+		<location x="27" y="7"/>
 	</widget>
 	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
 		<widget field="DigitalInput[0]" type="Digital Input" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
 			<location x="6" y="15"/>
 			<height>19</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
 			<location x="6" y="34"/>
 			<height>149</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
 			<location x="6" y="183"/>
 			<height>149</height>
-			<width>295</width>
-		</widget>
-		<widget field="MotorControllerGroup[2]" type="Motor Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
-			<location x="6" y="332"/>
-			<height>45</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="AnalogGyro[0]" type="Gyro" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-			<location x="6" y="377"/>
+			<location x="6" y="332"/>
 			<height>150</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="PIDController[3]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="527"/>
+			<location x="6" y="482"/>
 			<height>149</height>
-			<width>295</width>
-		</widget>
-		<widget field="MotorControllerGroup[1]" type="Motor Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
-			<location x="6" y="676"/>
-			<height>45</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="PIDController[4]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="721"/>
+			<location x="6" y="631"/>
 			<height>149</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
 		<widget field="PIDController[5]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="870"/>
+			<location x="6" y="780"/>
 			<height>149</height>
-			<width>295</width>
+			<width>250</width>
 		</widget>
-		<location x="0" y="0"/>
-		<width>307</width>
-		<height>1025</height>
+		<widget field="PIDController[6]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
+			<location x="6" y="929"/>
+			<height>149</height>
+			<width>250</width>
+		</widget>
+		<location x="0" y="3"/>
+		<width>262</width>
+		<height>1084</height>
 	</widget>
 </live-window>
-	<hidden field="limelight_Interface"/>
-	<hidden field="limelight_PipelineName"/>
-	<hidden field="limelight_Stream"/>
 </xml>
