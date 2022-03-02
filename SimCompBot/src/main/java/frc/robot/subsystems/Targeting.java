@@ -41,6 +41,7 @@ public class Targeting extends SubsystemBase {
   private static NetworkTableEntry aTol;
   private static NetworkTableEntry xScale;
   private static NetworkTableEntry yScale;
+  private static NetworkTableEntry aScale;
 
   protected static TargetData target = new TargetData();
   protected static TargetSpecs target_info = new TargetSpecs();
