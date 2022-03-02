@@ -30,9 +30,12 @@ public class CameraStreams extends Thread {
   private NetworkTableEntry tc; // camera (0=front 1=back)
   private static Mat m1,m2;
 
+  Targeting m_targeting;
+
   protected final Timer m_timer = new Timer();
 
-  public CameraStreams() {
+  public CameraStreams(Targeting targeting) {
+    m_targeting=targeting;
     System.out.println("new Targeting " + Robot.isReal());
     SmartDashboard.putBoolean("Front Camera", true);
     SmartDashboard.putBoolean("Show HVS threshold", false);
@@ -57,6 +60,8 @@ public class CameraStreams extends Thread {
   @Override
   public void run() {
     m_timer.start();
+    m_targeting.setFrontTarget(true);
+    m_front_detector.setTargetSpecs();
     while (true) {
       try {
         Thread.sleep(20);
@@ -64,24 +69,28 @@ public class CameraStreams extends Thread {
         System.out.println("exception)");
       }
       TargetDetector.show_hsv_threshold = SmartDashboard.getBoolean("Show HVS threshold", true);
-      boolean is_front = Targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
+      boolean is_front = m_targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
       tc.setBoolean(is_front);
       if (is_front != front_camera) {
-        if (is_front)
+        if (is_front){
           System.out.println("setting front camera");
-        else
+          m_front_detector.setTargetSpecs();
+        }
+        else{
           System.out.println("setting back camera");
+          m_back_detector.setTargetSpecs();
+        }
       }
       m1=m_front_detector.getFrame();
       m2=m_back_detector.getFrame();
       if (is_front && m1 !=null) {
         m_front_detector.process();
         putFrame(dualStream, m1);
-        m_front_detector.publish();
+        m_front_detector.setTargetData();
       } else if (m2 !=null){
         m_back_detector.process();
         putFrame(dualStream, m2);
-        m_back_detector.publish();
+        m_back_detector.setTargetData();
       }
       front_camera = is_front;
     }

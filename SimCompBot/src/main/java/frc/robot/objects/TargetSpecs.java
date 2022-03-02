@@ -6,8 +6,9 @@ public class TargetSpecs {
     public double idealA=100;
     public double xTol=1;
     public double yTol=2;
-    public double aTol=10;
-    public double xScale=1;
-    public double yScale=1;
+    public double aTol=1;
+    public double xScale=0;
+    public double yScale=0;
+    public double aScale=0;
     public boolean useArea=false; 
 }

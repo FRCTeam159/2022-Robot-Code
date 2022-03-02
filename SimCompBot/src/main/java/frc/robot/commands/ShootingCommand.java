@@ -58,8 +58,8 @@ public class ShootingCommand extends CommandBase {
   void whichCamera() {
     boolean newstate = m_switchCamera.newState();
     if (newstate) {
-      boolean is_front = Targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
-      Targeting.setFrontTarget(!is_front);
+      boolean is_front = m_aim.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
+      m_aim.setFrontTarget(!is_front);
       SmartDashboard.putBoolean("Front Camera", !is_front);
     }
   }
@@ -126,9 +126,11 @@ public class ShootingCommand extends CommandBase {
       return;
     }
     whichCamera();
-    boolean is_front=Targeting.frontCamera();
-    if(is_front!=was_front)
+    boolean is_front=m_aim.frontCamera();
+    if(is_front!=was_front){
       state=state_OFF;
+      m_aim.reset();
+    }
     was_front=is_front;
     if(is_front)
       front_target_program();

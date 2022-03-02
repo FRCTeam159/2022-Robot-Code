@@ -31,7 +31,8 @@ public class Shooting extends SubsystemBase implements Constants {
   public static double kIntakeHold = -1;
   public static double kShootSpeed = 17.5;
   public static double kShootHold = 0;
-  public static double kShooterRunUpTime = 3;
+  public static double kShooterRunUpTime = 2.5;
+  public static double kShooterRunDownTime = 5;
   public static double kIntakeRunUpTime = 1;
   public static double kIntakeRunDownTime = 1;
 
@@ -76,7 +77,7 @@ public class Shooting extends SubsystemBase implements Constants {
 
   public void setShooterOff() {
     if(shooter_ramp && shooter_is_on)
-      shooterRamp.config(kShooterRunUpTime,kShootSpeed,kShootHold,0.5);
+      shooterRamp.config(kShooterRunDownTime,kShootSpeed,kShootHold,0.5);
     shooter_is_on = false;
   }
 

@@ -21,6 +21,7 @@ public class Simulation extends SubsystemBase {
   private DriveTrain m_drive;
   private Shooting m_shoot;
   private Climber m_climber;
+  private Targeting m_targeting;
   private static boolean resetting = false;
   private final Field2d m_fieldSim = new Field2d();
   
@@ -32,10 +33,11 @@ public class Simulation extends SubsystemBase {
 
   private static SimClock m_simclock = new SimClock();
 
-  public Simulation(DriveTrain drivetrain, Shooting shoot,Climber climber) {
+  public Simulation(DriveTrain drivetrain, Shooting shoot,Climber climber, Targeting targeting) {
     m_drive = drivetrain;
     m_shoot = shoot;
     m_climber = climber;
+    m_targeting=targeting;
     SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putBoolean("Gazebo", false);
     SmartDashboard.putNumber("SimTime", 0);
@@ -120,6 +122,7 @@ public class Simulation extends SubsystemBase {
           clear();       
         m_drive.reset();
         m_climber.reset();
+        m_targeting.reset();
         m_timer.reset();
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {

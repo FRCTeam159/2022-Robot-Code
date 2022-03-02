@@ -27,12 +27,12 @@ public class Autonomous extends SubsystemBase {
   public static final int DRIVEBACK = 3;
   public static final int ONEBALL = 4;
   public static final int TWOBALL = 5;
+  public static final int THREEBALL = 6;
 
   public static double totalRuntime;
   public static boolean autoFailed = false;
   public static boolean autoFinished = false;
 
- 
   public int selected_path=PROGRAM;
 
   SendableChooser<Integer> m_path_chooser = new SendableChooser<Integer>();
@@ -53,6 +53,7 @@ public class Autonomous extends SubsystemBase {
     m_path_chooser.addOption("DriveBack", DRIVEBACK);
 	  m_path_chooser.addOption("OneBall", ONEBALL);
     m_path_chooser.addOption("TwoBall", TWOBALL);
+    m_path_chooser.addOption("ThreeBall", THREEBALL);
 
     SmartDashboard.putBoolean("reversed", false);
     SmartDashboard.putNumber("xPath", 4);
@@ -83,6 +84,8 @@ public class Autonomous extends SubsystemBase {
       return oneBall();
     case TWOBALL:
       return twoBall();
+    case THREEBALL:
+      return threeBall();
     }
     return null;
   }
@@ -110,6 +113,16 @@ public class Autonomous extends SubsystemBase {
     SequentialCommandGroup commands = new SequentialCommandGroup();
     commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
     commands.addCommands(new DriveToCargo(m_targeting,m_shoot));
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
+    return commands;
+  }
+  CommandGroupBase threeBall(){
+    SequentialCommandGroup commands = new SequentialCommandGroup();
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
+    commands.addCommands(new DriveToCargo(m_targeting,m_shoot));
+    commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
+    commands.addCommands(new DriveToCargo(m_targeting,m_shoot));
+    //commands.addCommands(new DrivePath(m_drive,2,0,0,false));
     commands.addCommands(new DriveToTarget(m_targeting,m_shoot));
     return commands;
   }

@@ -18,15 +18,22 @@ public class GripTapeDetector extends GripDetector{
         m_connected=camera.isConnected();
         setBestAttribute(BEST_SHAPE);
         setIdealRatio(2.5);
-        target_info.idealA=1;
         target_info.idealX=0;
         target_info.idealY=-7;
         target_info.yTol=2;
         target_info.xTol=2;
-        target_info.xScale=1.5;
+        target_info.xScale=1.3;
         target_info.yScale=1;
+        target_info.useArea=false;
+        target_info.idealA=0.06;
+        target_info.aScale=-3000.0;
+        target_info.aTol=0.005;
 
-        useBoundingBox(true);
+        //if(target_info.useArea)
+            useAveArea(true);
+       // else
+            useBoundingBox(true);
+
     }
     
     public Mat getFrame(){

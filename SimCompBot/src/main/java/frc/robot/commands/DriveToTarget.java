@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.objects.TargetSpecs;
 import frc.robot.subsystems.Autonomous;
@@ -23,48 +24,38 @@ public class DriveToTarget extends CommandBase {
   private double init_delay=0.05;
   private boolean initialized=false;
   boolean have_ball=false;
- // Timer m_timer = new Timer();
-  protected TargetSpecs target_info=new TargetSpecs();
+  private String last_msg;
 
   public DriveToTarget(Targeting targeting, Shooting shoot) {
     m_aim=targeting;
     m_shoot=shoot;
-    target_info.idealA=1;
-    target_info.idealX=0;
-    target_info.idealY=-14;
-    target_info.yTol=1;
-    target_info.xTol=2;
-    target_info.xScale=1.5;
-    target_info.yScale=1.0;
+    
     initialized=false;
-    //m_timer.start();
     addRequirements(shoot,targeting);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("DriveToTarget.start");
+    showStatus("DriveToTarget.start");
   
     have_ball=m_shoot.isBallCaptured();
     m_shoot.setIntakeHold();
-    //m_timer.reset();
     Timing.reset();
     haveTarget=false;
     shooting=false;
     starting=false;
     runtime = 0;
-    
-    Targeting.setTargetSpecs(target_info);
-    Targeting.setFrontTarget(true);
-    
+    initialized=false;
+    m_aim.setFrontTarget(true);
+    m_aim.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(Timing.get()>init_delay && !initialized){
-      Targeting.enable();
+      m_aim.enable();
       initialized=true;
     }
     else if(!haveTarget)
@@ -74,12 +65,12 @@ public class DriveToTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Targeting.disable();
+    m_aim.disable();
      m_shoot.setShooterOff();
    // m_shoot.setIntakeOff();
     runtime += Timing.get();
     Autonomous.totalRuntime += runtime;
-    System.out.println("DriveToTarget.end " + runtime + " total time: " + Autonomous.totalRuntime);
+    showStatus("DriveToTarget.end " + runtime + " total time: " + Autonomous.totalRuntime);
   }
 
   // Returns true when the command should end.
@@ -106,5 +97,11 @@ public class DriveToTarget extends CommandBase {
       return true;
     }
     return false;   
+  }
+  private void showStatus(String msg){
+    SmartDashboard.putString("Status", msg);
+    if(!msg.equals(last_msg))
+      System.out.println(msg);
+    last_msg=msg;
   }
 }

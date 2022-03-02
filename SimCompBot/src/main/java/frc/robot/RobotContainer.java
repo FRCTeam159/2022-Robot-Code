@@ -31,8 +31,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain m_drivetrain = new DriveTrain();
   private final Cameras m_cameras = new Cameras();
-  private final CameraStreams m_streams = new CameraStreams();
   private final Targeting m_targeting = new Targeting(m_drivetrain);
+  private final CameraStreams m_streams = new CameraStreams(m_targeting);
+
   private final Shooting m_shoot = new Shooting();
   private final Climber m_climber=new Climber();
   private Simulation m_simulation;
@@ -46,7 +47,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_driveCommand=new DriveWithGamepad(m_drivetrain, m_controller);
     m_drivetrain.setDefaultCommand(m_driveCommand);
-    m_simulation=new Simulation(m_drivetrain,m_shoot,m_climber);
+    m_simulation=new Simulation(m_drivetrain,m_shoot,m_climber,m_targeting);
     m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_controller, m_targeting, m_drivetrain));
     m_climber.setDefaultCommand(new ClimberCommands(m_controller, m_climber));
     configureButtonBindings();
@@ -69,7 +70,8 @@ public class RobotContainer {
     return m_autonomous.getCommand();
   }
   public void teleopInit(){
-   //m_drivetrain.enable();
+    m_drivetrain.enable();
+    m_targeting.reset();
   }
   public void disabledInit(){
     m_drivetrain.disable();
