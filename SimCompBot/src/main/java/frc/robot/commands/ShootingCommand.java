@@ -271,7 +271,7 @@ public class ShootingCommand extends CommandBase {
         }
         break;
       case state_FOUND:
-      if (m_shoot.shooterReady() /*&& m_timer.get() > Shooting.kShooterRunUpTime*/) {
+      if (m_shoot.shooterReady(Shooting.kShootSpeed)){
           state = state_SHOOT;
           showStatus("Shooting");
           m_timer.reset();

@@ -135,12 +135,12 @@ public class GripDetector extends TargetDetector{
         double height = br.y - tl.y;
         double xcenter=tl.x+0.5*width;
         double ycenter=tl.y+0.5*height;
-        target.tx=100*(xcenter-0.5*image_width)/image_width;
-        target.ty=100*(ycenter-0.5*image_height)/image_height;
+        target.tx=(xcenter-0.5*image_width)/image_width;
+        target.ty=(ycenter-0.5*image_height)/image_height;
         if(use_ave_area)
-            target.ta=100*(ave_area)/(image_width*image_height);
+            target.ta=(ave_area)/(image_width*image_height);
         else
-            target.ta=100*(width*height)/(image_width*image_height);
+            target.ta=(width*height)/(image_width*image_height);
         target.tr=width/height;
         //System.out.println(target.ta);
         setTargetData();

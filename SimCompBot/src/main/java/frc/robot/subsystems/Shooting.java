@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import javax.management.relation.RelationSupportMBean;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +27,8 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean ball_captured = false;
   private double shooter_err_tol = 0.1;
   private double shooter_err_vel_tol = 0.02;
+  private double intake_err_tol = 0.7;
+  private double intake_err_vel_tol = 0.1;
   private double last_err;
 
   public static double kIntakeSpeed = 8;
@@ -37,6 +41,7 @@ public class Shooting extends SubsystemBase implements Constants {
   public static double kIntakeRunDownTime = 1;
 
   private final static PIDController m_shooter_controller = new PIDController(0.1, 0.0, 0);
+  private final static PIDController m_intake_controller = new PIDController(0.1, 0.0, 0);
 
   public static double kSpinbackTime = 2;
 
@@ -51,6 +56,7 @@ public class Shooting extends SubsystemBase implements Constants {
     shoot = new SparkMotor(SHOOTER);
 
     m_shooter_controller.setTolerance(shooter_err_tol, shooter_err_vel_tol);
+    m_intake_controller.setTolerance(intake_err_tol, intake_err_vel_tol);
 
     shoot.setInverted();
     
@@ -140,9 +146,9 @@ public class Shooting extends SubsystemBase implements Constants {
   public double intakeSpeed(){
     return intake.getRate();
   }
-  public boolean shooterReady() {
-    double correction=m_shooter_controller.calculate(aveShooterVel(),kShootSpeed);
-    boolean ready = m_shooter_controller.atSetpoint();
+  public boolean shooterReady(double target) {
+    m_shooter_controller.calculate(aveShooterVel(),target);
+    return m_shooter_controller.atSetpoint();
     /*
     boolean ready = false;
     //double r = shoot.getRate();
@@ -155,7 +161,11 @@ public class Shooting extends SubsystemBase implements Constants {
       ready = true;
     last_err = err;
     */
-    return ready;
+  }
+
+  public boolean intakeReady(double target) {
+    m_intake_controller.calculate(intake.aveVelocity(),target);
+    return  m_intake_controller.atSetpoint();
   }
 
   public boolean isBallCaptured() {

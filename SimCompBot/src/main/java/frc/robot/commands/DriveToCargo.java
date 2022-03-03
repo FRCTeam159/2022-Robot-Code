@@ -59,7 +59,7 @@ public class DriveToCargo extends CommandBase {
   public void end(boolean interrupted) {
     runtime = Timing.get();
     //if (m_shoot.isBallCaptured())
-      m_shoot.setIntakeHold();
+     // m_shoot.setIntakeHold();
     //else
     //  m_shoot.setIntakeOff();
     Autonomous.totalRuntime += runtime;
@@ -69,8 +69,13 @@ public class DriveToCargo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(have_ball || Autonomous.autoFailed)
+    if(Autonomous.autoFailed)
       return true;
+    if(have_ball){
+      m_shoot.setIntakeHold();
+      if(m_shoot.intakeReady(Shooting.kIntakeHold))
+        return true;
+    }
     boolean onTarget = m_aim.onTarget();
     if (onTarget && !haveTarget) {
       runtime = Timing.get();

@@ -19,15 +19,15 @@ public class GripBallDetector extends GripDetector {
         setBestAttribute(LARGEST);
         setIdealRatio(1.0);
         target_info.idealX=0;
-        target_info.xScale=0.25;
+        target_info.xScale=0.5;
 
-        target_info.idealY=0;
-        target_info.yScale=0.5;
+       // target_info.idealY=0;
+        //target_info.yScale=1;
 
         target_info.useArea=true;
-        target_info.idealA=105;
-        target_info.aTol=5;
-        target_info.aScale=0.7;
+        target_info.idealA=1.05;
+        target_info.aTol=0.05;
+        target_info.aScale=0.07;
     }
    
     public Mat getFrame(){

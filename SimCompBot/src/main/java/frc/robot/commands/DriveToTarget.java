@@ -86,7 +86,7 @@ public class DriveToTarget extends CommandBase {
       m_shoot.setShooterOn();
       haveTarget = true;  
     }
-    if (!shooting && haveTarget && m_shoot.shooterReady()) {
+    if (!shooting && haveTarget && m_shoot.shooterReady(Shooting.kShootSpeed)) {
       m_shoot.setIntakeOn();
       System.out.println("Shoot started:" + Timing.get() + " shooterspeeed: " + m_shoot.shooterSpeed());
       shooting=true;
