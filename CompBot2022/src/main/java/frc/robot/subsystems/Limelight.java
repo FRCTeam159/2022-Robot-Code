@@ -17,6 +17,7 @@ public class Limelight extends SubsystemBase {
   public NetworkTableEntry ty = table.getEntry("ty");
   public NetworkTableEntry ta = table.getEntry("ta");
   public NetworkTableEntry tv = table.getEntry("tv");
+  public boolean testLimelight;
 
   public double limeX;
   public double limeA;
@@ -24,19 +25,34 @@ public class Limelight extends SubsystemBase {
   public double limeV;
 
   public Limelight() {
-
+    SmartDashboard.putBoolean("test limelight", testLimelight);
   }
   
   public void limelightOff() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(1);
+    table.getEntry("ledMode").setNumber(1);
+    table.getEntry("camMode").setNumber(1);
+    
   }
   public void limelightOn() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(3);
+    table.getEntry("ledMode").setNumber(3);
+    table.getEntry("camMode").setNumber(0);
+    
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    boolean test = SmartDashboard.getBoolean("test limelight", testLimelight);
+    if (test != testLimelight) {
+      testLimelight = test;
+      if(testLimelight){
+        limelightOn();
+      } else {
+        limelightOff();
+      }
+    }
+
+    
 
     // read values periodically
     limeX = tx.getDouble(0.0);
@@ -48,6 +64,7 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("LimelightX", limeX);
     SmartDashboard.putNumber("LimelightY", limeY);
     SmartDashboard.putNumber("LimelightArea", limeA);
+  
   }
 
   @Override

@@ -61,20 +61,12 @@ public class DriveTrain extends SubsystemBase implements Constants {
 	private final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(kMaxSpeed);
 	private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(kMaxAngularSpeed);
 	public boolean m_driveArcade = true; 
-	public boolean useGyro = true;
+	public boolean useGyro = false;
 	
 	public static double kTrackWidth = i2M(flagPancake?28.25:24); // inches
 	public static double kWheelRadius = i2M(flagPancake?2.13:4.0); // inches
 
 
-	// public static final double WHEEL_DIAMETER = 4.26;
-	//if (flagPancake == true) {
-	//	kTrackWidth = kTrackWidthPancake;
-	//	kWheelRadius = kWheelRadiusPancake;
-	//} else {
-	//	kTrackWidth = kTrackWidthComp;
-	//	kWheelRadius = kWheelRadiusComp;
-	//}
 	private static final double distancePerRotationGearDown = (kWheelRadius * 2 * Math.PI)/FINAL_GEAR_RATIO;
 
 	public DriveTrain() {
@@ -84,7 +76,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		backLeft = new SparkMotor(BACK_LEFT);
 		backRight = new SparkMotor(BACK_RIGHT);
 		gyro = new AnalogGyro(0);
-		//gyro.initGyro();
+		gyro.calibrate();
+		gyro.initGyro();
 		//gyro.setSensitivity(0.0128);
 		frontLeft.setDistancePerRotation(distancePerRotationGearDown);
 		frontRight.setDistancePerRotation(distancePerRotationGearDown);
@@ -99,8 +92,6 @@ public class DriveTrain extends SubsystemBase implements Constants {
 		frontRight.setInverted();
 		backRight.setInverted();
 		SmartDashboard.putBoolean("ArcadeMode", m_driveArcade);
-	
-		
 	}
 
 	public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
@@ -124,11 +115,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
 			double delta = getLeftDistance() - getRightDistance();
 		Rotation2d r = new Rotation2d(-delta/kTrackWidth); //remove neg if add neg at omega radianspersecond
 		return r;
-		}
-		
+		}	
 	}
-
-
 
 	public void drive(double xSpeed, double rot) {
 		var wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
@@ -250,4 +238,8 @@ public class DriveTrain extends SubsystemBase implements Constants {
     public double getRightDistance() {
         return frontRight.getDistance();
     }
+
+	public double getTotalDistance(){
+		return 0.5*(getLeftDistance()+getRightDistance());
+	}
 }

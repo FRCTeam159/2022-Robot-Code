@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Aiming;
+import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooting;
@@ -36,7 +37,8 @@ public class AutoTarget extends CommandBase {
     runtime = 0;
     m_aim.aimOn();
     m_timer.start();
-    m_shoot.setIntakeOff();
+    m_timer.reset();
+    m_shoot.setIntakeHold();
     haveTarget = false;
     System.out.println("Shoot started");
 
@@ -46,7 +48,7 @@ public class AutoTarget extends CommandBase {
   @Override
   public void execute() {
    
-    if (m_timer.get() > 0.5 && !m_shoot.isShooterOn()) {
+    if (m_timer.get() > m_shoot.kInputHoldTime && !m_shoot.isShooterOn()) {
       m_shoot.setShooterOn();
     }
     m_aim.adjust();
@@ -60,14 +62,15 @@ public class AutoTarget extends CommandBase {
     m_shoot.setShooterOff();
     m_shoot.setIntakeOff();
     runtime += m_timer.get();
-    System.out.println("Shoot finished " + runtime);
+    Autonomous.totalRuntime += runtime;
+    System.out.println("Shoot finished " + runtime + " cumulative time: " + Autonomous.totalRuntime);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     boolean onTarget = m_aim.onTarget();
-    if (onTarget && !haveTarget) {
+    if (onTarget && !haveTarget && m_timer.get() > m_shoot.kRunUpTime) {
       runtime = m_timer.get();
       System.out.println("Shoot, target acquired - 1 " + m_timer.get());
       m_timer.reset();
@@ -75,7 +78,8 @@ public class AutoTarget extends CommandBase {
       haveTarget = true;
     
     }
-    if (haveTarget && m_timer.get() > 1) {
+    if (haveTarget && m_timer.get() > 0.5) {
+      System.out.println("done " + m_timer.get() + "shooterspeeed: " + m_shoot.getShoot());
       return true;
     }
     return false;
