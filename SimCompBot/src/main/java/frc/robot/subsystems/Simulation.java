@@ -54,14 +54,14 @@ public class Simulation extends SubsystemBase {
   }
 
   public void reset() {
-    System.out.println("Simulation.reset");
+    //System.out.println("Simulation.reset");
     m_simclock.reset();
     m_timer.reset();
     SmartDashboard.putNumber("SimTime", 0);
    // running = false;
   }
   public void clear() {
-    System.out.println("Simulation.clear");
+    //System.out.println("Simulation.clear");
     m_simclock.clear();
     m_timer.reset();
     m_drive.resetPose();
@@ -70,14 +70,14 @@ public class Simulation extends SubsystemBase {
   }
 
   public static void start() {
-    System.out.println("Simulation.start");
+    //System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();
     running = true;
   }
 
   public void end() {
-    System.out.println("Simulation.end");
+    //System.out.println("Simulation.end");
     SmartDashboard.putNumber("SimTime", m_simclock.getTime());
     m_simclock.disable();
     running = false;

@@ -33,10 +33,13 @@ public class Climber extends SubsystemBase implements Constants{
   Piston m_piston=new Piston(1);
   boolean m_arms_out;
   double setval=0;
-  double adjust_delta=0.005;
+  final double adjust_delta_slow=0.005;
+  final double adjust_delta_fast=0.05;
+  double adjust_delta=adjust_delta_slow;
+
   double max_setpoint=1.05;
   double min_setpoint=0;
-  final PIDController m_controller=new PIDController(1,0.5,0.0);
+  final PIDController m_controller=new PIDController(3,0.6,0.1);
   
   public Climber() {
     SmartDashboard.putBoolean("Arms out",m_arms_out);
@@ -76,22 +79,21 @@ public class Climber extends SubsystemBase implements Constants{
   }
  
   public void setLifterUp(){
-    setval=max_setpoint;
+    setval=1;
   }
   public void setLifterDown(){
-    setval=min_setpoint;
+    setval=0.0;
   }
 
   public void setLifterUp(double f){
+    adjust_delta=adjust_delta_slow;
     adjustSetpoint(f);
   }
   public void setLifterDown(double f){
+    adjust_delta=adjust_delta_slow;
     adjustSetpoint(-f);
   }
 
-  public void setLifter(double f){
-    setval=f;
-  }
   public void armsOut(){
     m_arms_out=true;
     m_piston.setForward();

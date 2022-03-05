@@ -20,10 +20,6 @@ public class GripBallDetector extends GripDetector {
         setIdealRatio(1.0);
         target_info.idealX=0;
         target_info.xScale=0.5;
-
-       // target_info.idealY=0;
-        //target_info.yScale=1;
-
         target_info.useArea=true;
         target_info.idealA=1.05;
         target_info.aTol=0.05;
@@ -34,6 +30,7 @@ public class GripBallDetector extends GripDetector {
         mat=camera.getFrame();
         return mat;
     }
+   
     public void process() {
         if(mat == null)
             return;

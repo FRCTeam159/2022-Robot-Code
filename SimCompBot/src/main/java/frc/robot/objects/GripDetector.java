@@ -45,6 +45,7 @@ public class GripDetector extends TargetDetector{
     }
 
     void getTargets(){
+        best=null;
         ave_area=0;
         rects.clear();
         double max_area = 0;  
@@ -109,7 +110,6 @@ public class GripDetector extends TargetDetector{
             double xVal = tl.x + 0.5 * width;
             double yVal = tl.y + 0.5 * height;
             double xTweek = 0;//horizontalTweek()/angleFactorWidth;
-            //double xTweek = (xOff * width) / targetWidth;
             double yTweek = 0;//verticalTweek() / angleFactorHeight;
             Point xPoint = new Point(xVal + xTweek, yVal + yTweek);
             if (r == best) {
@@ -122,27 +122,25 @@ public class GripDetector extends TargetDetector{
     protected void setTarget(){
         if(best==null){
             target.tv=false;
-            target.ta=target.tx=target.ty=0;
-           // System.out.println("no targets");
-            return;
+            //target.ta=target.tx=target.ty=0;
+        }else{
+            target.tv=true;
+            double image_width=mat.width();
+            double image_height=mat.height();
+            Point tl = best.tl();
+            Point br = best.br();
+            double width = br.x - tl.x;
+            double height = br.y - tl.y;
+            double xcenter=tl.x+0.5*width;
+            double ycenter=tl.y+0.5*height;
+            target.tx=(xcenter-0.5*image_width)/image_width;
+            target.ty=(ycenter-0.5*image_height)/image_height;
+            if(use_ave_area)
+                target.ta=(ave_area)/(image_width*image_height);
+            else
+                target.ta=(width*height)/(image_width*image_height);
+            target.tr=width/height;
         }
-        target.tv=true;
-        double image_width=mat.width();
-        double image_height=mat.height();
-        Point tl = best.tl();
-        Point br = best.br();
-        double width = br.x - tl.x;
-        double height = br.y - tl.y;
-        double xcenter=tl.x+0.5*width;
-        double ycenter=tl.y+0.5*height;
-        target.tx=(xcenter-0.5*image_width)/image_width;
-        target.ty=(ycenter-0.5*image_height)/image_height;
-        if(use_ave_area)
-            target.ta=(ave_area)/(image_width*image_height);
-        else
-            target.ta=(width*height)/(image_width*image_height);
-        target.tr=width/height;
-        //System.out.println(target.ta);
         setTargetData();
     }
 }

@@ -58,7 +58,7 @@ public class ShootingCommand extends CommandBase {
   void whichCamera() {
     boolean newstate = m_switchCamera.newState();
     if (newstate) {
-      boolean is_front = m_aim.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
+      boolean is_front = m_aim.frontCamera();
       m_aim.setFrontTarget(!is_front);
       SmartDashboard.putBoolean("Front Camera", !is_front);
     }

@@ -30,7 +30,7 @@
     </include>
     
     <include>
-      <uri>model://Hanger</uri>
+      <uri>model://FakeHanger</uri>
       <name>Blue-Hanger</name>
       <pose>-6.14 3.98 0 1.570 0 -3.12</pose>
     </include>
@@ -46,8 +46,9 @@
     </include>
 
      <include>
+     
       <uri>model://SimBot2022</uri>
-      <pose>-0.868 -0.151 0.1216 0.0 0.03 0.558</pose>
+      <pose>-0.659 -0.154 0.1216 0.0 0.0 0.48</pose>
       <!--<pose>0.267 -1.85 0.13 0 0 1.43</pose>-->
     </include>
 

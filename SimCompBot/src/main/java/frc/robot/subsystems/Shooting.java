@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.management.relation.RelationSupportMBean;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,21 +27,20 @@ public class Shooting extends SubsystemBase implements Constants {
   private double shooter_err_vel_tol = 0.02;
   private double intake_err_tol = 0.7;
   private double intake_err_vel_tol = 0.1;
-  private double last_err;
 
   public static double kIntakeSpeed = 8;
   public static double kIntakeHold = -1;
   public static double kShootSpeed = 17.5;
   public static double kShootHold = 0;
-  public static double kShooterRunUpTime = 2.5;
+  public static double kShooterRunUpTime = 3;
   public static double kShooterRunDownTime = 5;
-  public static double kIntakeRunUpTime = 1;
+  public static double kIntakeRunUpTime = 1.5;
   public static double kIntakeRunDownTime = 1;
+  public static double kSpinbackTime = 1;
 
   private final static PIDController m_shooter_controller = new PIDController(0.1, 0.0, 0);
   private final static PIDController m_intake_controller = new PIDController(0.1, 0.0, 0);
 
-  public static double kSpinbackTime = 2;
 
   private boolean shooter_ramp = true;
   private boolean intake_ramp = true;
@@ -149,18 +146,6 @@ public class Shooting extends SubsystemBase implements Constants {
   public boolean shooterReady(double target) {
     m_shooter_controller.calculate(aveShooterVel(),target);
     return m_shooter_controller.atSetpoint();
-    /*
-    boolean ready = false;
-    //double r = shoot.getRate();
-
-    double r = aveShooterVel();
-    double err = Math.abs(r - kShootSpeed);
-    double delta_err = Math.abs(err - last_err);
-    System.out.println("ave-v:"+r+" target:"+kShootSpeed+" delta_err:"+delta_err);
-    if (shooter_is_on && err < shooter_err_tol && delta_err < shooter_err_vel_tol)
-      ready = true;
-    last_err = err;
-    */
   }
 
   public boolean intakeReady(double target) {

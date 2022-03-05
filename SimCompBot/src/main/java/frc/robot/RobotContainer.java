@@ -12,6 +12,7 @@ import frc.robot.commands.DriveWithGamepad;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.objects.CameraStreams;
 import frc.robot.subsystems.Targeting;
+import utils.PlotServer;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Cameras;
 import frc.robot.subsystems.Climber;
@@ -37,6 +38,7 @@ public class RobotContainer {
   private final Shooting m_shoot = new Shooting();
   private final Climber m_climber=new Climber();
   private Simulation m_simulation;
+  private utils.PlotServer m_plotter=new PlotServer();
  
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting,m_shoot);
 
@@ -74,6 +76,7 @@ public class RobotContainer {
     m_targeting.reset();
   }
   public void disabledInit(){
+    m_targeting.reset();
     m_drivetrain.disable();
     m_simulation.disable();
   }
@@ -84,10 +87,13 @@ public class RobotContainer {
   }
   
   public void robotInit(){
+    m_targeting.reset();
     m_drivetrain.init();
     m_climber.init();
     m_simulation.init();
     m_streams.start();
+    if(Robot.isSimulation()){
+      m_plotter.start();
+    }
   }
-
 }

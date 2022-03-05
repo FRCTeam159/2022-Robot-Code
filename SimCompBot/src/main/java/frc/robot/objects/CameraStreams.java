@@ -27,7 +27,7 @@ public class CameraStreams extends Thread {
   protected static CvSource dualStream;
   public int image_width = 640;
   public int image_height = 480;
-  private NetworkTableEntry tc; // camera (0=front 1=back)
+  private NetworkTableEntry frontCam; // camera (0=front 1=back)
   private static Mat m1,m2;
 
   Targeting m_targeting;
@@ -39,7 +39,7 @@ public class CameraStreams extends Thread {
     System.out.println("new Targeting " + Robot.isReal());
     SmartDashboard.putBoolean("Front Camera", true);
     SmartDashboard.putBoolean("Show HVS threshold", false);
-    tc= m_target_table.getEntry("tc");
+    frontCam= m_target_table.getEntry("frontCamera");
 
     dualStream = CameraServer.putVideo("SwitchedCamera", image_width, image_height);
 
@@ -69,15 +69,15 @@ public class CameraStreams extends Thread {
         System.out.println("exception)");
       }
       TargetDetector.show_hsv_threshold = SmartDashboard.getBoolean("Show HVS threshold", true);
-      boolean is_front = m_targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
-      tc.setBoolean(is_front);
+      boolean is_front = m_targeting.frontCamera();
+      //tc.setBoolean(is_front);
       if (is_front != front_camera) {
         if (is_front){
-          System.out.println("setting front camera");
+          System.out.println("CameraStreams setting front camera");
           m_front_detector.setTargetSpecs();
         }
         else{
-          System.out.println("setting back camera");
+          System.out.println("CameraStreams setting back camera");
           m_back_detector.setTargetSpecs();
         }
       }
@@ -86,11 +86,11 @@ public class CameraStreams extends Thread {
       if (is_front && m1 !=null) {
         m_front_detector.process();
         putFrame(dualStream, m1);
-        m_front_detector.setTargetData();
+        frontCam.setBoolean(true);
       } else if (m2 !=null){
         m_back_detector.process();
         putFrame(dualStream, m2);
-        m_back_detector.setTargetData();
+        frontCam.setBoolean(false);
       }
       front_camera = is_front;
     }

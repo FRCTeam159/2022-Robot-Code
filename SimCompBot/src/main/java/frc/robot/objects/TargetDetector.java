@@ -30,6 +30,7 @@ public class TargetDetector implements VideoInterface{
     private NetworkTableEntry ty;
     private NetworkTableEntry tv;
     private NetworkTableEntry tr;
+    private NetworkTableEntry tc;
 
     private NetworkTableEntry idealX;
     private NetworkTableEntry idealY;
@@ -46,7 +47,7 @@ public class TargetDetector implements VideoInterface{
     public int image_height=480;
 
     TargetDetector(){
-        setTargetData();
+       setTargetData();
     }
     
     public void outputTargetInImage(){

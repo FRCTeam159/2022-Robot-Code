@@ -6,7 +6,6 @@ package frc.robot.objects;
 
 import org.opencv.core.Mat;
 
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.subsystems.Cameras;
 
 public class GripTapeDetector extends GripDetector{
@@ -22,21 +21,15 @@ public class GripTapeDetector extends GripDetector{
         setBestAttribute(BEST_SHAPE);
         setIdealRatio(2.5);
         target_info.idealX=0;
-        target_info.idealY=-0.07;
+        target_info.idealY=-0.05;
         target_info.yTol=0.03;
         target_info.xTol=0.03;
-        target_info.xScale=1;
-        target_info.yScale=1.5;
+        target_info.xScale=1.4;
+        target_info.yScale=1.2;
         target_info.useArea=false;
-        target_info.idealA=0.005;
-        target_info.aScale=-3000.0;
-        target_info.aTol=0.005;
 
-        //if(target_info.useArea)
-            useAveArea(true);
-       // else
-            useBoundingBox(true);
-
+        useAveArea(true);
+        useBoundingBox(true);
     }
     
     public Mat getFrame(){
@@ -44,6 +37,7 @@ public class GripTapeDetector extends GripDetector{
         return mat;
     }
     
+   
     public void process() {
         if(mat == null)
             return;

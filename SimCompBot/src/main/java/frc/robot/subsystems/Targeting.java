@@ -32,6 +32,8 @@ public class Targeting extends SubsystemBase {
   private NetworkTableEntry tr; // tarket skew
   private NetworkTableEntry tv; // true if target is present
 
+  private NetworkTableEntry frontCam;
+
   private NetworkTableEntry idealX;
   private NetworkTableEntry idealY;
   private NetworkTableEntry idealA;
@@ -51,9 +53,7 @@ public class Targeting extends SubsystemBase {
 
   public Targeting(DriveTrain D) {
     m_drive = D;
-   // m_moveXController.enableContinuousInput(-0.5, 0.5);
     m_moveXController.setTolerance(0.1, 0.005);
-   // m_moveYController.enableContinuousInput(-0.5, 0.5);
     m_moveYController.setTolerance(0.1, 0.005);
     m_moveAController.setTolerance(0.2, 0.005);
     SmartDashboard.putNumber("Xoffset", 0);
@@ -76,16 +76,31 @@ public class Targeting extends SubsystemBase {
   }
 
   public boolean haveTarget() {
+    tv = m_target_data.getEntry("tv");
+    target.tv = tv.getBoolean(false);
     return target.tv;
   }
 
   public boolean frontCamera() {
+    tc = m_target_data.getEntry("tc");
+    target.tc=tc.getBoolean(target.tc);
     return target.tc;
+  }
+  public boolean isFrontCamera() {
+    frontCam = m_target_data.getEntry("frontCamera");
+    return frontCam.getBoolean(true);
+  }
+  public boolean backCamera() {
+    tc = m_target_data.getEntry("tc");
+    target.tc=tc.getBoolean(target.tc);
+    return target.tc?false:true;
   }
 
   public void setFrontTarget(boolean front) {
+    System.out.println("Targeting setFrontTarget("+front+")");
     target.tc=front;
-    tc.setBoolean(target.tc);
+    tc = m_target_data.getEntry("tc");
+    tc.setBoolean(front);
   }
   public boolean turnDoneX() {
     return m_moveXController.atSetpoint();
@@ -99,51 +114,31 @@ public class Targeting extends SubsystemBase {
   }
 
   public double targetOffsetX() {
+    tx = m_target_data.getEntry("tx");
+    target.tx = tx.getDouble(0);
     return target.tx;
   }
 
   public double targetOffsetY() {
+    ty = m_target_data.getEntry("ty");
+    target.ty = ty.getDouble(0);
     return target.ty;
   }
 
   public double targetArea() {
+    ta = m_target_data.getEntry("ta");
+    target.ta = ta.getDouble(0);
     return target.ta;
   }
 
   public boolean onTarget() {
+    if(!haveTarget())
+      return false;
     boolean onTargetTurn = turnDoneX();
     boolean onTargetMove = turnDoneY();
     return onTargetTurn && onTargetMove;
   }
-/*
-  public void setTargetSpecs(TargetSpecs specs) {
-    target_info=specs;
-    setTargetSpecs();
-  }
-  
-  private void setTargetSpecs() {
-    idealX=m_target_specs.getEntry("idealX");
-    idealX.setDouble(target_info.idealX);
-    idealY=m_target_specs.getEntry("idealY");
-    idealY.setDouble(target_info.idealY);
-    idealA=m_target_specs.getEntry("idealA");
-    idealA.setDouble(target_info.idealA);
-    useArea=m_target_specs.getEntry("useArea");
-    useArea.setBoolean(target_info.useArea);
-    xTol=m_target_specs.getEntry("xTol");
-    xTol.setDouble(target_info.xTol);
-    yTol=m_target_specs.getEntry("yTol");
-    yTol.setDouble(target_info.yTol);
-    aTol=m_target_specs.getEntry("aTol");
-    aTol.setDouble(target_info.aTol);
-    xScale = m_target_specs.getEntry("xScale");
-    xScale.setDouble(target_info.xScale);
-    yScale = m_target_specs.getEntry("yScale");
-    yScale.setDouble(target_info.yScale);
-    aScale = m_target_specs.getEntry("aScale");
-    aScale.setDouble(target_info.aScale);
-  }
-  */
+
   protected void getTargetData() {
     ta = m_target_data.getEntry("ta");
     target.ta = ta.getDouble(0);
@@ -191,19 +186,18 @@ public class Targeting extends SubsystemBase {
     m_moveAController.setTolerance(target_info.aTol, 0.1 * target_info.aTol);
   }
   public void reset(){
+    System.out.println("Targeting.reset");
     correctionMove=correctionTurn=0;
-    //m_moveXController.reset();
-    //m_moveYController.reset();
-    //m_moveAController.reset();
+    m_moveXController.reset();
+    m_moveYController.reset();
+    m_moveAController.reset();
   }
   public void enable() {
-    reset();
-    //m_moveXController.setTolerance(target_info.xTol, 0.1 * target_info.xTol);
-    //m_moveYController.setTolerance(target_info.yTol, 0.1 * target_info.yTol);
-    //m_moveAController.setTolerance(target_info.aTol, 0.1 * target_info.aTol);
+    //reset();
   }
 
   public void disable() {
+    m_drive.set(0);
     reset();
   }
   @Override

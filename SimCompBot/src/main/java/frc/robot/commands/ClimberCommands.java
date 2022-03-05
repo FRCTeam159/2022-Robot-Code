@@ -42,10 +42,10 @@ public class ClimberCommands extends CommandBase implements Constants {
     switch (direction) {
       case 0:
         m_climber.setLifterUp();
-      break;
+        break;
       case 180:
         m_climber.setLifterDown();
-    break;
+        break;
       case 90:
         m_climber.armsOut();
         break;
