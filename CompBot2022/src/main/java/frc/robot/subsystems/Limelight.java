@@ -21,7 +21,7 @@ public class Limelight extends SubsystemBase {
   public NetworkTableEntry ty = table.getEntry("ty");
   public NetworkTableEntry ta = table.getEntry("ta");
   public NetworkTableEntry tv = table.getEntry("tv");
-  public ToggleButton switchCamera; 
+  public boolean testLimelight;
 
   public double limeX;
   public double limeA;
@@ -29,16 +29,8 @@ public class Limelight extends SubsystemBase {
   public double limeV;
   public boolean frontCamera = true;
 
-  private UsbCamera IntakeCamera;
-  private XboxController m_Controller;
-
-  public Limelight(XboxController Controller) {
-    m_Controller = Controller;
-    switchCamera = new ToggleButton(new JoystickButton(Controller, 4));
-    //IntakeCamera = CameraServer.startAutomaticCapture(0);
-    //IntakeCamera.setResolution(320, 240);
-    //IntakeCamera.setFPS(25);
-    //setCameraFront();
+  public Limelight() {
+    SmartDashboard.putBoolean("test limelight", testLimelight);
   }
 
   // public void setCameraFront(){
@@ -78,7 +70,18 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //switchView();
+    boolean test = SmartDashboard.getBoolean("test limelight", testLimelight);
+    if (test != testLimelight) {
+      testLimelight = test;
+      if(testLimelight){
+        limelightOn();
+      } else {
+        limelightOff();
+      }
+    }
+
+    
+
     // read values periodically
     limeX = tx.getDouble(0.0);
     limeY = ty.getDouble(0.0);
@@ -89,6 +92,7 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putNumber("LimelightX", limeX);
     SmartDashboard.putNumber("LimelightY", limeY);
     SmartDashboard.putNumber("LimelightArea", limeA);
+  
   }
 
   @Override

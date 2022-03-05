@@ -11,9 +11,11 @@ import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.DriveBack;
 import frc.robot.commands.AutoTarget;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveToPath;
 import frc.robot.subsystems.Aiming;
 import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.SwitchCamera;
@@ -30,12 +32,12 @@ public class RobotContainer {
   //subsystem
   private final XboxController m_Controller = new XboxController(0);
   private final DriveTrain m_Drive = new DriveTrain();
-  private final Limelight m_limelight = new Limelight(m_Controller);
+  private final Limelight m_limelight = new Limelight();
   private final Shooting m_shoot = new Shooting();
   private final Aiming m_aim = new Aiming(m_Drive, m_limelight);
   private final Autonomous m_auto = new Autonomous(m_Drive, m_aim, m_shoot);
   private final SwitchCamera m_cameras = new SwitchCamera(m_Controller);
- 
+  private final Climber m_climber = new Climber();
 
   //command
   private final TurnToAngle m_turnToAngle = new TurnToAngle(m_Drive, 90);
@@ -43,6 +45,9 @@ public class RobotContainer {
   private final DriveToPath m_driveToPath = new DriveToPath(m_Drive);
   private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller, m_aim, m_Drive);
 
+  private final AutoTarget m_autoTarget = new AutoTarget(m_Drive, m_aim, m_shoot);
+  private final ClimberCommand m_climberCommand = new ClimberCommand(m_climber);
+ 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

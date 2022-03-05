@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -17,29 +20,34 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean shooter_is_on = false;
   private DigitalInput m_dio = new DigitalInput(0);
   public static double kIntakeForward = -0.4;
-  public static double kIntakeBackward = 0.10;
-  public static double kShootSpeed = -1.5;
-  public double kRunUpTime = 1.8;
-  public double kInputHoldTime = 0.5;
+  public static double kIntakeBackward = 0.9;
+  public static double kShootSpeed = -0.75;
+  public double kRunUpTime = 1.9;
+  public double kInputHoldTime = 1;
+  public DoubleSolenoid intakePiston;
 
   public Shooting() {
+    //PIDController shootPID = new PIDController(0.1, 0, 0);
     if (!flagPancake){
     intake = new SparkMotor(INTAKE);
     shoot = new SparkMotor(SHOOTER);
+    intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 4);
     }
     SmartDashboard.putNumber("shooter speed", 0);
     SmartDashboard.putNumber("intake speed", 0);
     SmartDashboard.putNumber("spinback Speed", 0.12);
   }
 
+
   public boolean ballCapture() {
+    System.out.println(m_dio.get());
     return m_dio.get();
   }
 
   public void setIntakeHold() {
     if (!flagPancake)
     intake.set(kIntakeBackward);
-    intake_is_on = true;
+    intake_is_on = false;
   }
 
   public void setIntakeOn() {
@@ -51,7 +59,6 @@ public class Shooting extends SubsystemBase implements Constants {
   public void setShooter(double speed) {
     if (!flagPancake)
     shoot.set(speed);
-
   }
 
   public double getIntake() {

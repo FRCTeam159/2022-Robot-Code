@@ -44,7 +44,7 @@ public class Autonomous extends SubsystemBase {
     System.out.println("2 ball selected");
     return new SequentialCommandGroup(
         new AutoTarget(m_drive, m_aim, m_shoot),
-        new DriveBack(m_drive, m_shoot, -0.5),
+        new DriveBack(m_drive, m_shoot, -1),
         new AutoTarget(m_drive, m_aim, m_shoot));
   }
 
@@ -57,7 +57,7 @@ public class Autonomous extends SubsystemBase {
   private CommandGroupBase back() {
     System.out.println("drive back selected");
     return new SequentialCommandGroup(
-        new DriveBack(m_drive, m_shoot, -0.5));
+        new DriveBack(m_drive, m_shoot, -1));
   }
 
   @Override

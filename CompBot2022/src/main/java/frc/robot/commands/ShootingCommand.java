@@ -7,13 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Aiming;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooting;
-import frc.robot.subsystems.ToggleButton;
+import frc.robot.subsystems.ToggleButton
+;
 
 public class ShootingCommand extends CommandBase {
   public boolean test = false;
@@ -77,10 +79,10 @@ public class ShootingCommand extends CommandBase {
     if (newstate) {
       if (m_shoot.isShooterOn()) {
         m_shoot.setShooterOff();
-        System.out.println("shooter is on");
+        System.out.println("shooter is off");
       } else {
         m_shoot.setShooterOn();
-        System.out.println("shooter is off");
+        System.out.println("shooter is on");
       }
     }
   }
@@ -120,7 +122,9 @@ public class ShootingCommand extends CommandBase {
     } else {
       switch (state) {
         case state_OFF:
-          // System.out.println(".");
+          System.out.print(".");
+          m_shoot.intakePiston.set(Value.kReverse);
+          m_shoot.intakePiston.set(Value.kOff);
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
           if (m_controller.getRawButtonPressed(2)) {
@@ -132,16 +136,19 @@ public class ShootingCommand extends CommandBase {
         case state_LOOKING:
           m_shoot.setShooterOff();
           m_shoot.setIntakeOn();
+          m_shoot.intakePiston.set(Value.kForward);
+          System.out.println("lookingn for ball");
           if (m_shoot.ballCapture()) {
             System.out.println("going to aim");
             state = state_AIM;
           }
-          if (m_controller.getRawButtonPressed(2)) {
+          if (m_controller.getRawButtonPressed(3)) {
             m_timeOut.reset();
             state = state_OFF;
           }
           break;
         case state_AIM:
+          m_shoot.intakePiston.set(Value.kReverse);
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
           System.out.println("ready to aim");
@@ -151,13 +158,12 @@ public class ShootingCommand extends CommandBase {
             m_aim.aimOn();
             m_timeOut.reset();
           }
-          if (m_controller.getRawButtonPressed(2)) {
+          if (m_controller.getRawButtonPressed(3)) {
             m_timeOut.reset();
             state = state_OFF;
           }
           if (!m_aim.seeTarget()) {
             System.out.println("no target");
-            autoAim = false;
           }
           if (autoAim && m_aim.seeTarget()) {
             // do aiming stuff her
@@ -196,6 +202,10 @@ public class ShootingCommand extends CommandBase {
           m_shoot.setShooterOn();
         if (m_timer.get() > m_shoot.kRunUpTime) {
           state = state_SHOOT;
+        }
+        if (m_controller.getRawButtonPressed(3)) {
+          m_timeOut.reset();
+          state = state_OFF;
         }
         break;
         case state_SHOOT:
