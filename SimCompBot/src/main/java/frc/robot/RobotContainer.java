@@ -38,7 +38,7 @@ public class RobotContainer {
   private final Shooting m_shoot = new Shooting();
   private final Climber m_climber=new Climber();
   private Simulation m_simulation;
-  private utils.PlotServer m_plotter=new PlotServer();
+  //private utils.PlotServer m_plotter=new PlotServer();
  
   private final Autonomous m_autonomous = new Autonomous(m_drivetrain,m_targeting,m_shoot);
 

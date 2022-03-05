@@ -46,13 +46,14 @@ public class RobotContainer {
   private final ShootingCommand m_shootingCommand = new ShootingCommand(m_shoot, m_Controller, m_aim, m_Drive);
 
   private final AutoTarget m_autoTarget = new AutoTarget(m_Drive, m_aim, m_shoot);
-  private final ClimberCommand m_climberCommand = new ClimberCommand(m_climber);
+  private final ClimberCommand m_climberCommand = new ClimberCommand(m_Controller,m_climber);
  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_Drive.setDefaultCommand(new DriveWithGamepad(m_Drive, m_Controller));
     m_shoot.setDefaultCommand(new ShootingCommand(m_shoot, m_Controller, m_aim, m_Drive));
+    m_climber.setDefaultCommand(new ClimberCommand(m_Controller, m_climber));
     // Configure the button bindings
     configureButtonBindings();
   }

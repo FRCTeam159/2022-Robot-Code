@@ -123,8 +123,8 @@ public class ShootingCommand extends CommandBase {
       switch (state) {
         case state_OFF:
           System.out.print(".");
-          m_shoot.intakePiston.set(Value.kReverse);
-          m_shoot.intakePiston.set(Value.kOff);
+          m_shoot.setIntakeArmsIn();
+          //m_shoot.intakePiston.set(Value.kOff);
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
           if (m_controller.getRawButtonPressed(2)) {
@@ -136,7 +136,7 @@ public class ShootingCommand extends CommandBase {
         case state_LOOKING:
           m_shoot.setShooterOff();
           m_shoot.setIntakeOn();
-          m_shoot.intakePiston.set(Value.kForward);
+          m_shoot.setIntakeArmsOut();
           System.out.println("lookingn for ball");
           if (m_shoot.ballCapture()) {
             System.out.println("going to aim");
@@ -148,7 +148,7 @@ public class ShootingCommand extends CommandBase {
           }
           break;
         case state_AIM:
-          m_shoot.intakePiston.set(Value.kReverse);
+          m_shoot.setIntakeArmsIn();
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
           System.out.println("ready to aim");

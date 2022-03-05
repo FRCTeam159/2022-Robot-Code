@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -93,6 +94,14 @@ public class Shooting extends SubsystemBase implements Constants {
     shooter_is_on = false;
   }
 
+  public void setIntakeArmsOut() {
+    intakePiston.set(Value.kForward);
+  }
+
+  public void setIntakeArmsIn() {
+    intakePiston.set(Value.kReverse);
+  }
+
   public boolean isIntakeOn() {
     return intake_is_on;
   }
@@ -108,5 +117,6 @@ public class Shooting extends SubsystemBase implements Constants {
     SmartDashboard.putNumber("intake speed", (!flagPancake)? intake.getRate() : 0.0);
     SmartDashboard.putNumber("shooter speed", (!flagPancake)? shoot.getRate() : 0.0);
     kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.10);
+    
   }
 }
