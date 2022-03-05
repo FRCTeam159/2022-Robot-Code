@@ -29,7 +29,7 @@ public class Aiming extends SubsystemBase implements Constants {
     m_drive = D;
     m_limelight = limelight;
     m_turnController.enableContinuousInput(-29.8, 29.8);
-    m_turnController.setTolerance(1.0, 0.05);
+    m_turnController.setTolerance(1.5, 0.05);
     m_moveController.enableContinuousInput(-24.85, 24.85);
     m_moveController.setTolerance(1.0, 0.1);
   }
@@ -73,7 +73,7 @@ public class Aiming extends SubsystemBase implements Constants {
   public void aimOn() {
     m_limelight.limelightOn();
     m_turnController.reset();
-    m_moveController.reset();
+    //m_moveController.reset();
   }
   
 

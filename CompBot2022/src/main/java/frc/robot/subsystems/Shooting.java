@@ -17,10 +17,10 @@ public class Shooting extends SubsystemBase implements Constants {
   private boolean shooter_is_on = false;
   private DigitalInput m_dio = new DigitalInput(0);
   public static double kIntakeForward = -0.4;
-  public static double kIntakeBackward = 0.10;
-  public static double kShootSpeed = -1.5;
+  public static double kIntakeBackward = 0.9;
+  public static double kShootSpeed = -0.75;
   public double kRunUpTime = 1.8;
-  public double kInputHoldTime = 0.5;
+  public double kInputHoldTime = 1;
 
   public Shooting() {
     if (!flagPancake){
@@ -32,6 +32,7 @@ public class Shooting extends SubsystemBase implements Constants {
     SmartDashboard.putNumber("spinback Speed", 0.12);
   }
 
+
   public boolean ballCapture() {
     return m_dio.get();
   }
@@ -39,7 +40,7 @@ public class Shooting extends SubsystemBase implements Constants {
   public void setIntakeHold() {
     if (!flagPancake)
     intake.set(kIntakeBackward);
-    intake_is_on = true;
+    intake_is_on = false;
   }
 
   public void setIntakeOn() {
@@ -100,6 +101,6 @@ public class Shooting extends SubsystemBase implements Constants {
     // System.out.println("ballCapture = " + ballCapture());
     SmartDashboard.putNumber("intake speed", (!flagPancake)? intake.getRate() : 0.0);
     SmartDashboard.putNumber("shooter speed", (!flagPancake)? shoot.getRate() : 0.0);
-    kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.12);
+    kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.10);
   }
 }
