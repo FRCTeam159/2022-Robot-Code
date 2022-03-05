@@ -22,9 +22,9 @@ public class Shooting extends SubsystemBase implements Constants {
   public static double kIntakeForward = -0.4;
   public static double kIntakeBackward = 0.9;
   public static double kShootSpeed = -0.75;
-  public double kRunUpTime = 1.9;
-  public double kInputHoldTime = 1;
   public DoubleSolenoid intakePiston;
+  public double kRunUpTime = 1.8;
+  public double kInputHoldTime = 1;
 
   public Shooting() {
     //PIDController shootPID = new PIDController(0.1, 0, 0);
@@ -107,6 +107,6 @@ public class Shooting extends SubsystemBase implements Constants {
     // System.out.println("ballCapture = " + ballCapture());
     SmartDashboard.putNumber("intake speed", (!flagPancake)? intake.getRate() : 0.0);
     SmartDashboard.putNumber("shooter speed", (!flagPancake)? shoot.getRate() : 0.0);
-    kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.12);
+    kIntakeBackward = SmartDashboard.getNumber("spinback Speed", 0.10);
   }
 }

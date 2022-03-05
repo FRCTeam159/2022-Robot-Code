@@ -19,7 +19,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Timing;
@@ -33,10 +33,10 @@ public class DrivePath extends CommandBase {
   /** Creates a new AutoTest. */
   private final ArrayList<PathData> pathdata = new ArrayList<PathData>();
   private final RamseteController m_ramsete = new RamseteController();
-  //private final Timer m_timer = new Timer();
   private final DriveTrain m_drive;
   static public boolean plot_trajectory_motion = false;
   static public boolean plot_trajectory_dynamics = false;
+  private String last_msg;
 
   Trajectory m_trajectory;
   double runtime;
@@ -49,7 +49,6 @@ public class DrivePath extends CommandBase {
   boolean reversed = false;
 
   int plot_type = utils.PlotUtils.PLOT_NONE;
-  Timer m_timer=new Timer();
 
   public DrivePath(DriveTrain drive, double x, double y, double r, boolean rev) {
     reversed=rev;
@@ -66,7 +65,7 @@ public class DrivePath extends CommandBase {
   @Override
   public void initialize() {
     plot_type = PlotUtils.auto_plot_option;
-    System.out.println("DrivePath.start");
+    showStatus("DrivePath.start");
 
     PlotUtils.initPlot();
 
@@ -84,9 +83,6 @@ public class DrivePath extends CommandBase {
 
     m_drive.resetOdometry(p);
 
-    m_timer.reset();
-    m_timer.start();
-    
     m_drive.enable();
 
     pathdata.clear();
@@ -102,8 +98,8 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void execute() {
-    elapsed = m_timer.get();
-    //elapsed = Timing.getTime();
+    //elapsed = m_timer.get();
+    elapsed = Timing.get();
     if (elapsed < 0.02)
       return;
 
@@ -124,7 +120,7 @@ public class DrivePath extends CommandBase {
   // =================================================
   @Override
   public void end(boolean interrupted) {
-    System.out.println("DrivePath.end");
+    showStatus("DrivePath.end");
     if (m_trajectory == null)
       return;
     m_drive.reset();
@@ -248,5 +244,11 @@ public class DrivePath extends CommandBase {
         state.velocityMetersPerSecond, m_drive.getVelocity(),
         state.accelerationMetersPerSecondSq);
     pathdata.add(pd);
+  }
+  private void showStatus(String msg){
+    SmartDashboard.putString("Status", msg);
+    if(!msg.equals(last_msg))
+      System.out.println(msg);
+    last_msg=msg;
   }
 }

@@ -4,9 +4,10 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.objects.TargetSpecs;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Targeting;
@@ -20,84 +21,95 @@ public class DriveToTarget extends CommandBase {
   
   private final Targeting m_aim;
   private final Shooting m_shoot;
+  private boolean started=false;
   boolean have_ball=false;
- // Timer m_timer = new Timer();
-  protected TargetSpecs target_info=new TargetSpecs();
+  private String last_msg;
 
   public DriveToTarget(Targeting targeting, Shooting shoot) {
     m_aim=targeting;
     m_shoot=shoot;
-
-    //m_timer.start();
+    
     addRequirements(shoot,targeting);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("DriveToTarget.start");
-  
+    showStatus("DriveToTarget.init");
+    started=false;
+
     have_ball=m_shoot.isBallCaptured();
     m_shoot.setIntakeHold();
-    //m_timer.reset();
-    Timing.reset();
+    
     haveTarget=false;
     shooting=false;
     starting=false;
     runtime = 0;
-    target_info.idealA=1;
-    target_info.idealX=0;
-    target_info.idealY=-7;
-    target_info.yTol=2;
-    target_info.xTol=2;
-    target_info.xScale=1.5;
-    target_info.yScale=1;
-    Targeting.setTargetSpecs(target_info);
-    Targeting.setFrontTarget(true);
-    Targeting.enable();
+    m_aim.setFrontTarget(true);
+    m_aim.reset();
+    Timing.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!haveTarget)
+    if(!haveTarget && m_aim.isFrontCamera()){
+      if(!started)
+        showStatus("DriveToTarget started " + Timing.get());
+      started=true;
       m_aim.adjust();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Targeting.disable();
+    m_aim.disable();
     m_shoot.setShooterOff();
-    m_shoot.setIntakeOff();
+   // m_shoot.setIntakeOff();
     runtime += Timing.get();
     Autonomous.totalRuntime += runtime;
-    System.out.println("DriveToTarget.end " + runtime + " total time: " + Autonomous.totalRuntime);
+    if(Autonomous.autoFailed)
+      showStatus("DriveToTarget.end - Auto failed");
+    else
+      showStatus("DriveToTarget.end " + runtime + " total time: " + Autonomous.totalRuntime);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(!have_ball || Autonomous.autoFailed)
+    if(!m_aim.frontCamera()|| !started)
+      return false;
+    if(!have_ball || Autonomous.autoFailed){
+      if(!haveTarget)
+        Autonomous.autoFailed=true;
       return true;
+    }
     boolean onTarget = m_aim.onTarget();
     if (onTarget && !haveTarget) {
       runtime = Timing.get();
-      System.out.println("Target acquired time:" + runtime);
+      showStatus("Target acquired time:" + runtime);
       Timing.reset();
       m_shoot.setShooterOn();
       haveTarget = true;  
     }
-    if (!shooting && haveTarget && m_shoot.shooterReady()) {
+    if (!shooting && haveTarget && m_shoot.shooterReady(Shooting.kShootSpeed)) {
       m_shoot.setIntakeOn();
-      System.out.println("Shoot started:" + Timing.get() + " shooterspeeed: " + m_shoot.shooterSpeed());
+      //System.out.println("Shoot started:" + Timing.get() + " shooterspeeed: " + m_shoot.shooterSpeed());
       shooting=true;
+      runtime+=Timing.get();
       Timing.reset();
     }
-    if (shooting && Timing.get() >Shooting.kIntakeRunUpTime && !m_shoot.isBallCaptured()) {
+    if (shooting && Timing.get()> Shooting.kIntakeRunUpTime && !m_shoot.isBallCaptured()) {
       System.out.println("Done time:" + Timing.get());
       return true;
     }
     return false;   
+  }
+  private void showStatus(String msg){
+    SmartDashboard.putString("Status", msg);
+    if(!msg.equals(last_msg))
+      System.out.println(msg);
+    last_msg=msg;
   }
 }

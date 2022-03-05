@@ -10,12 +10,12 @@
       <!---->
       <velocity_decay>
         <linear>0.00</linear>
-        <angular>0.002</angular>
+        <angular>0.01</angular>
       </velocity_decay>
       
       
       <inertial>
-        <mass>0.2</mass>
+        <mass>0.1</mass>
         <pose>0 0 0 0 0 0</pose>
         <!---->
         <inertia>
@@ -33,7 +33,7 @@
         <pose>0 -0.12065 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <scale>.93 .93 .93</scale>
+            <scale>.95 .95 .95</scale>
             <uri>model://BlueCargo/meshes/Ball_col.STL</uri>
           </mesh>
         </geometry>
@@ -51,8 +51,9 @@
           <elastic_modulus>3</elastic_modulus>
           <ode>
             <max_vel>10</max_vel>
+            <soft_cfm>2.0</soft_cfm>
             <kd>1</kd>
-            <kp>1e7</kp>
+            <kp>1e6</kp>
             <min_depth>0.0001</min_depth>
           </ode>
         </contact>
@@ -66,7 +67,7 @@
         </material>
         <geometry>
           <mesh>
-            <scale>1 1 1</scale>
+            <scale>.95 .95 .95</scale>
             <uri>model://BlueCargo/meshes/Ball.STL</uri>
           </mesh>
         </geometry>

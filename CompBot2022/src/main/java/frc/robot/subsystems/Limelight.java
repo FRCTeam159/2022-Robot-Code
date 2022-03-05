@@ -33,42 +33,35 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putBoolean("test limelight", testLimelight);
   }
 
-  // public void setCameraFront(){
-  //   //lr stands for lower right
-  //   table.getEntry("stream").setNumber(1);
-  //   frontCamera = true;
-  // }
+  public void setCameraFront(){
+    //lr stands for lower right
+    table.getEntry("stream").setNumber(1);
+    System.out.println("setCameraFront");
 
-  // public void setCameraBack(){
-  //   table.getEntry("stream").setNumber(2);
-  //   frontCamera = false;
-  // }
+    frontCamera = true;
+  }
 
-  // public void switchView() {
-  //   boolean newstate = switchCamera.newState();
-
-  //   if (newstate) {
-  //     if (frontCamera) {
-  //       setCameraBack();
-  //     } else {
-  //       setCameraFront();
-  //     }
-  //   }
-  // }
+  public void setCameraBack(){
+    table.getEntry("stream").setNumber(2);
+    System.out.println("setCameraBack");
+    frontCamera = false;
+  }
   
   public void limelightOff() {
     table.getEntry("ledMode").setNumber(1);
     table.getEntry("camMode").setNumber(1);
-    System.out.println("limelight off");
+    
   }
   public void limelightOn() {
     table.getEntry("ledMode").setNumber(3);
     table.getEntry("camMode").setNumber(0);
-    System.out.println("limelight on");
+    
   }
 
   @Override
   public void periodic() {
+    //System.out.println(limeX);
+    //System.out.println(limeY);
     // This method will be called once per scheduler run
     boolean test = SmartDashboard.getBoolean("test limelight", testLimelight);
     if (test != testLimelight) {

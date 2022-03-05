@@ -29,7 +29,7 @@ public class SparkMotor implements MotorInterface {
     private double last_velocity=0;
     private double last_time=0;
     private Averager acc_averager = new Averager(10);
-    private Averager vel_averager = new Averager(2);
+    private Averager vel_averager = new Averager(3);
     private double ave_acc = 0;
     private double ave_vel = 0;
     private double max_acc=-1;
@@ -121,10 +121,10 @@ public class SparkMotor implements MotorInterface {
     @Override
     public void set(double v) {
         double r=scale*v/distancePerRotation;
-        double mag_acc=Math.abs(ave_acc);   
+        double mag_acc=Math.abs(ave_acc);  
+        ave_acc = acc_averager.getAve(getAcceleration());
+        ave_vel = vel_averager.getAve(getRate());
         if(max_acc>0 && mag_acc>max_acc){
-            ave_acc = acc_averager.getAve(getAcceleration());
-            ave_vel = vel_averager.getAve(getRate());
             //System.out.println(chnl+" acc:"+mag_acc+" r1:"+r+" r2:"+r*max_acc/mag_acc);
             r*=max_acc/mag_acc;
         }

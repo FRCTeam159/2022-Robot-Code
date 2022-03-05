@@ -20,6 +20,8 @@ public class Simulation extends SubsystemBase {
   private SimControl m_simcontrol = new SimControl();
   private DriveTrain m_drive;
   private Shooting m_shoot;
+  private Climber m_climber;
+  private Targeting m_targeting;
   private static boolean resetting = false;
   private final Field2d m_fieldSim = new Field2d();
   
@@ -31,9 +33,11 @@ public class Simulation extends SubsystemBase {
 
   private static SimClock m_simclock = new SimClock();
 
-  public Simulation(DriveTrain drivetrain, Shooting shoot) {
+  public Simulation(DriveTrain drivetrain, Shooting shoot,Climber climber, Targeting targeting) {
     m_drive = drivetrain;
     m_shoot = shoot;
+    m_climber = climber;
+    m_targeting=targeting;
     SmartDashboard.putBoolean("Reset", false);
     SmartDashboard.putBoolean("Gazebo", false);
     SmartDashboard.putNumber("SimTime", 0);
@@ -50,14 +54,14 @@ public class Simulation extends SubsystemBase {
   }
 
   public void reset() {
-    System.out.println("Simulation.reset");
+    //System.out.println("Simulation.reset");
     m_simclock.reset();
     m_timer.reset();
     SmartDashboard.putNumber("SimTime", 0);
    // running = false;
   }
   public void clear() {
-    System.out.println("Simulation.clear");
+    //System.out.println("Simulation.clear");
     m_simclock.clear();
     m_timer.reset();
     m_drive.resetPose();
@@ -66,14 +70,14 @@ public class Simulation extends SubsystemBase {
   }
 
   public static void start() {
-    System.out.println("Simulation.start");
+    //System.out.println("Simulation.start");
     m_simclock.reset();
     m_simclock.enable();
     running = true;
   }
 
   public void end() {
-    System.out.println("Simulation.end");
+    //System.out.println("Simulation.end");
     SmartDashboard.putNumber("SimTime", m_simclock.getTime());
     m_simclock.disable();
     running = false;
@@ -117,6 +121,8 @@ public class Simulation extends SubsystemBase {
         if (m)
           clear();       
         m_drive.reset();
+        m_climber.reset();
+        m_targeting.reset();
         m_timer.reset();
       } else if (m_timer.get() > 0.1) {
         if (!disabling) {
@@ -128,6 +134,7 @@ public class Simulation extends SubsystemBase {
           resetting = false;
           disabling = false;
           m_drive.enable();
+          m_climber.enable();
           run();
           running = true;
         }

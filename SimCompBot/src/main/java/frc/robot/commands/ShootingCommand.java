@@ -58,8 +58,8 @@ public class ShootingCommand extends CommandBase {
   void whichCamera() {
     boolean newstate = m_switchCamera.newState();
     if (newstate) {
-      boolean is_front = Targeting.frontCamera();//SmartDashboard.getBoolean("Front Camera", true);
-      Targeting.setFrontTarget(!is_front);
+      boolean is_front = m_aim.frontCamera();
+      m_aim.setFrontTarget(!is_front);
       SmartDashboard.putBoolean("Front Camera", !is_front);
     }
   }
@@ -112,6 +112,8 @@ public class ShootingCommand extends CommandBase {
     manualAim = false;
     SmartDashboard.putString("Status", "Manual Driving");
     m_aim.disable();
+    if (test == true)
+      m_shoot.setIntakeHold();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -124,9 +126,11 @@ public class ShootingCommand extends CommandBase {
       return;
     }
     whichCamera();
-    boolean is_front=Targeting.frontCamera();
-    if(is_front!=was_front)
+    boolean is_front=m_aim.frontCamera();
+    if(is_front!=was_front){
       state=state_OFF;
+      m_aim.reset();
+    }
     was_front=is_front;
     if(is_front)
       front_target_program();
@@ -227,19 +231,20 @@ public class ShootingCommand extends CommandBase {
         break;
      
       case state_AIM:
-        if(!manualAim && m_shoot.isShooterOn())
-          m_shoot.setShooterOff();
+        //if(!manualAim && m_shoot.isShooterOn())
+        //  m_shoot.setShooterOff();
          m_shoot.setIntakeHold();
 
         if (m_controller.getRawButtonPressed(5)) {
+          m_aim.enable();
           showStatus("Starting Auto-Aiming");
+          manualAim = false;
           autoAim = true;
         }
         if (!manualAim && m_controller.getRawButtonPressed(6)) {
           showStatus("Starting Manual-aiming");
           autoAim = false;
           manualAim = true;
-          m_shoot.setIntakeHold();
           m_shoot.setShooterOn();
         }
         if (m_controller.getRawButtonPressed(2)) {
@@ -248,25 +253,25 @@ public class ShootingCommand extends CommandBase {
           autoAim = false;
         }
         if (autoAim) {
-          m_aim.enable();
           m_aim.adjust();
-          m_shoot.setIntakeHold();
-          m_shoot.setShooterOff();
+
           if (m_aim.onTarget()) {
             showStatus("On Target");
             state = state_FOUND;
+            autoAim=false;
             m_timer.reset();
             m_aim.disable();
             m_shoot.setShooterOn();
           }
         }
         if (manualAim && m_controller.getRawButtonPressed(1)) {
+          showStatus("Shooting");
           m_timer.reset();
           state = state_SHOOT;
         }
         break;
       case state_FOUND:
-      if (m_shoot.shooterReady() /* || m_timer.get() > Shooting.kShooterRunUpTime*/) {
+      if (m_shoot.shooterReady(Shooting.kShootSpeed)){
           state = state_SHOOT;
           showStatus("Shooting");
           m_timer.reset();
@@ -275,7 +280,7 @@ public class ShootingCommand extends CommandBase {
       case state_SHOOT:
         m_shoot.setIntakeOn();
         autoAim = false;
-        if (m_timer.get() > 3) {
+        if (m_timer.get() > 3 || !m_shoot.isBallCaptured()) {
           if (m_shoot.isBallCaptured())
             showStatus("Shot Failed");
           else

@@ -5,12 +5,14 @@
 package frc.robot.objects;
 
 import org.opencv.core.Mat;
+
 import frc.robot.subsystems.Cameras;
 
 public class GripTapeDetector extends GripDetector{
     GripTapePipeline grip = new GripTapePipeline();
     Camera camera;
 
+    
     public GripTapeDetector(){
         System.out.println("new GripFrontCamera");
         camera=new Camera(Cameras.FRONT_CAMERA);
@@ -18,14 +20,15 @@ public class GripTapeDetector extends GripDetector{
         m_connected=camera.isConnected();
         setBestAttribute(BEST_SHAPE);
         setIdealRatio(2.5);
-        target_info.idealA=1;
         target_info.idealX=0;
-        target_info.idealY=-7;
-        target_info.yTol=2;
-        target_info.xTol=2;
-        target_info.xScale=1.5;
-        target_info.yScale=1;
+        target_info.idealY=-0.05;
+        target_info.yTol=0.03;
+        target_info.xTol=0.03;
+        target_info.xScale=1.4;
+        target_info.yScale=1.2;
+        target_info.useArea=false;
 
+        useAveArea(true);
         useBoundingBox(true);
     }
     
@@ -34,6 +37,7 @@ public class GripTapeDetector extends GripDetector{
         return mat;
     }
     
+   
     public void process() {
         if(mat == null)
             return;

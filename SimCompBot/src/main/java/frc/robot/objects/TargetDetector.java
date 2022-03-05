@@ -30,6 +30,7 @@ public class TargetDetector implements VideoInterface{
     private NetworkTableEntry ty;
     private NetworkTableEntry tv;
     private NetworkTableEntry tr;
+    private NetworkTableEntry tc;
 
     private NetworkTableEntry idealX;
     private NetworkTableEntry idealY;
@@ -40,12 +41,13 @@ public class TargetDetector implements VideoInterface{
     private NetworkTableEntry aTol;
     private NetworkTableEntry xScale;
     private NetworkTableEntry yScale;
+    private NetworkTableEntry aScale;
 
     public int image_width=640;
     public int image_height=480;
 
     TargetDetector(){
-        publish();
+       setTargetData();
     }
     
     public void outputTargetInImage(){
@@ -55,10 +57,6 @@ public class TargetDetector implements VideoInterface{
         m_annotate=false;
     }
     
-    public void publish(){
-        setTargetSpecs();
-        setTargetData();  
-    }
     protected void setTargetSpecs(){
         idealX=m_target_specs.getEntry("idealX");
         idealX.setDouble(target_info.idealX);
@@ -78,7 +76,8 @@ public class TargetDetector implements VideoInterface{
         xScale.setDouble(target_info.xScale);
         yScale = m_target_specs.getEntry("yScale");
         yScale.setDouble(target_info.yScale);
-
+        aScale = m_target_specs.getEntry("aScale");
+        aScale.setDouble(target_info.aScale);
     }
     protected void setTargetData(){
         ta= m_target_table.getEntry("ta");

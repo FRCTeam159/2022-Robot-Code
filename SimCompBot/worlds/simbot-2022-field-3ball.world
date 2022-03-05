@@ -46,8 +46,9 @@
     </include>
 
      <include>
+     
       <uri>model://SimBot2022</uri>
-      <pose>0.3 -0.96 0.1216 0 0 1.57907</pose>
+      <pose>-0.659 -0.154 0.1216 0.0 0.0 0.48</pose>
       <!--<pose>0.267 -1.85 0.13 0 0 1.43</pose>-->
     </include>
 

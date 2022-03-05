@@ -23,9 +23,11 @@ public class GripDetector extends TargetDetector{
     public double xfov=29.6;
     public double yfov=49.7;
     public double ideal_ratio=2.5;
+    public double ave_area;
     public final int BEST_SHAPE=1;
     public final int LARGEST = 0;
     boolean use_bounding_box=false;
+    protected boolean use_ave_area=false;
 
     protected int best_attribute=BEST_SHAPE;
 
@@ -38,8 +40,13 @@ public class GripDetector extends TargetDetector{
     public void useBoundingBox(boolean b){
         use_bounding_box=b;
     }
+    public void useAveArea(boolean b){
+        use_ave_area=b;
+    }
 
     void getTargets(){
+        best=null;
+        ave_area=0;
         rects.clear();
         double max_area = 0;  
         double best_ratio=10;    
@@ -47,8 +54,12 @@ public class GripDetector extends TargetDetector{
         for (int i = 0; i < contours.size(); i++) {
             MatOfPoint contour = contours.get(i);
             Rect r = Imgproc.boundingRect(contour);
+            double area = r.area();
+            ave_area+=area;
             rects.add(r);
         }
+        if(rects.size()>0)
+            ave_area/=rects.size();
         if(use_bounding_box && rects.size()>0){
             int xmin=1000;
             int xmax=0;
@@ -70,6 +81,7 @@ public class GripDetector extends TargetDetector{
         for (int i = 0; i < rects.size(); i++) {
             Rect r = rects.get(i);
             double area = r.area();
+            
             double ratio_err=Math.abs(r.width/r.height-ideal_ratio);
 
             if (ratio_err < best_ratio) {
@@ -86,6 +98,7 @@ public class GripDetector extends TargetDetector{
             else
                 best=biggest;
         }
+        
     }
     void markTargets(){
         for (int i = 0; i < rects.size(); i++) {
@@ -97,7 +110,6 @@ public class GripDetector extends TargetDetector{
             double xVal = tl.x + 0.5 * width;
             double yVal = tl.y + 0.5 * height;
             double xTweek = 0;//horizontalTweek()/angleFactorWidth;
-            //double xTweek = (xOff * width) / targetWidth;
             double yTweek = 0;//verticalTweek() / angleFactorHeight;
             Point xPoint = new Point(xVal + xTweek, yVal + yTweek);
             if (r == best) {
@@ -110,24 +122,25 @@ public class GripDetector extends TargetDetector{
     protected void setTarget(){
         if(best==null){
             target.tv=false;
-            target.ta=target.tx=target.ty=0;
-           // System.out.println("no targets");
-            return;
+            //target.ta=target.tx=target.ty=0;
+        }else{
+            target.tv=true;
+            double image_width=mat.width();
+            double image_height=mat.height();
+            Point tl = best.tl();
+            Point br = best.br();
+            double width = br.x - tl.x;
+            double height = br.y - tl.y;
+            double xcenter=tl.x+0.5*width;
+            double ycenter=tl.y+0.5*height;
+            target.tx=(xcenter-0.5*image_width)/image_width;
+            target.ty=(ycenter-0.5*image_height)/image_height;
+            if(use_ave_area)
+                target.ta=(ave_area)/(image_width*image_height);
+            else
+                target.ta=(width*height)/(image_width*image_height);
+            target.tr=width/height;
         }
-        target.tv=true;
-        double image_width=mat.width();
-        double image_height=mat.height();
-        Point tl = best.tl();
-        Point br = best.br();
-        double width = br.x - tl.x;
-        double height = br.y - tl.y;
-        double xcenter=tl.x+0.5*width;
-        double ycenter=tl.y+0.5*height;
-        target.tx=100*(xcenter-0.5*image_width)/image_width;
-        target.ty=100*(ycenter-0.5*image_height)/image_height;
-        target.ta=100*(width*height)/(image_width*image_height);
-        target.tr=width/height;
-        //System.out.println(target.ta);
-        publish();
+        setTargetData();
     }
 }

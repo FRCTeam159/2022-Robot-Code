@@ -47,7 +47,7 @@ public class GripTapePipeline {
 		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 300.0;
 		double filterContoursMinHeight = 0.0;
-		double filterContoursMaxHeight = 1000.0;
+		double filterContoursMaxHeight = 100.0;
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 100.0;
 		double filterContoursMinVertices = 4.0;

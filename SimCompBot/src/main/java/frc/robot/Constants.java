@@ -17,19 +17,25 @@ package frc.robot;
 
 
 public interface Constants {
-    public static boolean flagPancake = true;
+
+    // motor ids
     public static final int FRONT_LEFT = 3;
     public static final int BACK_LEFT = 4;
-
     public static final int FRONT_RIGHT = 2;
     public static final int BACK_RIGHT = 1;
-
+    public static final int CLIMBER = 5;
     public static final int INTAKE = 7;
     public static final int SHOOTER = 8;
+
+    // xbox controller keys
 
     public static final int LEFT_JOYSTICK = 1;
     public static final int RIGHT_JOYSTICK = 4;
 
-    
+    public static final int LEFT_BUMPER = 5;
+	public static final int RIGHT_BUMPER = 6;
+
+    public static final int LEFT_TRIGGER = 2;
+	public static final int RIGHT_TRIGGER = 3;
 
 }
