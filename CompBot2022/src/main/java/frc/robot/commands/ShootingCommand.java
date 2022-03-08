@@ -124,9 +124,9 @@ public class ShootingCommand extends CommandBase {
         case state_OFF:
           System.out.print(".");
           m_shoot.setIntakeArmsIn();
-          //m_shoot.intakePiston.set(Value.kOff);
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
+          //press b to go into looking
           if (m_controller.getRawButtonPressed(2)) {
             autoAim = false;
             m_timer.reset();

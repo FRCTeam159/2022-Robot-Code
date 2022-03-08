@@ -22,28 +22,37 @@ public class Climber extends SubsystemBase {
   double max = 0.52;
   double min = 0;
   boolean armsOut;
-  final PIDController m_controller = new PIDController(2, 0.5, 0.0);
+  final PIDController m_rightcontroller = new PIDController(2, 0.5, 0.0);
+  final PIDController m_leftcontroller = new PIDController(2, 0.5, 0.0);
   double inchesPerRev=0.250;
-  SparkMaxLimitSwitch m_forwardLimit;
-  SparkMaxLimitSwitch m_reverseLimit;
+  SparkMaxLimitSwitch m_rightforwardLimit;
+  SparkMaxLimitSwitch m_rightreverseLimit;
+  SparkMaxLimitSwitch m_leftforwardLimit;
+  SparkMaxLimitSwitch m_leftreverseLimit;
+  public boolean foundZero;
 
   public Climber() {
     leftHook.setDistancePerRotation(1);
     rightHook.setDistancePerRotation(1);
-    m_controller.setTolerance(0.01, 0.001);
-    m_controller.setIntegratorRange(-4, 4);
-    //are we gonna have to do this?
+    m_rightcontroller.setTolerance(0.01, 0.001);
+    m_rightcontroller.setIntegratorRange(-4, 4);
+    m_leftcontroller.setTolerance(0.01, 0.001);
+    m_leftcontroller.setIntegratorRange(-4, 4);
     leftHook.setInverted();
     rightHook.setInverted();
     leftHook.setDistancePerRotation(0.0254*inchesPerRev);
     rightHook.setDistancePerRotation(0.0254*inchesPerRev);
-    m_forwardLimit = rightHook.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
-    m_reverseLimit = rightHook.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
-    m_forwardLimit.enableLimitSwitch(true);
-    m_reverseLimit.enableLimitSwitch(true);
+    m_rightforwardLimit = rightHook.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+    m_rightreverseLimit = rightHook.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+    m_rightforwardLimit.enableLimitSwitch(true);
+    m_rightreverseLimit.enableLimitSwitch(true);
+    m_leftforwardLimit = leftHook.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+    m_leftreverseLimit = leftHook.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+    m_leftforwardLimit.enableLimitSwitch(true);
+    m_leftreverseLimit.enableLimitSwitch(true);
 
     setVal = 0;
- 
+    foundZero = false;
 
     leftHook.reset();
     rightHook.reset();
@@ -86,19 +95,41 @@ public class Climber extends SubsystemBase {
     rightHook.reset();
   }
 
+  public void findZero(){
+    if(!atZero()){
+      contractHook();
+      foundZero = false;
+    } else {
+      foundZero = true;
+    }
+  }
+
+  public boolean atZero(){
+    return m_rightreverseLimit.isPressed() && m_leftreverseLimit.isPressed();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    if(!foundZero){
+      findZero();
+    }
+
+
     double distance = -rightHook.getDistance();
-    double correction = m_controller.calculate(distance, setVal);
-    leftHook.set(correction);
+    double correction = m_rightcontroller.calculate(distance, setVal);
     rightHook.set(correction);
-    SmartDashboard.putNumber("Lifter",distance);
+    SmartDashboard.putNumber("right distance",distance);
+    distance = -leftHook.getDistance();
+    correction = m_leftcontroller.calculate(distance, setVal);
+    leftHook.set(correction);
+    SmartDashboard.putNumber("left distance",distance);
     SmartDashboard.putNumber("Setval",setVal);
     SmartDashboard.putBoolean("Arms out",armsOut);
-    SmartDashboard.putBoolean("Right Forward Limit Switch", m_forwardLimit.isPressed());
-    SmartDashboard.putBoolean("Right Reverse Limit Switch", m_reverseLimit.isPressed());
+    SmartDashboard.putBoolean("Right Forward Limit Switch", m_rightforwardLimit.isPressed());
+    SmartDashboard.putBoolean("Right Reverse Limit Switch", m_rightreverseLimit.isPressed());
+    SmartDashboard.putBoolean("left Forward Limit Switch", m_leftforwardLimit.isPressed());
+    SmartDashboard.putBoolean("left Reverse Limit Switch", m_leftreverseLimit.isPressed());
     //SmartDashboard.putBoolean("Forward Limit Enabled", m_forwardLimit.isLimitSwitchEnabled());
     //SmartDashboard.putBoolean("Reverse Limit Enabled", m_reverseLimit.isLimitSwitchEnabled());
   
