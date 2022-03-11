@@ -47,7 +47,7 @@
 		<location x="616" y="12"/>
 	</widget>
 	<widget field="rightSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="10" y="10"/>
+		<location x="652" y="82"/>
 		<height>22</height>
 	</widget>
 	<widget field="Rotations" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -60,7 +60,7 @@
 		<width>146</width>
 	</widget>
 	<widget field="rightDistance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="5" y="37"/>
+		<location x="507" y="155"/>
 	</widget>
 	<widget field="leftDistance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="167" y="37"/>
@@ -82,70 +82,34 @@
 	<widget field="Shooting" type="Subsystem" class="edu.wpi.first.smartdashboard.gui.elements.Subsystem">
 		<location x="308" y="0"/>
 	</widget>
+	<widget field="Setval" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="617" y="47"/>
+	</widget>
+	<widget field="right climber distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="687" y="159"/>
+	</widget>
+	<widget field="Right Forward Limit Switch" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="890" y="149"/>
+	</widget>
+	<widget field="Right Reverse Limit Switch" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="901" y="176"/>
+	</widget>
+	<widget field="left climber distance" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1112" y="162"/>
+	</widget>
+	<widget field="left Forward Limit Switch" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1289" y="152"/>
+	</widget>
+	<widget field="Arms out" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="871" y="217"/>
+	</widget>
+	<widget field="test limelight" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="-1" y="46"/>
+	</widget>
+	<widget field="left Reverse Limit Switch" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1293" y="179"/>
+	</widget>
 </dashboard>
 <live-window>
-	<widget field="Aiming" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="9" y="2"/>
-	</widget>
-	<widget field="Shooting" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="5" y="30"/>
-	</widget>
-	<widget field="ToggleButton" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="10" y="25"/>
-	</widget>
-	<widget field="Limelight" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="7" y="1"/>
-	</widget>
-	<widget field="DriveTrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="3" y="31"/>
-	</widget>
-	<widget field="Autonomous" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="27" y="7"/>
-	</widget>
-	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<widget field="DigitalInput[0]" type="Digital Input" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
-			<location x="6" y="15"/>
-			<height>19</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[1]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="34"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[2]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="183"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<widget field="AnalogGyro[0]" type="Gyro" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-			<location x="6" y="332"/>
-			<height>150</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[3]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="482"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[4]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="631"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[5]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="780"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<widget field="PIDController[6]" type="PIDController" class="edu.wpi.first.smartdashboard.gui.elements.PIDEditor">
-			<location x="6" y="929"/>
-			<height>149</height>
-			<width>250</width>
-		</widget>
-		<location x="0" y="3"/>
-		<width>262</width>
-		<height>1084</height>
-	</widget>
 </live-window>
 </xml>
