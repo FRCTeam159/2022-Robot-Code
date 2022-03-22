@@ -120,9 +120,9 @@ public class ShootingCommand extends CommandBase {
       m_aim.aimOn();
       m_shoot.ballCapture();
     } else {
-      switch (state) {
+      switch (state) { //dont make any changes here unless nothing else works, and text me if you do
         case state_OFF:
-          System.out.print(".");
+          //System.out.print(".");
           m_shoot.setIntakeArmsIn();
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
@@ -180,6 +180,7 @@ public class ShootingCommand extends CommandBase {
           }
           if (m_controller.getRawButtonPressed(6)) {
             System.out.println("isacc shooty shoot");
+            m_aim.aimOn();
             m_timer.reset();
             state = state_FOUND;
             // isaac thing here
@@ -218,6 +219,7 @@ public class ShootingCommand extends CommandBase {
             m_timer.reset();
             state = state_OFF;
           }
+          m_aim.aimOff();
           break;
       }
     }

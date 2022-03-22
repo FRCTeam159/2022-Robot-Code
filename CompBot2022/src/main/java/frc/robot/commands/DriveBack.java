@@ -57,6 +57,7 @@ public class DriveBack extends CommandBase {
     elapse = 0;
     m_controller.setTolerance(0.07, 0.01);
     m_shoot.setIntakeOn();
+    m_shoot.setIntakeArmsOut();
   }
 
 

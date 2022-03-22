@@ -15,14 +15,14 @@ public class Aiming extends SubsystemBase implements Constants {
   public double aimX;
   DriveTrain m_drive;
   Limelight m_limelight;
-  public final double idealDistance = 102; // Ideal Distance limelight to target, inches
+  public final double idealDistance = 102; //this doesn't do anything
   // public final double limelightArea =
   // 4*idealDistance*idealDistance*Math.tan(29.8)*Math.tan(29.2); //inches^2
   public final double iA = 75.1;
   public final double iB = 0.989;
   public final double iC = -24.5;
-  public final double idealX = 0; // future robotics problem
-  public final double idealY = (!flagPancake)? -1.3 : 9;
+  public final double idealX = 0; //this shouldn't need to be changed
+  public final double idealY = (!flagPancake)? 3.75 : 9; // change the -1.3 to what the limelight says the ty on the limelight says to make it aim better
   //iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
 
   public Aiming(DriveTrain D, Limelight limelight) {

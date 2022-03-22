@@ -30,12 +30,12 @@ public class ClimberCommand extends CommandBase implements Constants{
   public void execute() {
     int direction = m_controller.getPOV(0);
     if (m_controller.getRawButtonPressed(3)) {
-      m_climber.terminate();
+      //m_climber.terminate();
     }
     //System.out.println(m_climber.foundZero);
     if(!m_climber.foundZero){
       m_climber.findZero();
-      //System.out.println("finding zero");
+      System.out.println("finding zero");
       return;
     } 
     switch (direction) {

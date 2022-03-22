@@ -19,11 +19,11 @@ public class Climber extends SubsystemBase {
   DoubleSolenoid arms = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
   double setVal = 0;
   double delta = 0.005; //0.005
-  double max = 0.53;
+  double max = 0.53; //changing the value here won't do anything change it where it is changed in line 123 approx.
   double min = 0;
   boolean armsOut;
-  final PIDController m_rightcontroller = new PIDController(3, 0.1, 0.0);
-  final PIDController m_leftcontroller = new PIDController(3, 0.1, 0.0);
+  final PIDController m_rightcontroller = new PIDController(4, 0.35, 0.0); //increasing the first argument's value will make the arms go up or down faster, changing the second argument should make it go faster near the end but increasing it too much will make it go beyond the max
+  final PIDController m_leftcontroller = new PIDController(4, 0.35, 0.0); // same as above
   double inchesPerRev=0.20;
   SparkMaxLimitSwitch m_rightforwardLimit;
   SparkMaxLimitSwitch m_rightreverseLimit;
@@ -120,7 +120,7 @@ public class Climber extends SubsystemBase {
       leftHook.reset();
       rightHook.reset();
       min = 0;
-      max = 0.555;
+      max = 0.555; //this value corresponds to the height to which the climber extends here is the only place where changing the value will doing anything
       setVal = 0;
       foundZero = true;
     }
