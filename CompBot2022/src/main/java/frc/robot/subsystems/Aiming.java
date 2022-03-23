@@ -22,16 +22,16 @@ public class Aiming extends SubsystemBase implements Constants {
   public final double iB = 0.989;
   public final double iC = -24.5;
   public final double idealX = 0; //this shouldn't need to be changed
-  public final double idealY = (!flagPancake)? 3.75 : 9; // change the -1.3 to what the limelight says the ty on the limelight says to make it aim better
+  public final double idealY = (!flagPancake)? 0 : 9; // change the -1.3 to what the limelight says the ty on the limelight says to make it aim better
   //iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
 
   public Aiming(DriveTrain D, Limelight limelight) {
     m_drive = D;
     m_limelight = limelight;
     m_turnController.enableContinuousInput(-29.8, 29.8);
-    m_turnController.setTolerance(1.5, 0.05);
+    m_turnController.setTolerance(1.5, 0.1);
     m_moveController.enableContinuousInput(-24.85, 24.85);
-    m_moveController.setTolerance(1.0, 0.1);
+    m_moveController.setTolerance(1.0, 0.25);
   }
 
   public void adjust() {

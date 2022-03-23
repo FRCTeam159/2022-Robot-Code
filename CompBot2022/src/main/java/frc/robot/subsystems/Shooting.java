@@ -23,6 +23,7 @@ public class Shooting extends SubsystemBase implements Constants {
   public static double kIntakeForward = -0.4;
   public static double kIntakeBackward = 0.9; //change this in the smartdashboard it is called "spinback speed"
   public static double kShootSpeed = -0.75; //decrease (to like -0.9) this if you want it to shoot higher
+  public static double kIdealShoot = 1;
   public DoubleSolenoid intakePiston;
   public double kRunUpTime = 1.8;
   public double kInputHoldTime = 1;
@@ -36,7 +37,7 @@ public class Shooting extends SubsystemBase implements Constants {
     }
     SmartDashboard.putNumber("shooter speed", 0);
     SmartDashboard.putNumber("intake speed", 0);
-    SmartDashboard.putNumber("spinback Speed", 0.11);
+    SmartDashboard.putNumber("spinback Speed", 0.08);
   }
 
 
@@ -74,6 +75,10 @@ public class Shooting extends SubsystemBase implements Constants {
     return shoot.getRate();
     else
     return 0.0;
+  }
+
+  public boolean shootOnTarget(){
+    return Math.abs(getShoot()-kIdealShoot) < 0.1;
   }
 
   public void setIntakeOff() {

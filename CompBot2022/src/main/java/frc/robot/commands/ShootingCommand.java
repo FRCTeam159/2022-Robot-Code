@@ -170,7 +170,6 @@ public class ShootingCommand extends CommandBase {
             System.out.println("aiming");
             m_aim.adjust();
             if (m_aim.onTarget()) {
-              m_timer.reset();
               state = state_FOUND;
               System.out.println("on target");
             }
@@ -181,7 +180,6 @@ public class ShootingCommand extends CommandBase {
           if (m_controller.getRawButtonPressed(6)) {
             System.out.println("isacc shooty shoot");
             m_aim.aimOn();
-            m_timer.reset();
             state = state_FOUND;
             // isaac thing here
           }
@@ -199,7 +197,8 @@ public class ShootingCommand extends CommandBase {
           break;
         case state_RUNUP:
         //System.out.println("time: " + m_timer.get());
-        //System.out.println("speed: " + m_shoot.getShoot());
+        System.out.println("speed: " + m_shoot.getShoot());
+        System.out.println("running up");
           m_shoot.setShooterOn();
         if (m_timer.get() > m_shoot.kRunUpTime) {
           state = state_SHOOT;
