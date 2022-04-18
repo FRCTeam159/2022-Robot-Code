@@ -33,9 +33,9 @@ public class Autonomous extends SubsystemBase {
     m_aim = aim;
     m_shoot = shoot;
 
-    m_chooser.setDefaultOption("drive back", mode_BACK);
+    m_chooser.addOption("drive back", mode_BACK);
     m_chooser.addOption("one ball", mode_ONEBALL);
-    m_chooser.addOption("two ball", mode_TWOBALL);
+    m_chooser.setDefaultOption("two ball", mode_TWOBALL);
     SmartDashboard.putData(m_chooser);
 
   }

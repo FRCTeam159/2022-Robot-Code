@@ -22,8 +22,8 @@ public class Climber extends SubsystemBase {
   double max = 0.53; //changing the value here won't do anything change it where it is changed in line 123 approx.
   double min = 0;
   boolean armsOut;
-  final PIDController m_rightcontroller = new PIDController(4, 0.35, 0.0); //increasing the first argument's value will make the arms go up or down faster, changing the second argument should make it go faster near the end but increasing it too much will make it go beyond the max
-  final PIDController m_leftcontroller = new PIDController(4, 0.35, 0.0); // same as above
+  final PIDController m_rightcontroller = new PIDController(4, 0.45, 0.0); //increasing the first argument's value will make the arms go up or down faster, changing the second argument should make it go faster near the end but increasing it too much will make it go beyond the max
+  final PIDController m_leftcontroller = new PIDController(4, 0.45, 0.0); // same as above
   double inchesPerRev=0.20;
   SparkMaxLimitSwitch m_rightforwardLimit;
   SparkMaxLimitSwitch m_rightreverseLimit;
@@ -166,6 +166,10 @@ public class Climber extends SubsystemBase {
     SmartDashboard.putBoolean("Right Reverse Limit Switch", m_rightreverseLimit.isPressed());
     SmartDashboard.putBoolean("left Forward Limit Switch", m_leftforwardLimit.isPressed());
     SmartDashboard.putBoolean("left Reverse Limit Switch", m_leftreverseLimit.isPressed());
+    SmartDashboard.putNumber("lefthook temp", leftHook.getMotorTemperature());
+    SmartDashboard.putNumber("righthook temp", rightHook.getMotorTemperature());
+    SmartDashboard.putNumber("lefthook current", leftHook.getOutputCurrent());
+    SmartDashboard.putNumber("righthook current", rightHook.getOutputCurrent());
     //SmartDashboard.putBoolean("Forward Limit Enabled", m_forwardLimit.isLimitSwitchEnabled());
     //SmartDashboard.putBoolean("Reverse Limit Enabled", m_reverseLimit.isLimitSwitchEnabled());
   

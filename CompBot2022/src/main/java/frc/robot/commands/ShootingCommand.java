@@ -41,6 +41,7 @@ public class ShootingCommand extends CommandBase {
   private final Timer m_timer = new Timer();
   private final Timer m_timeOut = new Timer();
   private boolean autoAim;
+  private boolean purging;
 
   private boolean goodVarNamesAreNotForAlpineRobotics;
 
@@ -109,6 +110,8 @@ public class ShootingCommand extends CommandBase {
     m_timeOut.start();
     autoAim = false;
     m_aim.aimOff();
+    purging = false;
+    m_aim.m_compressor.enableDigital();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -123,9 +126,18 @@ public class ShootingCommand extends CommandBase {
       switch (state) { //dont make any changes here unless nothing else works, and text me if you do
         case state_OFF:
           //System.out.print(".");
+          m_aim.m_compressor.enableDigital();
           m_shoot.setIntakeArmsIn();
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
+          if (purging){
+            m_shoot.purgeIntake();
+            System.out.println("purging");
+            if (m_timer.get() > 0.5){
+              System.out.println("purge done");
+              purging = false;
+            }
+          }
           //press b to go into looking
           if (m_controller.getRawButtonPressed(2)) {
             autoAim = false;
@@ -144,10 +156,14 @@ public class ShootingCommand extends CommandBase {
           }
           if (m_controller.getRawButtonPressed(3)) {
             m_timeOut.reset();
+            m_timer.reset();
+            purging = true;    
+            System.out.println("go to purging");        
             state = state_OFF;
           }
           break;
         case state_AIM:
+          m_aim.m_compressor.disable();
           m_shoot.setIntakeArmsIn();
           m_shoot.setShooterOff();
           m_shoot.setIntakeOff();
@@ -170,6 +186,7 @@ public class ShootingCommand extends CommandBase {
             System.out.println("aiming");
             m_aim.adjust();
             if (m_aim.onTarget()) {
+              m_timer.reset();
               state = state_FOUND;
               System.out.println("on target");
             }
@@ -180,6 +197,7 @@ public class ShootingCommand extends CommandBase {
           if (m_controller.getRawButtonPressed(6)) {
             System.out.println("isacc shooty shoot");
             m_aim.aimOn();
+            m_timer.reset();
             state = state_FOUND;
             // isaac thing here
           }
@@ -189,7 +207,7 @@ public class ShootingCommand extends CommandBase {
           if (m_shoot.isIntakeOn()) {
             System.out.println(m_shoot.getIntake());
           }
-          if (!m_shoot.ballCapture() || m_timer.get() > m_shoot.kInputHoldTime) {
+          if (m_timer.get() > m_shoot.kInputHoldTime) {
             System.out.println("goin to run up");
             m_timer.reset();
             state = state_RUNUP;
@@ -200,7 +218,7 @@ public class ShootingCommand extends CommandBase {
         System.out.println("speed: " + m_shoot.getShoot());
         System.out.println("running up");
           m_shoot.setShooterOn();
-        if (m_timer.get() > m_shoot.kRunUpTime) {
+        if (m_shoot.shootOnTarget()) {
           state = state_SHOOT;
         }
         if (m_controller.getRawButtonPressed(3)) {

@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,6 +26,8 @@ public class Aiming extends SubsystemBase implements Constants {
   public final double idealX = 0; //this shouldn't need to be changed
   public final double idealY = (!flagPancake)? 0 : 9; // change the -1.3 to what the limelight says the ty on the limelight says to make it aim better
   //iA * Math.pow(iB, idealDistance) + iC; //in the format a^b + c
+
+  public Compressor m_compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
   public Aiming(DriveTrain D, Limelight limelight) {
     m_drive = D;
@@ -76,10 +80,7 @@ public class Aiming extends SubsystemBase implements Constants {
     //m_moveController.reset();
   }
   
-
-  public void aimDrive() {
-
-  }
+  
 
   @Override
   public void periodic() {

@@ -45,10 +45,10 @@ public class ClimberCommand extends CommandBase implements Constants{
       case 180:
         m_climber.contractHook();
         break;
-      case 90:
+      case 270:
         m_climber.armsOut();
         break;
-      case 270:
+      case 90:
         m_climber.armsIn();
         break;
     }
